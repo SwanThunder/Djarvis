@@ -53,3 +53,29 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: product choices captured in both languages; no architecture selected and no application programming. Voice sample remains local and unstaged.
 - Remaining work: clarify cloud AI processing and local access before subscription; continue detailed task/day-planning scenarios. Voice versions, usage permissions, plan limits, and other open questions remain documented.
 - Commit: `Refine product choices from owner feedback`.
+
+## PRODUCT-003 — Local-only AI, trial, and task behavior
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates; reference-review updates the bilingual product definition.
+- Authorization: owner confirmed local-only AI and model download, a seven-day full-product trial, device-based repeat-trial prevention, post-expiry feature lock, task fields and optional extensions, day-planning behavior, overdue highlighting/voice notices, and both recurrence modes with retained debt. API-key support is a future capability.
+- Status: complete for the documented scope.
+- Files reserved: delegate uses `docs/PRODUCT.md` and `docs/PRODUCT.ru.md`; agent-01 uses the shared logs and `docs/LOCAL_MODEL.md` / `docs/LOCAL_MODEL.ru.md`.
+- Scope: document product decisions and prepare a local model evaluation environment; no application implementation or finalized architecture.
+- Checks: both product versions reviewed against the six answers and follow-up choices: seven-day trial, API keys as a future possibility, and fully offline licensing. Local-only inference, default confirmations, overdue behavior, recurrence debt, and optional fields preserved. No device fingerprint collected.
+- Result: current requirements captured without selecting application architecture or writing application code. Offline license issuance/renewal and detailed habit design remain open.
+- Remaining work: continue product scenarios and review offline licensing limitations before architecture approval.
+- Commit: `Record offline product requirements and local model evaluation`.
+
+## MODEL-001 — Download and evaluate a local language model
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01.
+- Authorization: owner explicitly requested downloading a local model using the console.
+- Status: complete for the documented scope.
+- Scope: use the installed local runtime to download Qwen3.5 4B as an evaluation candidate, verify model metadata/license and synthetic Russian/English/tool-call responses. Preserve existing models and avoid external inference.
+- Storage: imported model in the existing runtime store outside the repository; source GGUF and synthetic evaluation outputs in ignored `cache/model-downloads/`. No weights, machine identifiers, or credentials are committed.
+- Checks: official base-model and runtime sources reviewed. Standard registry download failed with TLS errors; fallback GGUF from the quantizer's pinned repository downloaded with TLS verification, exact byte size and SHA-256 verified. Import/license metadata and full GPU residency confirmed. Synthetic Russian, English, and task-tool checks passed; no actual task created. Weights and cache excluded from Git; existing model preserved.
+- Result: `djarvis-qwen3.5-4b:latest` installed in the existing runtime and unloaded after evaluation. Bilingual model notes record provenance, exact hash, local checks, and initial latency.
+- Remaining work: production quality/performance evaluation, first-initialization delay, voice pipeline selection, and deployment strategy require a separately approved plan.
+- Commit: `Record offline product requirements and local model evaluation`.

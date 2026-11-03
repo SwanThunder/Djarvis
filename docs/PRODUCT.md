@@ -12,9 +12,9 @@ The central value is simpler planning: users create and update tasks and habits 
 
 ## Platforms and scope
 
-Develop for Windows first. Subsequently design Android and cross-device synchronization. User data is stored on the device; cloud storage and cross-device synchronization are later capabilities, and their design is open. Local storage does not decide where AI processing runs: permitted cloud AI inputs and any fully local AI mode still need discussion. Offline planner behavior has not been explicitly decided.
+Develop for Windows first. Subsequently design Android and cross-device synchronization. User data is stored on the device; cloud storage and cross-device synchronization are later capabilities, and their design is open. AI inference in the current release must be local only; cloud AI inference is excluded. Offline planner behavior has not been explicitly decided.
 
-The application can start locally without an account. An account is needed to activate a subscription and will support future synchronization. Free or trial duration and limits are unresolved; do not promise perpetual free use.
+The application can start locally without an account. An account is needed to obtain a subscription and will support future synchronization. Subscription licensing and the seven-day full-product trial must work fully offline: there is no activation or subscription server and no entitlement registration with a server. The trial is per device, and the application remembers the device to prevent repeated trials through alternate accounts. This is not a claim to uniquely identify a person or to provide unbypassable local licensing. No device fingerprint was collected during environment preparation. The offline process for issuing and renewing licenses, and the device-trial design, remain open; no particular implementation is selected. After the trial or a subscription ends, application features are unavailable. This does not mean user data is deleted; data retention and recovery remain unresolved.
 
 The owner wants the entire requested product designed without a deadline or arbitrary feature cuts. Implementation order will follow dependencies and explicit approval; an implementation sequence does not remove features from the target scope.
 
@@ -22,13 +22,13 @@ The owner wants the entire requested product designed without a deadline or arbi
 
 ### Tasks and planning
 
-- Tasks with deadlines, priorities, reminders, and completion state.
+- Basic task fields: title, description, project, priority, deadline, scheduled time, duration, recurrence, and reminders; completion is tracked. Users can toggle advanced subtasks, checklists, tags, and attachments; whether this is a global or per-task toggle is unresolved.
 - Calendar, recurring tasks, and projects.
 - Automatic day planning.
 - Voice creation and modification of tasks, habits, and their records.
 - Daily spoken plans triggered by user-configured times or situations.
 
-Planning rules, conflict handling, automatic rescheduling authority, recurrence details, and the distinction between a deadline and a scheduled work period still need design.
+The automatic day planner considers meetings, deadlines, priorities, durations, habits, breaks, and the user's available hours. It proposes a plan and applies it after confirmation or remembered permission. A missed task is highlighted and announced aloud; its date is not changed automatically. Whether a per-task override is available remains unresolved. Recurrence can be calendar-fixed or relative to completion; missed occurrences remain outstanding debt. Conflict handling and the distinction between a deadline and a scheduled work period still need design.
 
 ### Habits
 
@@ -55,14 +55,14 @@ Initial integrations include Google Calendar, Outlook, and Gmail. The product al
 
 ### Personalization and memory
 
-The assistant remembers the user's name or nickname and location. Location source, precision, updates, timezone behavior, conversation history, additional memory, cloud processing, retention, export, and deletion are not decided.
+The assistant remembers the user's name or nickname and location. Location source, precision, updates, timezone behavior, conversation history, additional memory, any future cloud processing, retention, export, and deletion are not decided.
 
 ### Commercial model and localization
 
 - Subscription-based product.
 - English and Russian application languages.
 - Intended audience is not restricted to one region; actual distribution, payment, and service availability require validation later.
-- Both subscription-bundled AI usage and bring-your-own-key (BYOK) are supported. BYOK still requires an active subscription priced at 50% of the standard subscription price. No absolute price or usage caps have been selected. Free or trial duration and limits, cost controls, bundled usage limits, and expired-subscription behavior remain open.
+- The current release uses local AI only; cloud inference is not allowed. The owner authorized downloading and evaluating a local model separately from application programming. API-key support is a separate future capability excluded from the current local-only release. The earlier requirement for a BYOK subscription at 50% of the standard subscription price is retained as a future pricing requirement for that capability. Current subscription amounts and plan structure have not been selected. The full-product trial lasts seven days per device. After trial or subscription expiry, application features become unavailable.
 
 ## Existing application reference
 
@@ -84,13 +84,13 @@ The owner explicitly wants recognizable voices for the exact named characters, n
 
 ## Decisions needed before architecture
 
-1. AI usage limits and cost controls; subscription price, trial/free duration and limits, and behavior after expiration.
-2. Cloud AI processing boundaries, later cloud storage/synchronization, offline planner behavior, and data retention/export/deletion.
+1. Current subscription price and plan structure; future API-key support with the previously requested 50% BYOK pricing; offline license issuance and renewal, device-trial design, licensing security, retention, reinstalls, and hardware changes. Online entitlement registration is excluded. The seven-day per-device trial and feature unavailability after expiry are set.
+2. Future cloud storage/synchronization, offline planner behavior, and user-data retention/recovery/export/deletion. Current-version AI inference is local only.
 3. Supported Windows versions, baseline hardware, tray controls, explicit quit, and startup behavior; background wake listening when the main window is closed is required.
 4. Microphone indicators, voice interruption, whether proactive triggers are enabled by default, and exact trigger timing and absence detection.
 5. Character presentation and implementation of recognizable exact-character voices; identify the intended voice actor and language versions, and assess usage permissions.
-6. How the task-change no-confirmation preference is scoped, remembered, and revoked. Keep separate confirmation rules for email, file deletion, and device control.
+6. How remembered permission for task plan changes is scoped and revoked; whether a per-task missed-date override is available. Keep separate confirmation rules for email, file deletion, and device control.
 7. Calendar sync direction and conflict handling, Outlook sync details, and notes/projects integration needs.
-8. Detailed task scheduling, automatic rescheduling, recurrence, and habit semantics.
+8. Whether the advanced task-fields toggle is global or per-task; detailed scheduling and conflict rules; habit semantics.
 
 Next: resolve these product questions, review full user journeys, and then propose an architecture for explicit owner approval.
