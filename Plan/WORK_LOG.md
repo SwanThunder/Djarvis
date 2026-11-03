@@ -27,3 +27,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: local Git authenticated; initial history published to `SwanThunder/Djarvis`; local `main` tracks `origin/main`. Credentials were not written to project files.
 - Remaining work: no authentication work remains. Application design awaits the owner's next task.
 - Commit: work log update recorded in `Record successful Git authentication and initial publication`.
+
+## PRODUCT-001 — Product requirements and reference review
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01; delegate reference-review performed read-only reference inspection.
+- Authorization: owner requested product exploration before architecture and supplied detailed requirements and a local reference application.
+- Status: requirements snapshot complete; product decisions pending.
+- Scope: capture the owner's requirements, distinguish open product decisions, inspect the reference without changing it, and locate the supplied voice sample. No application programming or architecture selection.
+- Files reserved: `docs/PRODUCT.md`, `docs/PRODUCT.ru.md`, `Plan/WORK_LOG.md`, `Plan/WORK_LOG.ru.md`.
+- Checks: English and Russian requirements reviewed against the owner's answers; document links and section parity verified. Reference behavior confirmed against its README and planner data model. No reference files, user databases, or voice audio were modified; the voice sample remains unstaged.
+- Result: bilingual product definition saved with required capabilities, reference findings, proposed voice directions, and clearly unresolved decisions. No architecture was selected and no application code was written.
+- Remaining work: owner answers on AI billing, privacy/offline behavior, accounts, characters and voices, action permissions, situation triggers, and integration priorities; then detailed user journeys and architecture review.
+- Commit: `Document product requirements and reference review`.
