@@ -105,3 +105,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: voice and notification behavior captured in both languages; no application code or architecture selected.
 - Remaining work: continue product design with data handling and integration actions.
 - Commit: `Record voice interaction and notification behavior`.
+
+## PRODUCT-006 — History, location, sync, and data preservation
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates and reviews; reference-review updates the product definition.
+- Authorization: owner confirmed local conversation history controls, manual or optional automatic city location, mandatory confirmations for mail sending/file deletion/file overwrite, bidirectional calendar synchronization with user-resolved conflicts, automatic local backups, and data preservation after expiry.
+- Status: complete for the documented scope.
+- Files reserved: delegate uses `docs/PRODUCT.md` and `docs/PRODUCT.ru.md`; agent-01 uses both work logs.
+- Scope: capture the five decisions without selecting architecture or implementing application features.
+- Checks: both language diffs reviewed against all five answers; removed stale uncertainty about calendar sync and expiry data preservation; mandatory email/file confirmations remain independent of task opt-out. Links, bilingual structure, whitespace, staged scope, and publication exclusions checked before commit.
+- Result: confirmed history, city location, calendar sync, backup, and expiry data rules recorded in both languages; no application code or architecture changes.
+- Remaining work: clarify Windows support, deployment, and background behavior before architecture proposals.
+- Commit: `Record data retention and integration requirements`.
