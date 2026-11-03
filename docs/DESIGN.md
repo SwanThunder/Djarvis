@@ -2,7 +2,7 @@
 
 [Русская версия](DESIGN.ru.md) · [Product definition](PRODUCT.md)
 
-Status: this is the owner's required Djarvis visual design: visual system, sidebar/top-bar shell, assistant-above-day-panel composition, palettes, material modes, accessibility, and no background image. Detailed page-level grouping and the default theme are still unspecified. Flutter is separately selected only for the UI by [ADR-001](architecture/DECISIONS.md); this document does not select the application architecture or authorize programming. Source: `design/design 1.0.txt`, preserved locally without changes.
+Status: this is the owner's required Djarvis visual design: visual system, sidebar/top-bar shell, assistant-above-day-panel composition, palettes, material modes, accessibility, and no background image. The owner selected Midnight Electric + Glass initially and supplied `design/Djarvis_UI_Design_v2_1_.txt` as the current visual-system refinement; density is compact without crowding. Detailed grouping still needs review. Flutter is separately selected only for UI by [ADR-001](architecture/DECISIONS.md); this document does not select the remaining architecture or authorize programming. Both local originals, including `design/design 1.0.txt`, remain unchanged; v2.1 refines visual behavior without changing product features.
 
 ## Product mapping and composition
 
@@ -59,7 +59,7 @@ Alpha values, derived surface colors, blur, shadows, and dimensions are recommen
 
 - Put appearance controls in one local appearance section within the existing settings, not in a duplicate settings screen.
 - Show three theme choices with names and color swatches, plus a separate “Interface transparency” Glass/Solid control.
-- Apply selections immediately, persist them locally, and restore them after restart. The default `deep-blue-pink` + Glass is a source suggestion, not a confirmed default.
+- Apply selections immediately, persist them locally, and restore them after restart. The owner-confirmed initial combination is `midnight-electric` + Glass; all other combinations remain available.
 - Use one semantic token layer for `surface`, `surface-elevated`, `text`, `text-muted`, `border`, `primary`, `secondary`, `accent`, `focus`, `success`, `warning`, `danger`, and `chart-*`. Map tokens to the exact palette while deriving accessible foreground and surface colors.
 - Use the same tokens and state behavior across navigation, cards, charts, tables, menus, and dialogs. Provide a fallback for unavailable blur.
 - Derived surface, foreground, and border colors are implementation values; test them against the chosen palette and the contrast targets below.
@@ -70,7 +70,7 @@ Alpha values, derived surface colors, blur, shadows, and dimensions are recommen
 
 - Preserve keyboard access, clear labels, visible focus, and default/hover/pressed/focus/disabled states. Never use color as the sole status indicator.
 - Target WCAG AA contrast: at least 4.5:1 for normal text and 3:1 for large text. Verify every palette and both surface modes; do not use white text on bright pink, soft pink, or orange without measuring contrast.
-- Honor `prefers-reduced-motion`. Hover lift, transitions, and chart entrance motion are optional recommendations, not required timings.
+- Honor system reduced motion through Flutter; the source's CSS `prefers-reduced-motion` expresses intent rather than selecting a web stack. Do not add hover lift to every card or chart entrance purely for decoration.
 - Support desktop, tablet, and mobile layouts without shrinking text to unreadable sizes. Suggested breakpoints: desktop at 1200 px and above; tablet 768–1199 px; mobile below 768 px. Suggested sidebar width 52–68 px, card radius 16–24 px, and card gap 12–18 px; adapt these to the actual interface.
 - Theme and material changes should preserve the same geometry and behavior in all six combinations. Review all combinations and saved-setting restoration before accepting the design.
 
@@ -88,16 +88,20 @@ The following are adaptation ranges, not pixel-perfect requirements. Keep the as
 | Button/field radius | 10–16 px or pill |
 | Border | 1 px |
 | Main icon | 16–20 px |
+| Compact control height | 30–40 px with an adequate accessible hit area |
 | Page heading | 22–30 px |
 | Supporting text | 10–13 px, subject to readability |
 
-Use a neutral modern sans-serif. Suggested weights are 400 for body text, 500–600 for labels/actions, and 600–700 for prominent values. Tabular numerals may help align dates and counts. Avoid overly heavy table text.
+Use a neutral modern sans-serif. Suggested weights are 400 for body text, 500–600 for labels/actions, and 600–700 for prominent values. Tabular numerals may help align dates and counts. Long body text has a suggested width of 65 characters; never shrink text just to fit one line. Density is compact without crowding. Flutter maps these ranges to logical pixels and checks system scaling; source ranges are not immutable physical pixels.
 
 ## Recommended interaction details
 
-- Hover lift of roughly 3–5 px and a subtle border/highlight change are optional.
-- Hover timing around 180–300 ms and section/filter transitions around 200–350 ms are recommendations only; exact source timing is not established.
-- Optional chart entrance drawing must not delay access to the underlying data or interfere with reduced-motion preferences.
+- Before adding motion, identify its purpose and frequency: feedback, spatial continuity, or state indication. Very frequent actions, keyboard commands and switches are immediate; do not animate every data refresh or container entrance.
+- v2.1 timing guides: press 100–160 ms, small popover 125–200 ms, menu 150–250 ms, dialog 200–300 ms; up to 500 ms only for justified gesture interaction. Motion normally fits within 300 ms and never delays input.
+- Entrance/exit uses ease-out, movement ease-in-out; source curve guides are (0.23, 1, 0.32, 1), (0.77, 0, 0.175, 1), and drawer (0.32, 0.72, 0, 1). These guide Flutter rather than requiring example libraries.
+- Repeated commands interrupt motion without jumps. Do not use scale(0) entrance, ease-in entrance, transition: all, endless decorative loops or per-frame blur animation. The assistant circle may indicate actual activity without introducing perpetual decorative motion.
+- Feedback starts on press; hover is limited to suitable pointers rather than every surface. After the first tooltip opens, neighboring tooltips avoid a repeated delay. Menus/popovers preserve focus, Escape and their invocation anchor.
+- Prefer transform/opacity equivalents without per-frame rebuilding of complex layouts. Springs require a justified gesture/drag use case. Do not promise frame rates without measurement.
 - Glass and Solid share focus, hover, pressed, disabled, and selection behavior; only surface material and related depth effects vary.
 - Status labels and icons accompany any status colors, including task completion, overdue states, and habit tracking.
 
@@ -112,6 +116,6 @@ Use a neutral modern sans-serif. Suggested weights are 400 for body text, 500–
 
 ## Boundaries and open design details
 
-The source includes illustrative code and a web-stack example; these are not evidence of the running application stack and do not select a framework or dependencies. Application programming has not been approved. Screenshot tests and visual comparison have not yet been performed.
+The originals contain web terms and examples; these do not establish a running application or select a framework or dependencies. v2.1 defines only geometry, material and interaction. Content, routes, APIs and permissions come from the project. Do not create destinations, demo records or controls solely for styling. Programming remains unapproved; visual checks have not run.
 
-Open for review: sidebar grouping and labels; exact top-bar contents; placement of task, calendar, habit, project, and note panels; exact default theme; and derived surface colors, blur, typography, dimensions, and motion. These details must not change the required left-sidebar/top-bar shell, palette HEX values, six independent theme/material combinations, opaque Solid behavior, accessibility targets, or assistant-above-day-panel composition.
+Open for review: sidebar grouping and labels; exact top-bar contents; placement of task, calendar, habit, project and note panels; derived surface colors and concrete token values within v2.1. Initial theme/material and density direction are settled. Remaining details must preserve the required shell, HEX values, six combinations, opaque Solid behavior, accessibility and assistant-above-day-panel composition.

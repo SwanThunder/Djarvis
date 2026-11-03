@@ -8,6 +8,16 @@ Flutter for UI, Dart only for necessary UI code, Python for planner/background l
 
 The plan distinguishes a required product policy from an unresolved contract and from a proposed technical method. Owners choose user-facing, privacy, commercial, and other product tradeoffs. Agents should investigate and recommend technical details, with alternatives and consequences; the owner need not choose individual columns, indexes, or internal classes. No stated requirement is silently cut to create an MVP.
 
+## Detailed proposals prepared in PLAN-012
+
+The map is developed into three bilingual design dossiers, not implemented components:
+
+- [Foundation CP01–CP07](FOUNDATION_DESIGN.md): process/IPC, commands, logical data model, database lifecycle, scheduler, time/habits and content.
+- [Assistant CP08–CP14](ASSISTANT_DESIGN.md): local model, audio, voices, jobs, providers, web/weather and Windows.
+- [Delivery CP15–CP20](DELIVERY_DESIGN.md): archive/recovery, entitlement, UI/v2.1, packaging/updates, Android and acceptance evidence.
+
+Accepted during review: deadline-first then priority (no-deadline tasks by priority); release future blocks of an explicitly completed occurrence while preserving history; confirm a proposed valid time for a DST gap/two alternatives for a fold; initial Midnight Electric + Glass, with compact uncrowded density from the new local visual brief v2.1. Technical recommendations remain proposals; owner questions are tracked in the dossiers, and implementation is not authorized.
+
 ## Component overview
 
 | ID | Component | Main dependency | Reviewable deliverable |
@@ -87,7 +97,7 @@ The plan distinguishes a required product policy from an unresolved contract and
 
 **Known baseline:** planner considers meetings, deadlines, priority, duration, habits, breaks and available hours; proposes a plan and applies only after confirmation or a remembered applicable grant. Manual placements remain locked unless explicitly permitted. Splitting requires per-task opt-in; completing all segments is not completion. A date-only planning window is 06:00–22:00 with task duration; an explicit deadline lacking time always prompts.
 
-**Open design work:** define feasible-interval construction and hard/soft constraint semantics; propose reviewable priority/deadline ranking and tie-breaking; specify plan explanations, unplaced work and overload reporting; model opt-in segment placement bounds and behavior after explicit occurrence completion; define preview/stale-plan handling.
+**Open design work:** detail feasible intervals and constraints under the accepted deadline-first/priority policy; settle deterministic ties, explanations and overload reporting; model opt-in segment bounds and the already-started completion boundary. Explicit completion releases remaining future blocks of that occurrence and preserves history. Define preview/stale-plan handling.
 
 **Dependencies:** CP02–CP04, CP06, CP11–CP12, CP17. **Deliverable:** deterministic planner specification, worked examples, ranking alternatives and explainability contract.
 
@@ -99,7 +109,7 @@ The plan distinguishes a required product policy from an unresolved contract and
 
 **Known baseline:** task recurrence stays anchored to original schedule; missed occurrences remain task debt. Monthly missing-day default is last day, with per-rule skip option. Habits support four measurement types, fixed and flexible schedules, Monday-based weeks, pause rules, historical correction, separate streak definitions and no task-like debt. Each habit/personal recurrence chooses local-following or original fixed timezone; ask on timezone change if unset. Meeting events must not inherit that policy.
 
-**Open design work:** define instants vs civil dates and DST gap/overlap behavior; specify interval generation, exception/edit scope and backlog cutoffs; calculate pause, flexible quota, streak and correction math on partial weeks; define timezone-change behavior and date-only deadline input around zone transitions; keep historical records on their original timestamps.
+**Open design work:** define instants versus civil dates and implement the accepted DST clarification policy: propose a nearby valid time for a gap, show both instants for a fold, and require confirmation. Specify interval generation, exception/edit scope and backlog cutoffs; calculate pauses, flexible quota, streaks and corrections; define timezone changes and deadline input around transitions; keep historical timestamps.
 
 **Dependencies:** CP02, CP03, CP05, CP11, CP12, CP17. **Deliverable:** temporal glossary, recurrence/habit state tables and worked calendar examples.
 
@@ -132,6 +142,8 @@ The plan distinguishes a required product policy from an unresolved contract and
 **Owner chooses:** conversational memory/retention UX and acceptable assistant initiative. **Agent proposal:** model/runtime shortlist and evaluation method; no default or performance claim is approved.
 
 ### CP09 — Microphone, wake phrase, recognition, turns and mute
+
+Accepted privacy constraint: raw microphone audio stays in RAM for current recognition and is not recorded to disk, including diagnostics.
 
 **Known baseline:** wake phrase defaults to the selected character name, user may change it; no repeat phrase during dialogue. «Хватит»/“Stop” ends dialogue and returns to wake listening unless muted/gated. After each assistant answer, the default wait for the next reply is 30 seconds, configurable; it does not limit active user speech, inference or TTS. New speech interrupts TTS. Instant mute stops capture for wake and dialogue, lasts the app session and resets after genuine app/Windows restart only when OS/access/resources permit. Window close keeps background wake; Full Exit stops capture.
 
@@ -217,6 +229,8 @@ The plan distinguishes a required product policy from an unresolved contract and
 
 ### CP16 — Offline entitlement, trial, license issuance and renewal
 
+Accepted subscription periods: monthly and annual; price, issuer and payment workflow remain open.
+
 **Known baseline:** local profile, no mandatory account or own activation server; signed license file imported and checked offline. Seven-day device trial starts at first use of any product function; expiry locks planner/assistant but preserves data, allows renewal/import, deletion and backups, and stops microphone/proactive speech. No claim of unique-person or unbypassable trial.
 
 **Open design work:** determine commercial issuer, purchase, price/plan and renewal period; specify signed artifact, key custody/verification and offline renewal; define device-binding, clock rollback, reinstall/hardware-change and recovery policy; separate license state from user archives and account/cloud-future discussion.
@@ -229,17 +243,19 @@ The plan distinguishes a required product policy from an unresolved contract and
 
 ### CP17 — Screens, routes, states, themes, accessibility and localization
 
-**Known baseline:** mandatory dark glass/Bento design with sidebar/top bar and circular assistant above day panel; exact palette values and independent Glass/Solid modes; all six combinations required; no background image. AA contrast, focus, reduced motion, non-color status, responsive behavior and opaque fallback are required. Default palette/material, density and some route grouping remain undecided.
+**Known baseline:** mandatory dark glass/Bento design with sidebar/top bar and circular assistant above day panel; exact palette values and independent Glass/Solid modes; all six combinations required; no background image. AA contrast, focus, reduced motion, non-color status, responsive behavior and opaque fallback are required. Initial Midnight Electric + Glass is confirmed; v2.1 supplies compact uncrowded density and functional motion. Route grouping remains proposed.
 
-**Open design work:** map approved tasks/calendar/habits/projects/notes to routes and page-level groupings; design every empty/loading/offline/denied/conflict/model-preparing/license-expired state; settle default palette/material/density only through owner choices; specify navigation, responsive breakpoints, localization text expansion, focus and accessibility review.
+**Open design work:** map approved content to routes and page-level groupings; design every empty/loading/offline/denied/conflict/model-preparing/license-expired state; specify navigation, responsive behavior, translation expansion, focus and accessibility under the accepted defaults and v2.1.
 
 **Dependencies:** CP03, CP05–CP16, ADR-001, required design. **Deliverable:** screen/route inventory, wireflow, design-token/state matrix and prototype review package.
 
 **Future acceptance cases (not run):** six palette/material combinations; default does not remove alternatives; status is not color-only; keyboard/focus/reduced motion/contrast; loading and no-data states are real; no invented CRM entities; baseline visual effects are measured, not presumed valid.
 
-**Owner chooses:** still-open defaults and user-facing navigation/density tradeoffs. **Agent proposal:** route grouping and detailed state layouts under mandatory design constraints.
+**Owner chooses:** remaining user-facing navigation tradeoffs. **Agent proposal:** route grouping and state layouts under mandatory design constraints; do not re-ask accepted appearance choices.
 
 ### CP18 — Installer, adaptive assets, updates, rollback and build matrix
+
+Accepted app-update policy: notify only; download and installation require a user command. Automatic first-run model provisioning remains a separate approved flow.
 
 **Known baseline:** compact installer; first launch downloads hardware-appropriate local model assets with visible in-app progress. Installation is automatic/background from the user's perspective, not covert system installation. Win10/11 targets; exact versions/packages/dependencies are unselected. Current 8 GiB/full-stack performance is unvalidated.
 
