@@ -2,7 +2,7 @@
 
 [Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md) · [Planner core proposal](PLANNER_CORE.md)
 
-Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints come from the product discussion; Flutter/Dart for UI is the sole approved technology choice. All other technology and implementation choices below remain proposed.
+Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001 and local PostgreSQL backend database decision in ADR-002. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints and these narrowly scoped choices come from the product discussion; all other technology and implementation choices below remain proposed.
 
 ## 1. Design constraints
 
@@ -46,7 +46,7 @@ The owner's [visual specification](../DESIGN.md) is the required Djarvis design,
 | UI framework and necessary UI implementation | Flutter/Dart (selected by ADR-001) | .NET MAUI/C# was considered and not selected |
 | Local language inference | Bundled llama.cpp-based worker using pinned GGUF artifacts | Exact runtime build, process protocol, and supported CPU/GPU backends |
 | Voice processing | Local provider interfaces; evaluate sherpa-onnx components | Final wake, ASR, TTS, and voice assets need separate tests and licenses |
-| Structured local data | SQLite with a serialized write owner and versioned migrations | Driver, attachment layout, and encryption policy |
+| Backend database | PostgreSQL local to the user's device (ADR-002) | Driver, version, schema, migrations, local lifecycle/packaging, and connection/pooling model |
 | Windows integration | A platform adapter for microphone, tray, startup, notifications, credentials, and device actions | Concrete plugins/native bindings selected after review |
 
 The owner selected Flutter for the UI and necessary Dart UI implementation only (ADR-001), in the context of the required circular design, Windows-first target, and later Android support. This is not a measured RAM or speed advantage over .NET MAUI, which was considered in the initial proposal but is not an active UI alternative. Flutter currently lists Windows 10/11 and Android among supported deployment targets. Exact Flutter/Dart SDK versions and dependencies remain unselected. [Flutter support](https://docs.flutter.dev/reference/supported-platforms), [historical MAUI comparison](https://learn.microsoft.com/dotnet/maui/supported-platforms).
@@ -122,9 +122,9 @@ Sending email, deleting files, and overwriting files always require confirmation
 
 Core entities: Profile, Task, TaskOccurrence, Project, Note, CalendarEvent, Habit, HabitSchedule, HabitLog, Conversation, Message, Settings, CapabilityGrant, PendingAction, AuditEntry, ExternalMapping, SyncCursor, OutboxEntry, SyncConflict, InstalledAsset, LicenseState.
 
-Task occurrences preserve debt; habit logs preserve misses without creating debt. Maintain deadline and planned execution time separately. Preserve timezone/recurrence semantics rather than treating every calendar item as a single UTC timestamp; all-day dates, DST transitions, missed occurrences, and completion-relative repeats need a detailed temporal specification.
+Task occurrences preserve debt; habit logs preserve misses without creating debt. Deadlines and planned execution time are separate. Recurrence retains its original calendar/interval anchor despite late completion. A date-only task uses a default 06:00–22:00 placement window with its own duration, without an implicit deadline. Preserve timezone, all-day-date, DST, and original occurrence identity in the detailed temporal specification.
 
-Use transactions for related changes and serialize writes. SQLite supports transactional changes; its Online Backup API supplies a consistent snapshot of a live database. Do not back up an active database by naively copying one file. [Transactions](https://www.sqlite.org/lang_transaction.html), [backup API](https://www.sqlite.org/backup.html).
+PostgreSQL is selected as the local backend database; its driver, version, schema, migrations, local lifecycle/packaging, and connection model remain open. Use transactions for related changes and appropriate revision checks. PostgreSQL documents MVCC and transaction isolation; implementation details remain proposed. Automatic local backups may use `pg_dump` for a consistent single-database snapshot, with coordination for attachments and restore still to be designed. Do not treat a raw database-file copy as a backup. [Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [MVCC](https://www.postgresql.org/docs/current/mvcc.html), [transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [backup file formats](https://www.postgresql.org/docs/current/backup-file.html).
 
 Proposed production layout is under the current user's application-data directory, with distinct data, attachments, model cache, backups, and logs. Repository `data/` and `cache/` are development locations, not a requirement to put customer data beside an installed executable. Backup paths and retention remain configurable design items.
 
@@ -172,7 +172,7 @@ The earlier account-for-subscription requirement and an offline verifier need a 
 
 Keep domain rules, stable entity IDs, revisions, and data-format versions independent of Windows APIs and model providers. Future Android substitutes platform adapters and lifecycle management; do not assume Windows background microphone/tray behavior transfers unchanged to a phone.
 
-Do not synchronize SQLite files directly between devices. Later synchronization needs an approved transport, identity model, conflict protocol, deletion rules, and encryption policy. These are future design work, not a current cloud-storage implementation.
+Do not synchronize active database files directly between devices. Later synchronization needs an approved transport, identity model, conflict protocol, deletion rules, and encryption policy. These are future design work, not a current cloud-storage implementation.
 
 ## 15. Source organization proposal
 

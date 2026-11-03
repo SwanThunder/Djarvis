@@ -158,3 +158,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-001 records Flutter UI approval; existing documents aligned; bilingual detailed core proposal describes records, commands/queries, permissions, planning, transactions/outbox, reminders, provider reconciliation, history/recovery, and failure behavior. Four task priorities, separate overdue/missed-time indicators, and duration clarification are confirmed; remaining design choices remain proposals. No application code or dependencies added.
 - Remaining work: owner review of proposed core rules and unresolved choices before implementation approval.
 - Commit: `Document Flutter decision and detailed planner core design`.
+
+## CORE-002 — Backend database and planner-rule follow-up
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates and verifies; reference-review updates bilingual requirements and core documentation.
+- Authorization: owner selected PostgreSQL for the backend, confirmed manual placement locking, optional per-task splitting, distinct-day habit frequency, and a default 06:00–22:00 interval for date-only input. Owner requested an explanation of completion-relative recurrence.
+- Status: requirements and database proposal updated; implementation approval pending.
+- Files reserved: delegate will update both product definitions, core designs, architecture proposals, decision registers, and README files. Agent-01 uses both logs and coordinates the database deployment clarification. Existing visual design and source code stay untouched.
+- Scope: record approved scope and resolve ambiguities about database placement, the date-only interval, and recurrence. No database installation, schema migration, or application code.
+- Checks: owner clarified local PostgreSQL, original-anchor recurrence, and placement-only 06:00–22:00. Primary PostgreSQL sources and technical review covered transactions, concurrent plan validation, local lifecycle, backup consistency, and timezone preservation. Active SQLite assumptions replaced; bilingual documents, links, sources, identifiers, diagram flow, whitespace, and publication scope checked. No installation, database operation, or performance test performed.
+- Result: ADR-002 records local PostgreSQL; manual blocks locked, splitting opt-in, distinct-day habit frequency, original recurrence dates, and independent placement window/deadline captured. Local deployment, transaction guard, backup/attachment coordination, and runtime requirements remain detailed proposals; core language is not implicitly selected.
+- Remaining work: review core language, detailed schema/temporal defaults, local PostgreSQL lifecycle/packaging, and combined 8 GiB performance before implementation.
+- Commit: `Select local PostgreSQL and refine planner semantics`.

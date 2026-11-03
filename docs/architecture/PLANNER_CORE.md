@@ -2,7 +2,7 @@
 
 [Русская версия](PLANNER_CORE.ru.md) · [Product](../PRODUCT.md) · [Architecture](PROPOSAL.md) · [Approved decisions](DECISIONS.md)
 
-Date: 2026-11-03. Status: detailed design PROPOSAL. Flutter UI is approved in ADR-001; that does not approve this entire core, a database driver, an independent Dart host, or application programming. Rules explicitly confirmed by the owner are identified below. Entity fields, internal contracts, and defaults not already confirmed remain proposals for review. No schema has been applied and no application tests have been run.
+Date: 2026-11-03. Status: detailed design PROPOSAL. Flutter UI is approved in ADR-001; local PostgreSQL is approved in ADR-002. This does not approve the complete core, driver/schema, background-host language/packaging, or application programming. Owner-confirmed rules are identified below; other entity fields, contracts, and defaults remain proposals. No schema has been applied and no application tests have been run.
 
 ## 1. What the core owns
 
@@ -40,14 +40,15 @@ This is a logical model for review, not final SQL or a committed migration.
 | --- | --- |
 | Profile / Settings | Local ID, name/nickname, locale, timezone, city/source, appearance, quiet hours, availability, history retention |
 | Project / Note | Stable ID, title/content, local revision, timestamps; independent of external connections |
-| Task | ID, title, description, optional project, priority, optional duration estimate, optional recurrence reference, revision, archive marker |
-| TaskOccurrence | ID, task ID, stable original recurrence key, deadline specification, optional per-occurrence overrides, state, completed-at, revision |
-| RecurrenceRule / Exception | Task relation, fixed/calendar or completion-relative mode, interval, local anchor, timezone, exclusions, effective version and edit scope |
+| Task | ID, title, description, optional project, priority, optional duration estimate, per-task split opt-in, optional recurrence reference, revision, archive marker |
+| TaskOccurrence | ID, task ID, stable original recurrence key, planning date/local placement window (06:00–22:00 by default for date-only input), separate optional deadline, per-occurrence overrides, state, completed-at, revision |
+| RecurrenceRule / Exception | Task relation, calendar or interval mode anchored to its original schedule, interval, local anchor, timezone, exclusions, effective version and edit scope |
 | SchedulePlacement | ID, target occurrence/habit period, start, positive allocated duration, local timezone, manual/automatic source, lock policy, revision |
 | CalendarEvent | ID, calendar/source, title, date/time specification, busy/free status, optional attendees, revision |
 | Habit / HabitSchedule | ID, measurement type, unit, goal, fixed days or flexible frequency, period/timezone, effective settings version |
 | HabitPeriod / HabitLog | Stable period identity, bounds and goal snapshot; measurement/check-in, timestamp, correction metadata |
 | DayPlanProposal | ID, target date/timezone, input-version snapshot, proposed changes, constraints, unplaced/missing-input reasons, status |
+| PlanningState | Profile ID, planning revision, short transaction guard for related changes; proposed mechanism |
 | Reminder / ScheduledJob | Target, trigger rule, logical delivery key, due time, state, retry/catch-up metadata |
 | PendingAction / CapabilityGrant | Exact operation, targets/revisions, intent origin, permission scope, confirmation or clarification state, expiry |
 | AuditEntry / DomainOutbox | Action ID, minimal result/change metadata and durable follow-up work, without raw conversations by default |
@@ -60,9 +61,13 @@ Use stable locally generated IDs, record revisions, and unique keys for recurren
 
 Confirmed: four priorities — low, normal, high, urgent. Confirmed: a task without a duration can be saved; the planner asks for duration before scheduling it. It must not invent an estimate or silently substitute 30 minutes.
 
+Confirmed: recurrence keeps its original schedule even when an occurrence is completed late. A task due November 1 every seven days and completed November 3 is next due November 8, not November 10. Missed occurrences remain separate debt. Completion-relative shifting is rejected for the current design. For a date-only task, 06:00–22:00 is the permitted placement window using the task's own duration; it is not a 16-hour duration or global workday, and deadline is separate. The cutoff for an explicit deadline without a time remains open.
+
 Propose title as the only mandatory field for basic task creation; project, deadline, duration, and planned time can be absent. Proposed default priority is normal. Advanced subtasks, checklists, tags, and attachments remain user-enabled; global versus per-task switches need a decision.
 
 Distinguish date-only deadlines, local wall-clock times with a timezone, and absolute instants. A date-only deadline is a local calendar date, not midnight UTC. Exactly when a date-only deadline expires still needs an explicit rule. Preserve original scheduling intent and timezone when serializing recurrence. The iCalendar standard distinguishes DATE, DATE-TIME, timezone-linked recurrence, and original recurrence-instance identity. [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545).
+
+In the future PostgreSQL schema, retain the named timezone separately from stored instants and local recurrence anchors. PostgreSQL `timestamp with time zone` normalizes instants and does not retain the original timezone name; that type alone cannot preserve a recurring local schedule. [PostgreSQL date/time types](https://www.postgresql.org/docs/current/datatype-datetime.html).
 
 For automatic planning, request missing duration or ask the user to exclude the item from that planning attempt; never invent a busy interval or treat an unknown end as known free time. Whether manual entry may save a start-time-only marker outside automatic planning is a separate open UX decision, not approved by this proposal. Until that decision is made, distinguish a requested time in a pending draft from an actual validated placement. Validate allocated durations as positive; time intervals use an exclusive end so adjacent blocks can meet without overlap.
 
@@ -70,14 +75,14 @@ Freeze the interpretation of relative speech dates against the request's referen
 
 ## 5. Recurrence and debt
 
-Confirmed: both calendar-fixed and completion-relative recurrence are required; missed task occurrences remain debt. They are different algorithms:
+Confirmed: fixed-day and interval recurrence both retain their original schedule anchor; missed task occurrences remain separate debt. Completing late does not shift the next due date. Completion-relative shifting is rejected for the current design.
 
 | Mode | Proposed behavior | Example |
 | --- | --- | --- |
 | Calendar-fixed | Materialize bounded occurrences from the schedule independently of completion; preserve unfinished past occurrences | A daily task can have separate unfinished Monday and Tuesday instances |
-| Relative to completion | Keep an unfinished due occurrence; propose creating the next only from its actual completion time | Replace a filter 30 days after the previous replacement; a late replacement shifts the next due date |
+| Interval from original anchor | Preserve the original schedule anchor and calculate each occurrence from it, irrespective of completion time | A task due November 1 every seven days and completed November 3 is next due November 8 |
 
-The one-open-occurrence rule for completion-relative repeats is a proposal that needs owner agreement; the owner has not specified stacking semantics for that mode. Completion-relative rules are application behavior, not a direct substitute for standard RRULE.
+The owner rejected shifting recurrence from actual completion time. Detailed interval anchoring, exceptions, and edit scope still need a temporal specification; do not reinterpret late completion as moving the schedule.
 
 Generate a rolling horizon and keep a durable cursor so long absence/restart does not lose old debt. Use batching and uniqueness constraints rather than building an unbounded in-memory history. The generation horizon, archival policy, and backlog display need definition.
 
@@ -98,7 +103,7 @@ Confirmed: all four measurement types, fixed-day and flexible-frequency schedule
 
 Propose a HabitPeriod with fixed timezone boundaries and a goal/settings snapshot. Statistics use the historical target, not today's edited target. Corrections explicitly update the chosen period and its statistics; the policy for backdating still needs approval.
 
-Flexible "three times a week" needs a counting rule: distinct successful days or sessions, with a defined week start and cutoff. Pause/illness/vacation, streaks, and whether an approved pause is excluded from statistics remain unresolved. A miss never generates a make-up task automatically.
+Confirmed: flexible frequency such as "three times a week" counts distinct successful days. Multiple same-day logs may contribute to measurements but count as at most one successful day toward weekly frequency. Week start and cutoff remain unresolved. Pause/illness/vacation, streaks, and whether an approved pause is excluded from statistics remain unresolved. A miss never generates a make-up task automatically.
 
 Separate **a habit period**, **a measurement log**, and **a suggested time placement**. Moving a placement does not mark the habit complete. A recommendation to increase a goal becomes effective only after approval and an explicit effective date.
 
@@ -108,8 +113,8 @@ Propose a deterministic planning service with a model-independent input snapshot
 
 1. Load the chosen local date/timezone, available hours, existing placements, blocking events, eligible open task occurrences, habit needs, duration estimates, and break preferences.
 2. Return `NeedsInput` for selected tasks with unknown durations or ambiguous constraints. Ask rather than silently dropping them; an explicitly excluded item is different from a forgotten one.
-3. Reserve hard constraints: fixed meetings, unavailable time, and manually locked placements. Busy/free semantics and all-day events must be normalized explicitly.
-4. Order eligible work using a reviewable priority/deadline policy, then place it into feasible free intervals with configured breaks. The exact ranking, split-task behavior, and buffer rules remain proposed.
+3. Reserve hard constraints: fixed meetings, unavailable time, and manually placed task times. Manually set placements stay locked unless the user explicitly permits changing them. For date-only tasks, use the confirmed 06:00–22:00 placement window with the task's own duration. Busy/free semantics and all-day events must be normalized explicitly.
+4. Order eligible work using a reviewable priority/deadline policy, then place it into feasible free intervals with configured breaks. Task splitting is allowed only with explicit per-task user opt-in; a split task occurrence may have multiple `SchedulePlacement` segments. Segment count/sum validation and whether completion depends on all segments remain open. Exact ranking and buffer rules remain proposed.
 5. Return a proposal: additions/moves, unchanged locked items, and unplaced items with reasons such as no fitting interval or a deadline that cannot be met. Do not silently extend available hours, move meetings, change deadlines, or label an infeasible day as solved.
 6. Apply only after required confirmation or a grant covering this precise task-planning operation. Revalidate the snapshot, permissions, entitlement, and time before committing.
 
@@ -145,13 +150,15 @@ Validate drafts before asking for confirmation, then revalidate after it. Bind c
 
 Propose current-state tables as the source of truth, not full event sourcing. An accepted change writes domain records, an action result/deduplication record, minimal audit metadata, and required outbox work in one local transaction. Publish UI updates only after commit. If the host crashes after commit but before replying, the same action ID returns the recorded result instead of repeating the mutation.
 
-The outbox is durable follow-up work, not a claim that external services participate in a SQLite transaction. Local commit and provider confirmation remain separate in read models, notifications, and spoken results. UI notifications can refresh from a committed read model after reconnection; integration and reminder workers resume pending work by stable keys.
+The outbox is durable follow-up work, not a claim that external services participate in a PostgreSQL transaction. Local commit and provider confirmation remain separate in read models, notifications, and spoken results. UI notifications can refresh from a committed read model after reconnection; integration and reminder workers resume pending work by stable keys.
 
 An approved plan stores relevant input revisions: task occurrences, calendar events, placements, availability, timezone and planning settings. Acceptance checks them again. If an event changed, return `Conflict` and rebuild/review the proposal; do not apply a stale plan because its text was once approved. Unrelated note edits should not invalidate a plan snapshot.
 
 ## 11. Storage proposal and invariants
 
-SQLite remains a proposed implementation, behind repository/unit-of-work interfaces. Use one serialized write owner, bounded reads, transactions, versioned migrations, and explicit failure handling. If WAL is selected, readers can coexist with a writer but there is still one writer at a time; keep the live database local, not on a network share. Foreign-key enforcement must be enabled on every connection before transactions. [Transactions](https://www.sqlite.org/lang_transaction.html), [WAL](https://www.sqlite.org/wal.html), [foreign keys](https://www.sqlite.org/foreignkeys.html).
+PostgreSQL is approved as the local backend database on the user's device (ADR-002). User data remains on-device; there is no remote application backend or cloud user data. Driver, version, connection/pooling model, schema, migrations, local lifecycle/packaging, runtime tuning, 8 GiB performance, and transaction/isolation details remain unresolved and require later evaluation. PostgreSQL-specific behavior must be designed against official documentation; no SQLite single-writer, WAL, PRAGMA, or live-file assumptions apply. [Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [MVCC](https://www.postgresql.org/docs/current/mvcc.html), [constraints](https://www.postgresql.org/docs/current/ddl-constraints.html).
+
+Concurrency proposal, not an approved implementation: protect plan validation and commit against every concurrent planning-affecting write, including inserted meetings. One option is a per-profile `PlanningState` guard: all planning-affecting command/sync paths acquire the same guard inside their short transaction. Plan acceptance holds it while checking captured input/guard revisions and current constraints, committing placements, and advancing the planning revision. Unrelated notes/history do not advance that revision. Never hold a transaction or lock while waiting for the user, model inference, downloads, or a remote API. This is an application-level policy, not a PostgreSQL single-writer limitation. If the local database is unavailable, planner writes fail and recovery is needed; a model-only failure should leave manual planner actions available.
 
 Proposed database/domain invariants:
 
@@ -186,7 +193,7 @@ For a send-email timeout after dispatch, do not automatically send again: first 
 
 The context builder reads only authorized, relevant query results and the active conversation context. History disabled means no durable conversation-message retention; the exact policy for transient session buffers, pending drafts, audit minimization, and deletion remains to be specified. Audit records and domain objects must not become a hidden full transcript.
 
-Automatic local snapshots must be consistent with database and attachment revisions. Use SQLite's backup facilities for a live database; preserve a restorable pre-migration version. Restore must validate schema and references, require the agreed user action, preserve offline entitlement/trial rules, and avoid silently resurrecting deleted history. Credentials and model weights are not ordinary portable planner backup content. [SQLite live backup](https://www.sqlite.org/backup.html).
+Automatic local backups must be consistent with the local PostgreSQL database and attachment revisions. PostgreSQL's `pg_dump` produces a consistent single-database snapshot; coordinating that snapshot with attachments, local cluster/lifecycle, restore validation, and pre-migration recovery still requires design. Preserve a restorable pre-migration version. Restore must validate schema and references, require the agreed user action, preserve offline entitlement/trial rules, and avoid silently resurrecting deleted history. Credentials and model weights are not ordinary portable planner backup content. [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [backup file formats](https://www.postgresql.org/docs/current/backup-file.html).
 
 After subscription expiry the data remains. Paid functionality is denied through the command/query policy, not through deleting database files. Exact renewal-screen access and retention/backup housekeeping while locked remain design items.
 
@@ -240,12 +247,12 @@ For competing changes, the same contract applies: if a calendar edit arrives whi
 
 Proposed logical packages: domain models/rules; application commands and queries; planning/recurrence services; repository and clock interfaces; platform/integration adapters; UI projections; local worker protocol. Pure domain packages must not import widgets or assume a running model. The concrete package tree, state-management library, storage driver, IPC mechanism, and native bindings need selection after review.
 
-Keep screen rebuilds separate from commands and background jobs. Reuse the same domain/API on later Android, with different platform lifecycle adapters. Do not share a live SQLite file between devices or assume a Windows host process will run unchanged on Android.
+Keep screen rebuilds separate from commands and background jobs. Reuse the same domain/API on later Android, with different platform lifecycle adapters. Do not share active database files between devices or assume a Windows host process will run unchanged on Android.
 
 ## 18. Decisions to review next
 
-Confirmed in this discussion: Flutter UI, four priority levels, separate deadline-overdue/missed-placement indicators, and requesting missing duration before automatic scheduling. Earlier product requirements remain binding.
+Confirmed in this discussion: Flutter UI, local PostgreSQL backend, four priority levels, separate deadline-overdue/missed-placement indicators, requesting missing duration before automatic scheduling, original-anchor recurrence, distinct-day flexible habit counting, locked manual placements unless explicitly permitted, per-task opt-in for splitting, and the 06:00–22:00 date-only placement window. Earlier product requirements remain binding.
 
-Proposals still needing agreement include: normal default priority/title-only creation; one open completion-relative occurrence; manual start-only markers, placement locking and task splitting; date-only deadline cutoff and timezone travel; habit frequency/session counting and pauses; recurrence edit scopes; late-reminder catch-up; exact data schema/SQLite choice; host language/packaging; and backup/history restore semantics.
+Proposals still needing agreement include: normal default priority/title-only creation; manual start-only markers; explicit deadline-without-time cutoff and timezone travel; habit week start/cutoff, pauses and streaks; recurrence edit scope and exception behavior; task split segment count/sum and completion rules; exact planning concurrency guard/serialization; late-reminder catch-up; PostgreSQL driver/version/schema/migrations, local lifecycle/packaging, pooling, runtime tuning and 8 GiB performance; host language/packaging; and backup/history restore semantics.
 
-Future verification should exercise one-off/recurring task creation, late completion, two overdue fixed occurrences, completion-relative late completion, missing duration, no feasible interval, stale plan acceptance, duplicate action retries, partial habit progress, explicit abstinence check-ins, goal changes preserving history, timezone/DST changes, restart catch-up, provider conflicts/unknown send outcome, and backup restoration. These are proposed checks for a later approved implementation, not tests run now.
+Future verification should exercise one-off/recurring task creation, late completion without schedule shifting, two overdue fixed occurrences, missing duration, no feasible interval, stale plan acceptance, duplicate action retries, partial habit progress, distinct-day flexible frequency, explicit abstinence check-ins, goal changes preserving history, timezone/DST changes, restart catch-up, provider conflicts/unknown send outcome, and backup restoration. These are proposed checks for a later approved implementation, not tests run now.
