@@ -214,3 +214,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: reviewed the nine answers against both languages; six document pairs match on section counts, decision IDs and source links; local links and whitespace pass. Publication file set and outgoing metadata are checked before push. Rules/design/source/local assets are unchanged; no application tests were run.
 - Remaining/next batch: D2 travel/timezone policy; D6 split-task completion and break defaults. These choices have not been answered. Exact cryptography/payment/clock/device policy, schema, runtimes and other unaccepted architecture remain open; no app implementation authorized.
 - Commit: `Record offline licensing and planner choices`.
+
+## PLAN-003 — Timezones, split completion and breaks
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review synchronizes documentation.
+- Authorization: owner submitted D2 and two D6 choices: each habit/personal recurrence chooses local-time or original-zone behavior, unset policies are clarified on timezone change; only a separate Complete Task command completes a split task, segment check-offs show progress; automatic breaks require user-configured duration and frequency, with no automatic breaks before configuration.
+- Status: documentation completed and verified; remaining design choices await the owner.
+- Files reserved: agent-01 owns both shared logs; reference-review owns PRODUCT, PLANNER_CORE and REMAINING_PLAN in both languages. No overlapping work, rule/design changes, app code, dependency installation or local asset changes.
+- Scope: record these behavioral approvals, remove resolved questions while retaining unapproved segment limits and timezone/schema mechanics, and prepare the next selectable batch with free input.
+- Checks: verified three bilingual document pairs for section counts, decision IDs and source URLs; checked local links and whitespace. Reviewed timezone scope, selected-occurrence completion, proposed API naming and unset-break behavior. Rules/design/app code/assets are unchanged; no application tests were run.
+- Result: D2 accepted policy and partially accepted D6 behavior are recorded in PRODUCT, PLANNER_CORE and REMAINING_PLAN on both languages. Unapproved segment/timezone mechanics remain explicit. Future acceptance cases and recovery handoff updated.
+- Commit: `Record timezone, split completion and break policies`.
+- Continuation checkpoint: D2 policy and D6 completion/break behavior are accepted; D6 segment limits/buffers and exact timezone transitions remain open. A split-task completion applies only to the selected occurrence; segment check-offs never complete it automatically. Next batch is prepared for A2 task-change permission scope/revocation, E5 missed-reminder catch-up and F9 no-internet behavior; none has been answered. No coding approval.
