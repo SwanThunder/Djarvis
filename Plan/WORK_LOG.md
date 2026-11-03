@@ -293,3 +293,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-006 records the approved key/restore direction; product, core, proposal and remaining-plan versions are synchronized. Exact cryptography/key scope/format and failure handling remain open; misleading portable-backup wording removed.
 - Continuation: supersedes pending B2/full-restore cards from PLAN-007. Next prepared choices are B3 automatic history-expiry handling in managed copies, F1 calendar export scope and F2 provider deletion handling; no answers submitted. No coding approval.
 - Commit: `Record protected backup keys and full restore policy`.
+
+## PLAN-009 — Archive expiry and calendar synchronization policies
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review synchronizes bilingual specifications.
+- Authorization: owner selected B3 retaining automatically aged conversation history until the backup itself expires, applying the current history-retention policy at restore; F1 selected-calendar events/task time blocks, habits only after separate opt-in; F2 confirmation before removing a locally unchanged event deleted by Google Calendar/Outlook.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns DECISIONS, PRODUCT, PLANNER_CORE, PROPOSAL and REMAINING_PLAN in both languages. Other files, rules, design, source and local assets are unchanged.
+- Scope: distinguish automatic age expiry from explicit history erasure; preserve current restore policy, manual archive confirmation, independent tasks/habits, two-sided conflict choice, provider/local status and offline gates. Prepare selectable mail/device questions; no real archive/calendar changes or code.
+- Checks: five bilingual pairs checked for headings, IDs, source URL sets, local links and whitespace. Review added explicit F1/F2 core policies and corrected the translated B3 label, then all checks passed. Verified retention/manual-erasure separation, export scope and confirmation/conflict boundaries. Rules/design/code/assets unchanged; no app/provider/restore tests run.
+- Result: B3 expiry policy and F1/F2 sync policies recorded in product/core/proposal/remaining-plan documents, ADR-006 consequences updated. Runtime/format/projection/deletion-execution details remain unapproved; future checks and handoff updated.
+- Continuation: supersedes pending B3/F1/F2 from PLAN-008. Next prepared cards: F3 separate Gmail read/draft/send permissions; A3 application-launch permission; A3 disruptive Windows actions. None is answered; no coding approval.
+- Commit: `Record archive expiry and calendar sync policies`.
