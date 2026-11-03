@@ -32,11 +32,13 @@ The automatic day planner considers meetings, deadlines, priorities, durations, 
 
 ### Habits
 
-- Completion tracking and statistics.
-- Personalized plans, gradual goal increases, analysis of missed habits, and workload adjustment.
+- Four habit types: yes/no completion, quantity, duration, and abstaining from an undesired behavior.
+- Both fixed-day schedules and flexible frequency schedules, such as three times per week.
+- Completion tracking and statistics. Missed occurrences remain misses in statistics and do not accumulate as task-like debt.
+- Personalized plans, analysis of missed habits, and gradual goal increases or workload changes proposed by the assistant. The assistant never applies goal or load changes without user approval; the task-change no-confirmation preference does not override this restriction.
 - Users choose and configure which of these behaviors are active.
 
-Habit measurement types, schedules, pauses, corrections, and the conditions under which recommendations change a plan still need design.
+Pause and correction rules, the cutoff for counting a flexible weekly schedule as missed, and streak rules still need design.
 
 ### Assistant and interface
 
@@ -91,6 +93,6 @@ The owner explicitly wants recognizable voices for the exact named characters, n
 5. Character presentation and implementation of recognizable exact-character voices; identify the intended voice actor and language versions, and assess usage permissions.
 6. How remembered permission for task plan changes is scoped and revoked; whether a per-task missed-date override is available. Keep separate confirmation rules for email, file deletion, and device control.
 7. Calendar sync direction and conflict handling, Outlook sync details, and notes/projects integration needs.
-8. Whether the advanced task-fields toggle is global or per-task; detailed scheduling and conflict rules; habit semantics.
+8. Whether the advanced task-fields toggle is global or per-task; detailed scheduling and conflict rules; habit pause/correction rules, flexible-schedule miss cutoff, and streak semantics.
 
 Next: resolve these product questions, review full user journeys, and then propose an architecture for explicit owner approval.

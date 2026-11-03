@@ -67,6 +67,19 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Remaining work: continue product scenarios and review offline licensing limitations before architecture approval.
 - Commit: `Record offline product requirements and local model evaluation`.
 
+## PRODUCT-004 — Habit types, schedules, and goal changes
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates and reviews; reference-review updates the product definition.
+- Authorization: owner confirmed all four habit measurement types, both schedule types, missed habits recorded only in statistics, and suggestion-only goal/load changes.
+- Status: complete for the documented scope.
+- Files reserved: delegate uses `docs/PRODUCT.md` and `docs/PRODUCT.ru.md`; agent-01 uses the two shared work logs.
+- Scope: capture habit requirements and preserve the distinction from recurring task debt and task-change confirmation preferences. No application programming or architecture selection.
+- Checks: both language diffs reviewed against all four answers; confirmed habit misses create no task-like debt and task permission preferences cannot authorize habit goal/load changes. Documentation structure, links, whitespace, staged scope, and tool-branding exclusions checked before commit.
+- Result: habit requirements captured in both languages; no application code or architecture changes.
+- Remaining work: continue voice interaction and notification scenarios.
+- Commit: `Record confirmed habit behavior`.
+
 ## MODEL-001 — Download and evaluate a local language model
 
 - Date: 2026-11-03, Europe/Moscow.
