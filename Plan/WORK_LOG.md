@@ -267,3 +267,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: E3 quiet-hours policy and E4 approach/threshold recorded in PRODUCT, PROPOSAL and REMAINING_PLAN on both languages; exact detection, cooldown and trigger implementation remain open. E7 defines the still-unselected default history retention. Future checks and context handoff updated.
 - Continuation: supersedes pending quiet-hours/E4 choices from PLAN-005. Next prepared cards are B1 automatic-backup default location, B3 conversation history in backups/deletion, and E7 conversation-history default retention. None is answered. No coding approval.
 - Commit: `Record quiet-hours and context detection policies`.
+
+## PLAN-007 — Backup destination and conversation retention
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review updates bilingual specifications.
+- Authorization: owner selected B1 separate configurable local application backup folder outside the working database; B3 conversation history included in automatic backups, with affected copies shown for confirmed recreation or deletion when history is deleted; E7 thirty-day default conversation-history retention, still configurable/disableable/erasable.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns PRODUCT, PLANNER_CORE, PROPOSAL and REMAINING_PLAN in both languages. No other files, source, rules, design or local assets are changed.
+- Scope: record selected inclusion (not recommended exclusion), keep seven-day backup retention distinct from thirty-day conversation retention, and preserve open encryption/restore/automatic-expiry mechanics. Prepare selectable protection/recovery questions; no actual backup/database/file deletion or application implementation.
+- Checks: four bilingual pairs match on headings, IDs and source URL sets; local links/whitespace checked. Reviewed inclusion of history, user-confirmed archive handling, distinct 7/30-day policies and honest erasure/restore limits. Rules/design/code/assets unchanged; no application tests run.
+- Result: B1/E7 accepted and B3 partly accepted recorded in all four specification pairs; future checks and handoff updated. Encryption, recovery and automatic-expiry/archive mechanics remain open.
+- Continuation: supersedes pending B1/B3/E7 in PLAN-006. Next prepared cards: B2 backup encryption and separate recovery key, B3 full/selective restore. No answers submitted; no coding approval.
+- Commit: `Record backup location, history inclusion and retention`.
