@@ -254,3 +254,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: E2/E6 accepted and E3 partly accepted are recorded in PRODUCT, PROPOSAL and REMAINING_PLAN in both languages, with future checks and current handoff. Rules/design/code/assets unchanged.
 - Continuation: supersedes pending E2/E3/E6 from PLAN-004. Next prepared choices: E3 quiet-hours defaults; E4 call/game detection approach and input-idle threshold. No answers yet; detection implementation, exact triggers, voices and remaining architecture stay open. No coding approval.
 - Commit: `Record dialogue, initiative and microphone restart defaults`.
+
+## PLAN-006 — Quiet hours, context detection and return threshold
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review synchronizes bilingual specifications.
+- Authorization: owner selected E3 quiet-hours setup as an explicit local-time schedule or explicit “no quiet hours”; E4 system signals plus a user-selected application list and manual quiet mode; thirty-minute keyboard/mouse session-idle threshold for the enabled return trigger, configurable.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns PRODUCT, PROPOSAL and REMAINING_PLAN in both languages. No other files or local assets are edited.
+- Scope: record approved policies while retaining heuristic limits and unselected implementation details; preserve initiative opt-in, OS/entitlement gates and manual-mute restart behavior. Prepare selectable backup/history questions with free input; no programming or installation.
+- Checks: verified three bilingual pairs for headings, decision IDs, source URLs, local links and whitespace; reviewed opt-in, manual/OS/access gates, heuristic limits and the per-session idle definition. No application/performance tests run; rules/design/code/assets unchanged.
+- Result: E3 quiet-hours policy and E4 approach/threshold recorded in PRODUCT, PROPOSAL and REMAINING_PLAN on both languages; exact detection, cooldown and trigger implementation remain open. E7 defines the still-unselected default history retention. Future checks and context handoff updated.
+- Continuation: supersedes pending quiet-hours/E4 choices from PLAN-005. Next prepared cards are B1 automatic-backup default location, B3 conversation history in backups/deletion, and E7 conversation-history default retention. None is answered. No coding approval.
+- Commit: `Record quiet-hours and context detection policies`.
