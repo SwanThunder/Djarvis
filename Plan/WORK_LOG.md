@@ -240,3 +240,17 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: A2/E5/F9 recorded in both product/core/remaining-plan versions and removed from unresolved choices; future checks and context handoff updated. E6 explicitly identifies the remaining microphone-persistence question.
 - Continuation: this supersedes the PLAN-003 pending A2/E5/F9 batch. Next prepared cards are E2 dialogue idle/English stop defaults, E3 initiative at onboarding and E6 microphone-mute persistence. None has been answered. Technical implementation, performance, providers and other unaccepted architecture remain open; no programming approval.
 - Commit: `Record task grants, catch-up and offline behavior`.
+
+## PLAN-005 — Dialogue, initiative and microphone restart defaults
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review updates bilingual specifications.
+- Authorization: owner submitted E2 thirty-second wait for the next reply and stop commands “Хватит”/“Stop”; E3 offer initiative setup at first launch, with proactive speech off until a choice; E6 restart resumes listening if Windows allows it, rather than preserving manual mute across application/Windows restart.
+- Research: architecture-sources checks primary Windows call/game/idle detection documentation read-only to prepare honest E4 options; no detection stack or universal-coverage claim is approved.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns PRODUCT, PROPOSAL and REMAINING_PLAN in both languages. Other files, rules, design, application code and local assets are unchanged.
+- Scope: record defaults and approval boundaries; keep timeout distinct from active processing/speech, dialogue end distinct from mic mute, same-host window reopening distinct from application restart, and respect expired entitlement/OS denial. Prepare next quiet-hours/detection questions, with free input.
+- Checks: three bilingual pairs checked for heading counts, IDs, source URL equality, local links and whitespace. Verified the selected restart behavior (not the recommended persistent mute), dialogue/wake separation, first-launch consent and expired/OS-denied gates. Primary Windows documentation supports E4 heuristic limits; no implementation/performance tests run.
+- Result: E2/E6 accepted and E3 partly accepted are recorded in PRODUCT, PROPOSAL and REMAINING_PLAN in both languages, with future checks and current handoff. Rules/design/code/assets unchanged.
+- Continuation: supersedes pending E2/E3/E6 from PLAN-004. Next prepared choices: E3 quiet-hours defaults; E4 call/game detection approach and input-idle threshold. No answers yet; detection implementation, exact triggers, voices and remaining architecture stay open. No coding approval.
+- Commit: `Record dialogue, initiative and microphone restart defaults`.
