@@ -193,3 +193,24 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Pending selectable batch: F5 offline license-file purchase/account model; F6 seven-day trial start; F8 renewal/deletion/backup access after expiry. No submitted answers yet at this checkpoint; recommended selections are not consent.
 - Owner requested re-reading project files after context shortening. Recovery order: local entry instructions/rules → active shared log → approved ADRs/product/design → relevant architecture/core/remaining plan → working-tree changes and file ownership. Continue existing work; do not infer missing answers or coding permission.
 - Current ownership: agent-01 reviews/finishes the plan, canonical documentation and both logs; reference-review has completed the Russian translation; source research and review have finished read-only. Keep the local entry files, original design, voices, cache and secrets outside publication.
+
+## PLAN-002 — Licensing and planner choices
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates and verifies; bilingual canonical updates are delegated.
+- Authorization: owner submitted F5, F6 and F8: local profile without mandatory account, imported signed license file with offline verification; seven-day trial starts on first use of any product function, not setup/download waiting; expired state permits renewal/import, deletion and automatic backups, while planner/assistant are locked and microphone/proactive speech stopped.
+- Status: documentation completed; unresolved design choices await the owner.
+- Files reserved: agent-01 owns both logs and the English remaining plan; architecture-sources synchronizes the Russian remaining plan; reference-review owns both README, product, decision-register, architecture-proposal and planner-core files. No rules, design, application source or local assets are changed.
+- Scope: record the accepted choices, remove superseded open questions, preserve unresolved payment/cryptography/device-policy details, and present the next selectable batch with free input.
+- Checks/result/commit: recorded in the PLAN-002 result section below.
+- Continuation: this entry supersedes the PLAN-001 checkpoint's pending F5/F6/F8 batch. Those three choices are accepted, not questions to repeat. Next cards have been sent for D1 title-only creation/default priority, D1 manual start without duration, and D3 missing monthly dates; no answers to that batch have been submitted yet. Each card permits free text. No programming is authorized.
+- Subsequent submitted answers supersede the pending D1/D3 batch above: creation requires title and explicit priority, with other fields optional; a manual start without duration is a start-only marker, not a busy interval, and automatic planning asks duration; missing monthly dates are configurable per recurrence, defaulting to the last day, with skipping available and the original anchor preserved. Extend this documentation task to record these choices in product/core/plan; no coding approval.
+- Further submitted D4/D5: when a pause leaves fewer eligible distinct days than the flexible weekly quota, the week is paused without a miss or streak break and the goal is not reduced; fixed schedules count streaks in successful scheduled days, flexible schedules in successful weeks; corrections are allowed for any past date within the habit's lifetime, retain correction history and recompute using the historical goal. Record these accepted behaviors before issuing the next batch.
+
+### PLAN-002 result and continuation
+
+- Status: documentation completed and verified; architecture/programming approval remains pending.
+- Result: all nine submitted answers (F5/F6/F8 and D1/D3/D4/D5) recorded in the canonical English/Russian documents and remaining plan; ADR-005 records the limited license/access decision. No mandatory subscription account, silent normal priority, unresolved accepted habit rules or old pending cards remain in the current design descriptions.
+- Checks: reviewed the nine answers against both languages; six document pairs match on section counts, decision IDs and source links; local links and whitespace pass. Publication file set and outgoing metadata are checked before push. Rules/design/source/local assets are unchanged; no application tests were run.
+- Remaining/next batch: D2 travel/timezone policy; D6 split-task completion and break defaults. These choices have not been answered. Exact cryptography/payment/clock/device policy, schema, runtimes and other unaccepted architecture remain open; no app implementation authorized.
+- Commit: `Record offline licensing and planner choices`.

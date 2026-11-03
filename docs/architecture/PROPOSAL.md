@@ -2,14 +2,14 @@
 
 [Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md) · [Planner core proposal](PLANNER_CORE.md)
 
-Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001, local PostgreSQL decision in ADR-002, Python core/background direction in ADR-003, and app-managed isolated PostgreSQL lifecycle in ADR-004. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints and these narrowly scoped choices come from the product discussion; all other technology and implementation choices below remain proposed.
+Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001, local PostgreSQL decision in ADR-002, Python core/background direction in ADR-003, app-managed isolated PostgreSQL lifecycle in ADR-004, and offline license import/trial-access rules in ADR-005. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints and these narrowly scoped choices come from the product discussion; all other technology and implementation choices below remain proposed.
 
 ## 1. Design constraints
 
 - Commercial, individual-user task/habit tracker with a voice assistant; English and Russian.
 - Windows 10 and 11 first; target 8 GiB RAM without a discrete GPU. Exact builds, CPU instruction sets, x64/ARM64 coverage, performance, and minimum free disk space require validation.
 - Current AI inference and application data stay local. Optional search, weather, Google/Microsoft integrations, and asset downloads use the internet; local inference does not make those services offline.
-- Seven-day per-device trial, paid subscription, offline licensing, no entitlement server; expiry locks features while preserving data for renewal.
+- Local profile without a mandatory in-app account; buyer imports a signed license file verified offline, with no Djarvis activation/entitlement server. A seven-day per-device trial starts on first use of any product function, including the manual planner; setup and model-download waiting do not start it. On expiry, planner/assistant features lock and data remains; renewal/import, user-initiated deletion, and automatic local backups remain available, while all microphone capture and proactive speech stop. Exact license format/signing/issuer, payment provider, price, renewal period, device binding, and clock tolerance remain open.
 - Future Android and synchronization are considered at domain boundaries, without implementing a cloud backend now.
 - Automatic hardware-adapted model preparation. "Hidden" is interpreted as no console or manual model commands, with an in-app preparation status; the status presentation is a proposal to review.
 
@@ -90,7 +90,7 @@ Proposed flow: launch interface → local capability check → choose compatible
 
 The installer contains the application and required runtime components, not every model. Downloads use pinned HTTPS sources and resumable temporary files, check disk requirements before transfer, verify size/hash before activation, and preserve a known working asset set on failure. No console, manual model manager, global Python setup, or automatic driver replacement is required by the proposed user flow. Runtime packaging must still be validated.
 
-Model preparation runs automatically; its progress and recoverable errors belong in the application. Proposed behavior is to keep manual planner access available while assets prepare, subject to the trial/license rules. Cancellation and retry must not reset trial eligibility. The exact trial-start moment and download UI need owner review.
+Model preparation runs automatically; its progress and recoverable errors belong in the application. Proposed behavior is to keep manual planner access available while assets prepare, subject to the trial/license rules. Cancellation and retry must not reset trial eligibility. The first-use trial trigger is confirmed: if the proposed manual planner is used during model preparation, that use starts the trial. The availability and presentation of manual planner access during preparation remain proposals.
 
 ## 7. Application modules
 
@@ -158,15 +158,15 @@ History is local with user-selected retention, an off switch, and delete-all. Ke
 
 Create automatic local backups daily and before data-structure or migration updates. Keep seven days by default, with configurable schedule and retention. Use versioned snapshots including database and referenced attachment metadata; exclude model weights and credentials from normal user backups. Define crash-consistent attachment handling, backup location, optional encryption, restore preview, and migration compatibility. Deletion and retention policies must also govern application-managed backups and restoration; do not silently resurrect deleted conversation history. External copies cannot be promised physically erased by this application.
 
-Before migrations, make a verified recoverable snapshot as part of the required pre-structure/migration backup. Expiry preserves data; renewal restores feature access. Backup destination, restore authorization, and expiry-screen behavior require owner review.
+Before migrations, make a verified recoverable snapshot as part of the required pre-structure/migration backup. Expiry preserves data; renewal/import restores feature access. Renewal/import, user-initiated deletion, and automatic local backups remain available while planner/assistant functions are locked; microphone capture and proactive speech stop. Backup destination, restore authorization, and exact expiry-screen layout remain design details.
 
 ## 13. Offline trial and subscription
 
-Propose an offline license artifact signed by a separate publisher-controlled issuer. The client contains verification material only; the signing private key never ships with it. An artifact can bind an entitlement period and edition to a device policy. Key format, signing library, hardware-change tolerance, issuance, purchase flow, and renewal are not selected.
+The approved product flow is that the buyer imports a signed license file and the app verifies it offline (ADR-005). The issuance process, license-file format, signing algorithm/library, issuer, verification-key distribution, hardware-change tolerance, purchase flow, and renewal period remain proposals or open decisions. Any signing private key would remain outside the client; no particular cryptographic implementation or issuer has been selected.
 
 Keep local trial eligibility distinct from user data, optional accounts, model selection, and imported backups. A new account or data restore should not intentionally reset eligibility. Device binding identifies a device, not a person. With no server, clock rollback, reinstallations, administrator control, and hardware changes limit enforcement; do not claim unbypassable seven-day protection. Strict anti-abuse guarantees would require reconsidering constraints, not hiding a server in the design.
 
-The earlier account-for-subscription requirement and an offline verifier need a concrete purchase/identity workflow. Do not implement a nonexistent online account backend or claim automated recurring payments already exist. A renewal/activation path must remain reachable while paid features are locked; its UX requires explicit review.
+No mandatory in-app account or Djarvis activation/entitlement server is part of the current offline license flow. The buyer imports a signed license file for local verification. Future cloud identity/account needs are separate and remain unplanned. The exact license format, signing algorithm and issuer, payment provider, price, renewal period, device policy, and clock tolerance remain open; do not imply automated recurring payments or an approved issuance workflow. Renewal/import remains accessible while planner/assistant features are locked, alongside user-initiated data deletion and automatic local backups; exact screen layout remains to be designed.
 
 ## 14. Android and future synchronization
 
@@ -182,7 +182,7 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 ## 16. Verification and approval sequence
 
-1. Map the required visual design to Djarvis screens and review component boundaries. Flutter/Dart UI, Python core/background language, local PostgreSQL, and app-managed isolated database lifecycle are selected in ADR-001–004; decide remaining host boundaries and exact runtime/database packaging only after owner agreement.
+1. Map the required visual design to Djarvis screens and review component boundaries. Flutter/Dart UI, Python core/background language, local PostgreSQL, and app-managed isolated database lifecycle are selected in ADR-001–004; ADR-005 confirms only offline license import and trial/access behavior; decide remaining host boundaries and exact runtime/database packaging only after owner agreement.
 2. Specify entities, commands, permission state transitions, dates/recurrence, sync conflicts, and recovery. Resolve product defaults alongside these contracts.
 3. Approve isolated feasibility checks for CPU-only 8 GiB performance, voice interruption/custom wake phrases, Windows integration, and offline licensing behavior.
 4. Select exact engine/model/voice versions and redistribution terms from evidence. Define measured startup, latency, memory, and accuracy acceptance targets.
@@ -190,4 +190,4 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 Verification must cover duplicate intents, stale confirmations, ambiguous commands, denied capabilities, trial expiry, offline clock changes, interrupted downloads, corrupt assets, low memory, inference crashes, microphone release on exit/mute, restart-safe reminders, backup restoration, history deletion, recurring debt versus habit misses, and two-sided calendar conflicts. This is a future verification plan; no such application tests have been run yet.
 
-The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Flutter is approved for the UI, Python for core/background logic, and the app-managed isolated local PostgreSQL lifecycle is approved within the limited ADR scopes. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and remaining packaging/runtime details. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.
+The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Flutter is approved for the UI, Python for core/background logic, and the app-managed isolated local PostgreSQL lifecycle is approved within the limited ADR scopes. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and remaining packaging/runtime details. Model quality on baseline hardware, requested production voices, offline-license assurance, license issuance/payment details, future cloud identity needs, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.

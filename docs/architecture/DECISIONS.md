@@ -2,7 +2,7 @@
 
 [Русская версия](DECISIONS.ru.md)
 
-Four narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with its own packaged runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance. Exact versions, drivers, runtime/database distribution, installer dependencies, schema, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
+Five narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
 
 ## ADR-001 — Flutter UI and necessary Dart UI implementation
 
@@ -43,5 +43,15 @@ Four narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and 
 - Decision: The application manages the lifecycle of its private local PostgreSQL instance, including starting and stopping it as needed.
 - Consequences: No console or manual database operation is required in the planned user experience. Exact PostgreSQL binaries/distribution, version, runtime packaging, driver, local communication mechanism, schema, migrations, installer dependencies, and recovery behavior remain proposed. This does not authorize installing or implementing the database now.
 - Approval basis: Owner's explicit approval, 2026-11-03.
+
+## ADR-005 — Offline license import and trial/access behavior
+
+- Date: 2026-11-03
+- Status: APPROVED (product access flow and states only)
+- Context: The owner selected a local profile with no mandatory account, an imported signed license file verified offline, and a seven-day trial beginning at first use of any product function.
+- Considered options: Local profile and license-file import selected; an in-app account requirement and own activation/entitlement server are excluded.
+- Decision: The buyer imports a signed license file and the app verifies it offline. The seven-day per-device trial starts on the first use of any product function, including the manual planner; setup and waiting for downloads do not start it. When the trial or subscription expires, planner and assistant functions are locked while user data is retained. Renewal/import, user-initiated data deletion, and automatic backups remain available; all microphone capture and proactive speech stop.
+- Consequences: No specific license format, signing algorithm, issuer/tooling, payment provider, price, renewal period, device-binding details, clock tolerance, or backup encryption/recovery is selected. This does not approve an own activation server or authorize implementation. Future cloud identity/account needs remain a separate design question.
+- Approval basis: Owner's explicit choices F5, F6 and F8, 2026-11-03.
 
 Record each approved decision with a stable ID, date, status, context, considered options, chosen solution, consequences, and owner approval reference. Keep IDs and statuses aligned with the Russian version. Mark proposals as proposed until approved; preserve superseded decisions and link their replacements.
