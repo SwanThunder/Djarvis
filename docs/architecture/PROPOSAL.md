@@ -1,6 +1,6 @@
 # Architecture proposal — first review
 
-[Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Decision register](DECISIONS.md)
+[Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md)
 
 Date: 2026-11-03. Status: PROPOSED, not approved. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints come from the product discussion; every technology and implementation choice below remains proposed.
 
@@ -38,6 +38,8 @@ flowchart TD
 The language model proposes typed intents. Only the application core can commit changes or invoke approved service actions. Text obtained from search, messages, and attachments is data, never authority to change permissions.
 
 ## 3. Technology candidates
+
+The owner's [visual specification](../DESIGN.md) is the required Djarvis design, not an optional style alternative. Technology candidates must implement it: Dark Glassmorphism/Bento, three exact palettes, independent Glass/Solid materials, the circular assistant above the day panel, and all six combinations. The previous technology preference is unapproved and must be evaluated against these requirements. CSS/React examples in the local brief do not independently select a production stack.
 
 | Area | Preferred candidate for discussion | Alternative / unresolved choice |
 | --- | --- | --- |
@@ -134,6 +136,10 @@ Quiet hours, calls, and games suppress proactive voice and use normal notificati
 
 The circular visualization reflects defined states such as listening, thinking, speaking, muted, and preparing. Persona affects presentation and voice style, never permissions, factual state, or business rules. Exact character/voice asset rights and language versions are still unverified.
 
+The rest of the interface follows the mandatory [Djarvis visual design](../DESIGN.md): navigation, header, Bento task/habit/calendar surfaces, menus, dialogs, lists, and statistics share semantic tokens. Exact palette values and independent transparency are requirements; spacing, blur, animation timing, and derived surface colors are adaptable guidance. No background image or unrelated CRM business entities are introduced.
+
+Store appearance preferences locally and apply changes immediately. Solid uses opaque surface fills without backdrop blur, including nested panels. Reduced-motion settings, keyboard focus, non-color status indicators, contrast targets, and the specified opaque fallback belong to the design contract. Measure effects and circular animation together with the voice/AI workload on the 8 GiB target; do not silently replace the chosen material just because a computer is in the baseline profile. Source mockup video/images were not present locally, so visual fidelity has not been verified.
+
 ## 11. Google and Microsoft connections
 
 Use native/public-client OAuth through the system browser and provider-approved redirect/PKCE mechanisms; do not treat an embedded client secret as confidential. Store tokens in the Windows credential/protection adapter, separate from planner data and portable backups. DPAPI is a Windows candidate with user/machine binding implications; restoring on another device may require reconnecting accounts. [Google native OAuth](https://developers.google.com/identity/protocols/oauth2/native-app), [Microsoft desktop registration](https://learn.microsoft.com/entra/identity-platform/scenario-desktop-app-registration), [Windows protection API](https://learn.microsoft.com/en-us/windows/win32/api/dpapi/nf-dpapi-cryptprotectdata).
@@ -174,7 +180,7 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 ## 16. Verification and approval sequence
 
-1. Review component boundaries and choose the primary UI/core technology; record an approved decision only after owner agreement.
+1. Review the already specified visual requirements and their mapping to Djarvis screens, then review component boundaries and choose the primary UI/core technology; record an approved architecture decision only after owner agreement.
 2. Specify entities, commands, permission state transitions, dates/recurrence, sync conflicts, and recovery. Resolve product defaults alongside these contracts.
 3. Approve isolated feasibility checks for CPU-only 8 GiB performance, voice interruption/custom wake phrases, Windows integration, and offline licensing behavior.
 4. Select exact engine/model/voice versions and redistribution terms from evidence. Define measured startup, latency, memory, and accuracy acceptance targets.
@@ -182,4 +188,4 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 Verification must cover duplicate intents, stale confirmations, ambiguous commands, denied capabilities, trial expiry, offline clock changes, interrupted downloads, corrupt assets, low memory, inference crashes, microphone release on exit/mute, restart-safe reminders, backup restoration, history deletion, recurring debt versus habit misses, and two-sided calendar conflicts. This is a future verification plan; no such application tests have been run yet.
 
-The initial review should settle the modular core/worker split and framework direction first. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.
+The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and framework direction. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.

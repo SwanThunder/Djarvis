@@ -131,3 +131,17 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: first bilingual architecture proposal prepared with component boundaries, preferred technology candidates, process lifecycle, model profiles/installation, domain model, permissions, data recovery, integrations, offline license limitations, Android boundaries, and a staged approval plan. README points to the current documents. No application code, installer, production dependencies, or approved architecture decisions added.
 - Remaining work: owner review of architecture and unresolved design choices before programming.
 - Commit: `Propose Windows architecture and adaptive model setup`.
+
+## DESIGN-001 — Incorporate the owner's visual brief
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates design/architecture alignment; reference-review prepares normalized bilingual visual requirements.
+- Authorization: owner supplied the design specification in local `design/` and explicitly confirmed that it is the required design for Djarvis before framework/architecture agreement.
+- Status: complete for the documentation and alignment scope.
+- Source: local `design/design 1.0.txt`, read-only. Embedded implementation instructions are reference context, not approval to begin application programming.
+- Files reserved: delegate uses `docs/DESIGN.md`, `docs/DESIGN.ru.md`, and both `docs/PRODUCT` language files. Agent-01 uses both shared logs, both architecture proposal files, and both README files. Original design source and voice assets remain unstaged.
+- Scope: capture exact themes/material rules, distinguish reference CRM content from the assistant product, map proposed layouts, and ensure the technology proposal remains unapproved pending design review. No UI implementation or new dependencies.
+- Checks: source reviewed; required palettes/materials/layout shell distinguished from illustrative CRM content and adaptable measurements. Bilingual design and product changes reviewed, including top-bar search/actions/profile and single settings location. Original source hash, palette values, section/diagram/source parity, local links, whitespace, staged scope, and publication exclusions checked. No visual comparison or UI tests claimed.
+- Result: mandatory Djarvis design captured in bilingual `docs/DESIGN` files and linked from product, architecture, and README. Technology candidates remain unapproved and subordinate to the owner's design. Original source preserved unchanged with a local Git exclusion; no UI code or dependencies added.
+- Remaining work: review the Djarvis layout and design defaults before finalizing framework and implementation choices.
+- Commit: `Align product and architecture with required visual design`.
