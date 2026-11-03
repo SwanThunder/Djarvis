@@ -41,6 +41,7 @@ assets/           Static assets
 - Follow the owner's [required Djarvis visual design](docs/DESIGN.md); technology choices must preserve this design.
 - Review the [detailed planner core, data, and interaction proposal](docs/architecture/PLANNER_CORE.md) before implementation planning.
 - Use the [remaining design and decision plan](docs/architecture/REMAINING_PLAN.md) for all eight workstreams, selectable questions, acceptance criteria and context recovery.
+- Review the [detailed remaining component plan](docs/architecture/COMPONENT_PLAN.md) for CP01–CP20, dependencies, design deliverables and approval gates.
 - Maintain English and Russian documentation as separate synchronized files.
 - Present and discuss the implementation plan before programming; begin only after owner approval.
 

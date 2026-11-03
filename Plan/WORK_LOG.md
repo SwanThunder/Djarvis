@@ -319,3 +319,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: bundled F3 policy and scoped A3 launch/Windows confirmation policies recorded in product/core/proposal/remaining-plan versions. Exact scopes/cache/application identity/arguments and other device actions remain open; future checks and handoff updated.
 - Continuation: supersedes pending F3/A3 cards in PLAN-009. C1 default palette/material and C2 density are prepared and unanswered. Owner requested a structured project status during this task; provide it after saving these decisions. No coding approval.
 - Commit: `Record Gmail bundle and device confirmation policies`.
+
+## PLAN-011 — Detailed remaining component design plan
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 owns architecture outline, review, indexes and logs; reference-review drafts bilingual component plan; architecture-sources audits gap coverage read-only.
+- Authorization: owner requested a detailed written plan of the remaining insufficiently designed components and its presentation in chat.
+- Status: detailed plan completed and verified; technical design and implementation approvals remain open.
+- Files reserved: agent-01 owns both logs, README pair and REMAINING_PLAN pair; reference-review owns new COMPONENT_PLAN.md/.ru.md under docs/architecture. Other canonical requirements, rules, design, source and local assets remain unchanged.
+- Scope: decompose the remaining work into 20 stable component IDs with known baseline, specific open design tasks, dependencies, deliverables, future acceptance evidence and owner-decision boundaries. Preserve all submitted choices, full scope and separate approval before experiments/programming. No implementation, downloads or app tests.
+- Checks: reviewed all 20 English sections and critical Russian policies; three bilingual pairs checked for heading/ID/source sets, exactly CP01–CP20, local links and whitespace. Read-only gap audit confirmed coverage and six cross-component invariants. Review clarified 30-second dialogue baseline, calendar-vs-mail scope, early feasibility/UX/testing, reciprocal dependencies and reuse of existing authorization. Canonical requirements/rules/design/source/assets remain unchanged; no app tests or downloads.
+- Result: COMPONENT_PLAN.md/.ru.md define baseline, open work, dependencies, deliverables, future acceptance cases and owner/agent decisions for 20 components; README and remaining-plan links/handoff updated. No new product or technology choice is approved.
+- Continuation: owner reviews the component plan; coordinate CP01–CP04 foundations with early CP08–CP10/CP20 feasibility and CP17 user journeys, then domain/integrations/delivery groups. Previously prepared C1/C2 choices are still unanswered, not a mandatory question queue. Application coding needs an approved architecture/implementation plan; existing bounded authorization remains valid.
+- Commit: `Plan remaining component design and approval gates`.

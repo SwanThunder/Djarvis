@@ -2,6 +2,8 @@
 
 [Русская версия](REMAINING_PLAN.ru.md) · [Approved decisions](DECISIONS.md) · [Detailed planner core](PLANNER_CORE.md)
 
+[Detailed remaining component plan](COMPONENT_PLAN.md): CP01–CP20, open design tasks, dependencies, deliverables and approval gates.
+
 Date: 2026-11-03. Status: design work, not implementation approval. This document develops all remaining workstreams without reducing the requested product scope. Recommendations below are proposals until explicitly accepted. Version selection, implementation plans and programming require separate approval.
 
 ## 1. Current baseline and decision tracking
@@ -164,7 +166,7 @@ Context recovery checklist for both agents:
 4. Recover submitted answers from documents/logs; treat pending choice cards and recommendations as unanswered. Ask again only if the answer genuinely cannot be recovered.
 5. Continue the recorded task; do not restart completed research, install components or write app code merely because context was shortened.
 
-Current handoff, PLAN-010: D2 is accepted and D6 is partly accepted, alongside earlier planner choices and F5/F6/F8; A2, E5, F9, E2, E3 policy, E4 approach/threshold, and E6 are accepted as recorded. **B1, B2, B3, E7, F1, F2 and the scoped F3/A3 policies are accepted; technical details remain open.** The next prepared, unanswered batch is C1 (default palette; all three palettes remain required), C1 (default material; Glass/Solid remain independent), and C2 (density: comfortable, compact, or user choice). Workstreams A–H remain proposals where not explicitly confirmed. The deliverable is bilingual design documentation and selectable decision batches. Runtime/schema installation and application programming remain unauthorized. Track subsequent answers in the shared log and relevant canonical documents before issuing the next dependent batch.
+Current handoff, PLAN-011: D2 is accepted and D6 is partly accepted, alongside earlier planner choices and F5/F6/F8; A2, E5, F9, E2, E3 policy, E4 approach/threshold, and E6 are accepted as recorded. **B1, B2, B3, E7, F1, F2 and the scoped F3/A3 policies are accepted; technical details remain open.** The detailed CP01–CP20 component plan is prepared for review, including dependencies and approval gates. Previously prepared C1 palette/material and C2 density choices remain unanswered; they do not impose the review order. Workstreams A–H remain proposals where not explicitly confirmed. The deliverable is bilingual design documentation and selectable decision batches. Runtime/schema installation and application programming remain unauthorized. Track subsequent answers in the shared log and relevant canonical documents before issuing the next dependent batch.
 
 ## 11. Primary technical references
 
