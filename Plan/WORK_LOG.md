@@ -227,3 +227,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: D2 accepted policy and partially accepted D6 behavior are recorded in PRODUCT, PLANNER_CORE and REMAINING_PLAN on both languages. Unapproved segment/timezone mechanics remain explicit. Future acceptance cases and recovery handoff updated.
 - Commit: `Record timezone, split completion and break policies`.
 - Continuation checkpoint: D2 policy and D6 completion/break behavior are accepted; D6 segment limits/buffers and exact timezone transitions remain open. A split-task completion applies only to the selected occurrence; segment check-offs never complete it automatically. Next batch is prepared for A2 task-change permission scope/revocation, E5 missed-reminder catch-up and F9 no-internet behavior; none has been answered. No coding approval.
+
+## PLAN-004 — Task grants, catch-up reminders and offline functions
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review updates bilingual specifications.
+- Authorization: owner submitted A2 action-specific revocable task grants (create, edit, move, complete, delete), E5 one catch-up summary with speech only when settings/quiet hours/current situation permit, and F9 all local sections, reminders, voice and conversation available offline under valid trial/license.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns PRODUCT, PLANNER_CORE and REMAINING_PLAN in both languages. Other files and local assets are not edited.
+- Scope: record the three choices, remove superseded open questions, preserve mandatory confirmations and entitlement/resource limits; prepare next voice/initiative/microphone decision cards. No application code or dependency changes.
+- Checks: three bilingual pairs match on section counts, decision IDs and source URLs; local links and whitespace checked. Reviewed grants vs mandatory confirmations, catch-up gates and offline/provider boundaries. Read-only architecture-proposal review found no material contradiction. Rules/design/code/assets unchanged; no application tests run.
+- Result: A2/E5/F9 recorded in both product/core/remaining-plan versions and removed from unresolved choices; future checks and context handoff updated. E6 explicitly identifies the remaining microphone-persistence question.
+- Continuation: this supersedes the PLAN-003 pending A2/E5/F9 batch. Next prepared cards are E2 dialogue idle/English stop defaults, E3 initiative at onboarding and E6 microphone-mute persistence. None has been answered. Technical implementation, performance, providers and other unaccepted architecture remain open; no programming approval.
+- Commit: `Record task grants, catch-up and offline behavior`.

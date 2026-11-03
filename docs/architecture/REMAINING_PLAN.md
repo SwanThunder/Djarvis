@@ -36,9 +36,9 @@ Ambiguous targets or intended dates always require clarification, even when the 
 
 User speech, UI and scheduled proposals share the same command gate. The model receives narrow tools, never unrestricted SQL or shell execution. Search results, email and file contents are untrusted input and cannot grant permissions. A capability is granted by the user in Settings, can be revoked, and is checked again before execution.
 
-Decisions: **A1** transport; **A2** scope of remembered task-change permission (recommended: explicit task-action categories, visible and revocable); **A3** device actions (recommended: allowlisted applications/paths, explicit confirmation for destructive or disruptive actions). Mail sending and user-file deletion/overwrite always require confirmation; habit goal/load changes always require acceptance.
+Decisions: **A1** transport; **A2 — accepted:** the application user may grant separate, remembered, revocable no-confirm permissions for task creation, editing, moving, completion, and deletion. A task-deletion permission never authorizes user-file deletion. Ambiguous targets always require clarification; sending email and deleting/overwriting user files always require confirmation; habit goal/load changes always require acceptance. **A3** device actions (allowlisted applications/paths and confirmation rules remain to be designed).
 
-Completion evidence: reviewed contracts and process ownership; duplicate-command and reconnect scenarios; ambiguous targets with confirmations disabled; stale confirmation rejection; permission revocation during queued work; host/worker failure recovery; demonstrable microphone release on mute and Full Exit. Programming these checks awaits approval.
+Completion evidence (future cases only): separate remembered grants for each task action, grant revocation before execution, task deletion without file deletion, ambiguous targets even with confirmations disabled, mail/file confirmation remaining mandatory, habit goal/load acceptance, stale confirmation rejection, permission revocation during queued work, and host/worker failure recovery. Programming these checks awaits approval.
 
 ## 3. Workstream B — local PostgreSQL, schema and recovery
 
@@ -100,9 +100,11 @@ The requested Jarvis, Rick Sanchez and Sebastian identities and recognizable voi
 
 Proposed assistant states: muted, waiting for wake phrase, listening, processing, speaking, preparing models, degraded/error. State is visible in the main window and tray. Timeouts end a session; “Хватит” or the selected English command ends it immediately. An interrupted spoken answer is not resumed automatically over the user's next sentence.
 
-Decisions: **E1** exact voice/language versions (Rick: provided reference / another licensed version; Jarvis and Sebastian: selected dubbing / original-language voice); **E2** dialogue idle timeout and English stop phrase (suggested adjustable 30 seconds and “Stop”); **E3** initiative defaults and quiet hours (recommended: silent until onboarding opt-in, then configured triggers); **E4** absence/call/game detection (recommended: user-controlled OS/app signals, manual quiet mode available); **E5** reminder catch-up (recommended: one summary after resume, no replay of every missed spoken reminder).
+Decisions: **E1** exact voice/language versions (Rick: provided reference / another licensed version; Jarvis and Sebastian: selected dubbing / original-language voice); **E2** dialogue idle timeout and English stop phrase (suggested adjustable 30 seconds and “Stop”); **E3** initiative defaults and quiet hours (recommended: silent until onboarding opt-in, then configured triggers); **E4** absence/call/game detection (recommended: user-controlled OS/app signals, manual quiet mode available); **E5 — accepted:** after sleep/restart provide one aggregated missed-reminder summary, subject to valid access and OS notification permission; speak only when proactive-speech settings, quiet hours, calls/games, and current context permit, otherwise use an ordinary notification. Exclude obsolete, cancelled, and completed targets. Maximum frequency and exact delivery mechanics remain open.
 
 Completion evidence: RU/EN conversations and task intent accuracy; wake false-positive/miss measurements; custom phrases; barge-in and echo handling; immediate mute; tray/closed-window behavior; quiet/call/game scenarios; end-to-end CPU/memory latency. Exact required voice assets and their permissions are release dependencies, not completed work.
+
+**E6 — open:** whether microphone mute persists across application/Windows restart, and the explicit action required to resume capture. Instant mute of all capture is already required; persistence has not been selected.
 
 ## 7. Workstream F — integrations, privacy and offline subscriptions
 
@@ -112,7 +114,7 @@ After a mail-send timeout following dispatch, the outcome remains unknown: recon
 
 Decisions: **F1** export policy (recommended: selected calendars and task placements, habits private unless enabled); **F2** external deletion behavior (recommended: ask when it would remove a local item or conflict with newer local work); **F3** Gmail capabilities (recommended: independent read/search, draft and send permissions; no automatic full mailbox mirror); **F4** search/weather providers (recommendation depends on terms, availability, attribution and cost; not selected). Internet search sends the query, weather sends only the necessary city; the local language model does not need to become cloud inference.
 
-**F9** no-internet mode remains a separate choice: recommend all entitled local task/habit/calendar/note functions, local conversation and due reminders continue, while sync/search/weather show an unavailable or queued status as appropriate. Remote sending must not be described as complete while offline. Expired offline entitlement follows the separately approved expiry policy; lack of internet does not extend it.
+**F9 — accepted:** with valid trial/license access and required local resources available, all local sections, reminders, voice, and conversation work offline. Search, live weather, and external providers require a network connection. A locally queued intention is not remote execution; do not imply automatic retry after an uncertain email-send result or introduce an own server. Lack of internet does not change offline entitlement expiry.
 
 File/device capabilities use explicitly selected paths/applications and visible grants. Name/nickname and city are supported profile information; broader automatically inferred long-term memory is not approved. Local history deletion, token revocation and model/download state require separate controls. Product-wide telemetry is not assumed.
 
@@ -158,7 +160,7 @@ Context recovery checklist for both agents:
 4. Recover submitted answers from documents/logs; treat pending choice cards and recommendations as unanswered. Ask again only if the answer genuinely cannot be recovered.
 5. Continue the recorded task; do not restart completed research, install components or write app code merely because context was shortened.
 
-Current handoff, PLAN-003: D2 is accepted and D6 is partly accepted, alongside earlier planner choices and F5/F6/F8. The next batch is prepared: A2 (scope/revocation for remembered task-change permission), E5 (missed-reminder catch-up) and F9 (offline planner functions); no answers have been submitted. Workstreams A–H remain proposals where not explicitly confirmed. The deliverable is bilingual design documentation and selectable decision batches. Runtime/schema installation and application programming remain unauthorized. Track subsequent answers in the shared log and relevant canonical documents before issuing the next dependent batch.
+Current handoff, PLAN-004: D2 is accepted and D6 is partly accepted, alongside earlier planner choices and F5/F6/F8. A2, E5, and F9 are accepted as recorded above. The next batch is prepared: E2 (dialogue idle timeout and English stop command), E3 (initiative defaults), and E6 (microphone-mute persistence after restart); no answers have been submitted. Workstreams A–H remain proposals where not explicitly confirmed. The deliverable is bilingual design documentation and selectable decision batches. Runtime/schema installation and application programming remain unauthorized. Track subsequent answers in the shared log and relevant canonical documents before issuing the next dependent batch.
 
 ## 11. Primary technical references
 
