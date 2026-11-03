@@ -4,7 +4,7 @@
 
 Djarvis is a personal intelligent assistant intended to manage tasks and habits, hold conversations, and find information on the internet.
 
-The repository currently contains a project scaffold and development/design documents. Flutter UI and necessary Dart UI code are selected in ADR-001; PostgreSQL is selected as the local backend database in ADR-002. The current release has no Djarvis-hosted remote backend or cloud storage; authorized external integrations are separate, and future cloud synchronization still requires design. Core language, host packaging, drivers, versions, schema, and remaining architecture are not approved. No application implementation is authorized by these decisions, and there is no runnable application yet.
+The repository currently contains a project scaffold and development/design documents. Flutter UI and necessary Dart UI code are selected in ADR-001; PostgreSQL is selected as the local backend database in ADR-002; Python is selected for planner-core/background logic with its own packaged runtime in ADR-003; and the app-managed lifecycle of an isolated local PostgreSQL instance is selected in ADR-004. The current release has no Djarvis-hosted remote backend or cloud storage; authorized external integrations are separate, and future cloud synchronization still requires design. Exact versions, drivers, schema, runtime/database distribution and packaging details, and remaining architecture are not approved. No application implementation is authorized by these decisions, and there is no runnable application yet.
 
 ## Structure
 
@@ -37,12 +37,13 @@ assets/           Static assets
 - Read the [project rules](docs/PROJECT_RULES.md) before each task.
 - Check and update the [shared work log](Plan/WORK_LOG.md) before editing files.
 - Record approved architecture decisions in the [decision register](docs/architecture/DECISIONS.md).
-- Review the [product definition](docs/PRODUCT.md), [first architecture proposal](docs/architecture/PROPOSAL.md), and [decision register](docs/architecture/DECISIONS.md); ADR-001 selects Flutter/Dart only for the UI and ADR-002 selects a local PostgreSQL backend database only. Other architecture proposals remain unapproved.
+- Review the [product definition](docs/PRODUCT.md), [first architecture proposal](docs/architecture/PROPOSAL.md), and [decision register](docs/architecture/DECISIONS.md); ADR-001 selects Flutter/Dart for UI, ADR-002 local PostgreSQL, ADR-003 Python core/background logic, and ADR-004 app-managed lifecycle of an isolated local PostgreSQL instance. Exact packaging and remaining architecture are unresolved.
 - Follow the owner's [required Djarvis visual design](docs/DESIGN.md); technology choices must preserve this design.
 - Review the [detailed planner core, data, and interaction proposal](docs/architecture/PLANNER_CORE.md) before implementation planning.
+- Use the [remaining design and decision plan](docs/architecture/REMAINING_PLAN.md) for all eight workstreams, selectable questions, acceptance criteria and context recovery.
 - Maintain English and Russian documentation as separate synchronized files.
 - Present and discuss the implementation plan before programming; begin only after owner approval.
 
 Repository: [SwanThunder/Djarvis](https://github.com/SwanThunder/Djarvis).
 
-The next step is to review the detailed planner core, data, and interaction proposal and resolve its open rules before approving implementation. Flutter UI and a local PostgreSQL backend database are selected in their limited scopes; other architecture decisions still need agreement. The full requested product scope and required design remain documented. A GitHub copy of source files does not back up local user data; those require separate backups before risky changes.
+The next step is to review the detailed planner core, data, and interaction proposal and resolve its open rules before approving implementation. Flutter UI, Python core/background direction, and app-managed local PostgreSQL lifecycle are selected in their limited scopes; versions, drivers, packaging and other architecture decisions still need agreement. Daily local backups, pre-structure/migration backups, and seven-day configurable retention are requirements. The full requested product scope and required design remain documented. A GitHub copy of source files does not back up local user data; those require separate backups before risky changes.

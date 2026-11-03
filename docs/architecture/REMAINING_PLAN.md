@@ -1,0 +1,168 @@
+# Remaining design and approval plan
+
+[Русская версия](REMAINING_PLAN.ru.md) · [Approved decisions](DECISIONS.md) · [Detailed planner core](PLANNER_CORE.md)
+
+Date: 2026-11-03. Status: design work, not implementation approval. This document develops all remaining workstreams without reducing the requested product scope. Recommendations below are proposals until explicitly accepted. Version selection, implementation plans and programming require separate approval.
+
+## 1. Current baseline and decision tracking
+
+The repository contains scaffolding and bilingual product, visual, architecture and planner specifications. It does not contain a working application, database schema or installer. A development language model has been downloaded and smoke-checked; this is not a tested production voice stack or an 8 GiB CPU benchmark. See [local model evaluation](../LOCAL_MODEL.md).
+
+Approved technology directions: Flutter UI (ADR-001), local PostgreSQL (ADR-002), Python core/background logic with an app-owned runtime (ADR-003), and app-managed isolated PostgreSQL start/stop without a console (ADR-004). Automatic local backups run daily and before structural updates/migrations; default retention is seven days, with configurable schedule and retention. No own activation server or cloud user-data store is approved.
+
+Newly submitted planner choices: ask for a time whenever an explicit deadline contains only a date; advanced task fields have a global display preference and can also be expanded per task; habit weeks start Monday, paused days are excluded from assessment, pauses freeze streaks, and corrections retain history. None of these turns the date-only placement window 06:00–22:00 into a deadline.
+
+Each unresolved decision below has a stable ID. Questions are presented in small selectable batches; the answer UI also permits free text. A recommended or preselected choice is not accepted until the owner submits it. Unknown answers from older numbered replies must not be reconstructed by guessing.
+
+## 2. Workstream A — core, processes and contracts
+
+Proposed structure: Flutter presents read models; one per-user Python host owns commands, policy, planning, reminders and integration queues. The host manages its private PostgreSQL and supervises isolated model/speech workers. Closing the window preserves the host and wake listening; Full Exit stops capture, workers and the private database gracefully. A second app launch connects to the existing host rather than opening a second owner of the data directory.
+
+Domain rules and application use cases do not import Flutter, inference frameworks or provider SDKs. Suggested Python modules are `domain`, `application`, `planning`, `storage`, `conversation`, `permissions`, `integrations` and `platform_windows`. These are logical boundaries, not a request to create packages now. The existing folder structure is scaffolding and can be mapped after review.
+
+Recommended local transport: a versioned HTTP command/query API and a WebSocket event stream bound only to loopback, authenticated by a per-run secret passed through a protected local handoff. Do not place the secret in URLs or logs, expose a LAN listener, or give the UI database credentials. A framework such as FastAPI is a candidate, not an approved dependency. Alternative: Windows named pipes with user ACLs; this avoids a listening HTTP port but needs more native transport work and a different Android adapter.
+
+Proposed request envelope: action ID, contract version, target IDs/revisions, typed payload and permission context. Response states distinguish clarification, confirmation required, rejected, conflict, applied locally, and queued externally. Provider confirmation is a later distinct event. Events carry revisions; reconnect fetches a fresh read model rather than assuming every transient event was received. Cancelled generation does not imply an already committed action was undone.
+
+Ambiguous targets or intended dates always require clarification, even when the user has disabled task-change confirmations. Clarification establishes intent; a remembered permission cannot guess which of several meetings the user means.
+
+User speech, UI and scheduled proposals share the same command gate. The model receives narrow tools, never unrestricted SQL or shell execution. Search results, email and file contents are untrusted input and cannot grant permissions. A capability is granted by the user in Settings, can be revoked, and is checked again before execution.
+
+Decisions: **A1** transport; **A2** scope of remembered task-change permission (recommended: explicit task-action categories, visible and revocable); **A3** device actions (recommended: allowlisted applications/paths, explicit confirmation for destructive or disruptive actions). Mail sending and user-file deletion/overwrite always require confirmation; habit goal/load changes always require acceptance.
+
+Completion evidence: reviewed contracts and process ownership; duplicate-command and reconnect scenarios; ambiguous targets with confirmations disabled; stale confirmation rejection; permission revocation during queued work; host/worker failure recovery; demonstrable microphone release on mute and Full Exit. Programming these checks awaits approval.
+
+## 3. Workstream B — local PostgreSQL, schema and recovery
+
+Recommended layout: app-owned runtime files separate from per-user durable data and disposable cache. Store production user data under an explicitly chosen per-user application-data location, not inside the source checkout or an install directory. PostgreSQL listens only locally on a managed available port, uses a dedicated database role and authenticated connections, and never adopts or stops an unrelated installation. Startup verifies the cluster identity/version and prevents two hosts from managing the same cluster. Exact binary distribution and Windows 10 compatibility require validation.
+
+Candidate driver: Psycopg 3, with a bounded connection pool and short transactions. Select a supported Python/PostgreSQL/driver combination and package it together; no global Python, manual pip, Docker or visible terminal is part of the user journey. Embedded Python distribution is a possible packaging method; frozen executables are an alternative to compare against native speech/driver dependencies. No exact version or packager has been selected.
+
+The [core proposal](PLANNER_CORE.md) supplies the logical schema: tasks/templates, stable recurrence occurrences, placements, projects, habits and measurements, calendar events/provider mappings, notes, reminders/deliveries, scoped grants, actions/audit/outbox, conversation retention and planning revisions. Next schema review must specify columns, constraints, foreign keys, deletion policy, indexes and migrations. Keep task occurrence identity distinct from movable placements and optional deadlines. Preserve the original named timezone separately from UTC instants.
+
+Concurrency recommendation: every planning-affecting write, including calendar synchronization, uses the same short per-profile planning guard and increments a revision. Plan acceptance acquires that guard, revalidates inputs and writes atomically. No database lock remains open while waiting for a user, inference or network. A row update that does not affect planning need not invalidate a day proposal.
+
+Backup flow: produce a consistent database dump plus an attachment manifest; retain referenced immutable attachment content until the copy finishes; verify the archive and restore it in an isolated temporary database before declaring it recoverable. Do not copy a live PostgreSQL data directory as an ordinary application backup. Only prune old valid backups after the new one passes validation. Model weights, disposable cache and OAuth secrets are excluded from ordinary portable planner backups.
+
+Migration flow: check free space and versions, make the required recoverable copy, stop incompatible work, apply a versioned migration, check constraints and reopen the core. A failed update keeps a recovery path. Reverting binaries alone is insufficient after an incompatible schema change; major PostgreSQL upgrades need their own reviewed migration procedure.
+
+Decisions: **B1** backup destination (recommended: configurable folder outside the live-data directory); **B2** backup encryption/recovery (recommended: portable password-encrypted export, separately designed key recovery); **B3** restore/erasure interaction. Proposed restore UI shows archive date/version/content and warns that newer data will be replaced. Restoring a pre-erasure archive must not silently resurrect deleted conversations. Choose whether backups exclude conversations or deletion invalidates/rebuilds affected archives. Windows-protected local credentials alone do not make a backup portable to another computer.
+
+Completion evidence: SQL design review; restart/crash and low-disk scenarios; no cross-process cluster ownership collision; successful restore with attachments; failed migration recovery; retention and conversation-erasure checks. The database is not installed or initialized by this planning task.
+
+## 4. Workstream C — screens and mandatory visual design
+
+The [owner's visual specification](../DESIGN.md) remains mandatory: dark Glassmorphism/Bento, narrow left sidebar, contextual header with search and profile/actions, futuristic circular assistant above the day panel, no background image. All three exact palettes and independent Glass/Solid modes must work, including opaque nested Solid surfaces.
+
+Proposed navigation: Today, Tasks, Calendar, Habits, Projects, Notes, Conversation, Settings. Today contains the assistant, current/next block, remaining day plan and habit progress. Unscheduled work and deadline warnings are clearly distinct from timed blocks. A command preview highlights exactly which records change. Calendar conflicts show both versions and the consequences of choosing either.
+
+Settings groups: appearance; planning and available hours; habits; voice/persona/microphone; initiative/quiet hours; connections and capabilities; local data/history/backups; models/downloads; subscription. Global search searches authorized local records first; internet search is an explicit assistant action. Empty, loading, offline, permission-denied, conflict, model-preparing and license-expired states require real designs rather than fabricated demo content.
+
+Decisions: **C1** initial palette/material (proposed `deep-blue-pink` + Glass); **C2** density and default day view (recommended: comfortable density, timeline with compact task/habit cards); **C3** whether Conversation is a separate full page as well as an assistant panel. The advanced-fields display behavior is already selected; hidden fields retain data.
+
+Completion evidence: reviewed screen/state map and nonfunctional mockups before UI programming; six theme/material combinations; keyboard/focus/reduced-motion behavior; readable scaling; actual contrast measurement and effects tested together with the voice stack on the baseline device. Do not silently change approved Glass preference because a device is slow.
+
+## 5. Workstream D — planner and habit semantics
+
+Confirmed rules stay in [PRODUCT](../PRODUCT.md) and [PLANNER_CORE](PLANNER_CORE.md): four priorities; distinct deadline lateness and missed placement, without automatically changing the missed placement's date; missing duration queried before automatic scheduling; locked manual placements; per-task split consent; anchored recurrence with separate outstanding occurrences; four habit types; fixed days and flexible distinct successful days; habit misses do not become task debt.
+
+Proposed task entry: title required, normal priority by default, other basic fields optional unless the requested operation needs them. A date-only placement uses 06:00–22:00; an explicit deadline without a time always triggers a time question. For a manual start with unknown duration, recommend a visible start-only marker, not a validated reserved interval. Ask its duration before day planning, or let the user explicitly exclude it from that planning attempt; do not silently treat an unknown end as free time. Automatic planning never invents duration or silently changes a deadline.
+
+Proposed planner algorithm: capture a planning revision; collect availability, locked meetings/blocks and break rules; ask about missing required inputs; generate feasible placements; prefer deadlines and priorities while respecting explicit locks; explain unscheduled work and shortages; preview changes; apply only with the required confirmation/grant and revision validation. There is no claim of a globally optimal plan. The UI must distinguish a deadline that cannot be met from a merely crowded preference window.
+
+Recurrence review must cover daily/weekly/monthly patterns, interval anchors, exclusions, changes to one occurrence vs this-and-following, and cancellation without deleting historical debt. Recommended monthly rule: explicitly choose whether dates absent in a month are skipped or use its last day. Do not silently drift the recurring anchor. The temporal specification also defines all-day vs timed events, free/busy normalization and explicit policies for nonexistent or repeated local times during DST changes.
+
+Habit model: distinct daily measurements, an assessed day/period, goal-version history and corrected entries. A pause excludes paused days from assessment and freezes streaks. For flexible weekly habits, the treatment of a partly paused week remains open: recommendation is to mark a week with insufficient eligible days as paused/incomplete rather than silently lower the goal or record a miss. Abstinence needs an explicit successful check-in; silence is not evidence of success. Goal/load suggestions never auto-apply.
+
+Decisions: **D1** minimal creation/normal default and manual start-only marker; **D2** timezone travel rule (recommended: retain an event's original zone, explicitly offer adapting recurring personal routines); **D3** monthly missing dates; **D4** partial-pause weekly quotas and exact fixed/flexible streak definitions; **D5** backdated habit corrections (recommended: allow, retain correction history, recompute affected statistics); **D6** break length/buffer and task segment rules (recommended: configurable limits, validate positive segment durations and their total against the agreed task duration, and require an explicit task-completion action rather than inferring completion from elapsed slots). Whether all segment check-offs are required for completion remains a choice.
+
+Completion evidence: worked examples for date-only scheduling vs deadline clarification; multiple overdue recurrence occurrences; late completion without schedule drift; DST gaps/overlaps; impossible plans; stale proposals; split totals and explicit completion; paused weeks/corrections/abstinence. No algorithm or schema has been executed yet.
+
+## 6. Workstream E — local conversation, speech and characters
+
+Proposed pipeline: microphone capture → local wake detector/VAD → local speech recognition → intent/context → local language model → policy-controlled commands or answer → local speech synthesis. Interrupt detection must remain available during TTS; mute stops all capture, including wake detection. Raw audio retention is proposed off by default. Conversation history remains locally configurable, erasable and optional; transient session buffers and minimal action audit must not become a hidden transcript.
+
+Use resource budgets for the Python host, PostgreSQL, UI and speech/model workers together. Small LLM candidates and on-demand worker loading need accuracy/latency measurements. Keeping several large models resident is not a valid untested 8 GiB strategy; unloading workers must not break interruption or background wake listening. The evaluated development 4B model is not yet the baseline production choice.
+
+Candidate runtimes include llama.cpp for language inference and sherpa-onnx for offline speech components. Model licenses are checked separately from runtime licenses. Runtime support for keyword detection does not establish accurate recognition of every user-entered phrase; custom phrases need enrollment/validation and an explicit unsupported-phrase result rather than pretending to accept them.
+
+The sherpa-onnx model catalog contains Russian and English ASR options; the runtime's Apache-2.0 license does not determine their individual weight licenses. At least one older Russian GigaAM package has noncommercial terms, so no GigaAM release is approved for this commercial product without checking that exact artifact. Its documented pretrained keyword models do not establish Russian custom-phrase coverage. Qwen3-TTS 0.6B Base is a speech-cloning evaluation candidate with Russian/English support and Apache-2.0 model-card terms; CPU execution paths are not an official Windows 8 GiB latency/memory benchmark. Neither candidate is selected for production.
+
+The requested Jarvis, Rick Sanchez and Sebastian identities and recognizable voices remain requirements. The local Rick MP3 is a reference, not proof of permission or a production voice model. Before choosing assets, identify the exact dubbing/language version and obtain the required commercial-use permissions. A speech model's software/weight license does not grant character or recording rights. No generic substitute is silently selected. Technical evaluations may use appropriately licensed neutral test audio without declaring the requested production voices complete.
+
+Proposed assistant states: muted, waiting for wake phrase, listening, processing, speaking, preparing models, degraded/error. State is visible in the main window and tray. Timeouts end a session; “Хватит” or the selected English command ends it immediately. An interrupted spoken answer is not resumed automatically over the user's next sentence.
+
+Decisions: **E1** exact voice/language versions (Rick: provided reference / another licensed version; Jarvis and Sebastian: selected dubbing / original-language voice); **E2** dialogue idle timeout and English stop phrase (suggested adjustable 30 seconds and “Stop”); **E3** initiative defaults and quiet hours (recommended: silent until onboarding opt-in, then configured triggers); **E4** absence/call/game detection (recommended: user-controlled OS/app signals, manual quiet mode available); **E5** reminder catch-up (recommended: one summary after resume, no replay of every missed spoken reminder).
+
+Completion evidence: RU/EN conversations and task intent accuracy; wake false-positive/miss measurements; custom phrases; barge-in and echo handling; immediate mute; tray/closed-window behavior; quiet/call/game scenarios; end-to-end CPU/memory latency. Exact required voice assets and their permissions are release dependencies, not completed work.
+
+## 7. Workstream F — integrations, privacy and offline subscriptions
+
+Calendar proposal: independently useful internal calendar plus opt-in Google Calendar/Outlook adapters, system-browser OAuth, minimal scopes and Windows-protected refresh tokens. Sync provider changes incrementally and keep a last-synced base. If both sides change one event, preserve versions and ask the user. A disconnected adapter does not remove internal projects, notes or calendar data.
+
+After a mail-send timeout following dispatch, the outcome remains unknown: reconcile with the provider before any resend, or ask the user if reconciliation is inconclusive. Do not automatically retry blindly or announce either confirmed success or confirmed failure. A local queued intention alone never proves delivery.
+
+Decisions: **F1** export policy (recommended: selected calendars and task placements, habits private unless enabled); **F2** external deletion behavior (recommended: ask when it would remove a local item or conflict with newer local work); **F3** Gmail capabilities (recommended: independent read/search, draft and send permissions; no automatic full mailbox mirror); **F4** search/weather providers (recommendation depends on terms, availability, attribution and cost; not selected). Internet search sends the query, weather sends only the necessary city; the local language model does not need to become cloud inference.
+
+**F9** no-internet mode remains a separate choice: recommend all entitled local task/habit/calendar/note functions, local conversation and due reminders continue, while sync/search/weather show an unavailable or queued status as appropriate. Remote sending must not be described as complete while offline. Expired offline entitlement follows the separately approved expiry policy; lack of internet does not extend it.
+
+File/device capabilities use explicitly selected paths/applications and visible grants. Name/nickname and city are supported profile information; broader automatically inferred long-term memory is not approved. Local history deletion, token revocation and model/download state require separate controls. Product-wide telemetry is not assumed.
+
+Offline licensing proposal: an external purchase process issues a device-bound signed license file; the application verifies a bundled public key locally. Keep the signing private key outside the distributed application. The license contains product/features, validity interval and device binding, without task or conversation content. Renewal imports a new signed file. This is a proposal for issuance, not an existing subscription/payment system or a newly authorized activation server.
+
+There is an unresolved requirement conflict: an account was previously requested for subscription, while fully offline entitlement was later required. **F5** choose local profile + license-file purchase without mandatory in-app account (recommended), or an account only at an external purchase provider while the app still verifies a file offline. Do not introduce an own activation server to resolve this implicitly. Price, renewal periods, merchant/payment provider, taxes and supported purchase countries remain commercial choices requiring evidence; do not promise universal payment availability.
+
+**F6** trial start: recommend the first actual use of any product function, including the manual planner; installation screens and waiting for downloads alone do not start the seven days. Alternative: wait for all required models, with only setup available beforehand. **F7** clock/reinstall/device changes: recommend signed validity bounds, local high-water marks and an explicit recovery/reissue path; fully offline software cannot guarantee unique-person trials, permanent reinstall resistance or a tamper-proof clock. Do not call a device fingerprint proof of one person. **F8** expired state: product features locked and data retained as approved; recommend renewal/import, local deletion and automatic backups remain accessible, with background capture and proactive speech stopped. Whether backup housekeeping remains active needs explicit agreement.
+
+Choice cards **F5**, **F6** and **F8** are still awaiting answers and are not approved. Completion evidence: reviewed provider scopes/verification needs; revoked credentials; two-way create/edit/delete and recurrence conflicts; provider timeout/unknown mail result; offline signature and renewal; clock rollback and hardware-change recovery; expired state without data loss. No credentials, billing service or device fingerprint are created now.
+
+## 8. Workstream G — installation, updates and acceptance
+
+Proposed installer separates signed application/runtime packages from first-launch hardware-appropriate model assets. Initial setup checks free disk space and required compatibility, shows understandable preparation progress, supports interrupted-download resume, verifies pinned hashes/signed manifests, and activates complete assets atomically. Keep a known-good asset until replacement is validated. Installation is automatic without console/manual commands; it must not imply covert global system changes.
+
+**G1** Windows architecture: recommend x64 baseline first, separately decide ARM64 support; Windows 10/11 remains the product target. **G2** updates: recommend notification and scheduled application restart after backup, with explicit recovery; no forced restart during active speech/task editing. **G3** package/distribution: compare standalone signed installer vs store distribution after evaluating private runtimes, offline licenses, payment constraints and update costs. Exact Python/PostgreSQL builds, framework versions and native dependencies need a compatibility matrix before locking the toolchain.
+
+Proposed acceptance matrix combines, rather than isolates, Flutter effects, PostgreSQL, wake listening, recognition, LLM and TTS on a CPU-only 8 GiB Windows device. Record cold/warm startup, peak resident memory, responsiveness, first-token/first-audio delays, disk usage and download size. Numeric release thresholds must be selected and measured, not invented as achieved targets. Also test Win10/11 lifecycle, interrupted installation, corrupt assets, low disk, model failure, migrations/restore, duplicate operations, permission changes, sleep/resume and microphone release.
+
+Completion evidence: reproducible packaged builds on clean supported systems; documented dependency/license inventory; signed artifact verification; demonstrated recovery and data preservation; bilingual onboarding/help. These are future checks. This documentation task does not install dependencies or generate an installer.
+
+## 9. Workstream H — Android and future synchronization
+
+Preserve stable IDs, versioned command/read contracts, named timezone information, provider-origin mappings and explicit conflict types now. Keep Windows APIs behind adapters. Flutter can share presentation work, but neither the Python host nor the PostgreSQL server is assumed to run unchanged on Android.
+
+**H1**, later decision: Android-local runtime/storage vs connecting to the user's Windows host vs an explicitly approved future cloud service. Each affects offline behavior, background microphone restrictions, battery use, trial binding and synchronization. Retain the requested Android direction without choosing a mobile database, server or new cloud entitlement policy by implication.
+
+Future synchronization exchanges logical records and revisions, not live PostgreSQL data-directory files. It must define identity/account recovery, encrypted transport/storage, conflict handling, deletion propagation and multi-device license policy before implementation. Google/Outlook calendar synchronization is distinct from full Djarvis device-to-device synchronization.
+
+Completion evidence now: reviewed platform-neutral boundaries and documented mobile assumptions. Android implementation and sync acceptance criteria are developed in their own approved design stage; the Windows plan must not claim those features are built.
+
+## 10. Review order, implementation gates and context recovery
+
+Review order: confirmed baseline → remaining planner/time rules → core transport/permission contracts → database schema/recovery → screens and interactions → speech/voices/performance → integrations and offline purchase workflow → packaging/acceptance → Android boundary review. Discuss dependent decisions with their consequences, then save accepted results to product/core documents and architectural ADRs as appropriate.
+
+Before any programming, prepare a concrete implementation plan with file/module ownership, approved versions/contracts, error paths, data migration/recovery and appropriate checks. The owner approves that plan. Subsequent work is divided by dependencies, not by silently omitting requested features. An approved language or a recommendation in this document is not blanket coding permission.
+
+Context recovery checklist for both agents:
+
+1. Re-read the local entry instructions, current [project rules](../PROJECT_RULES.md), and both the active task and latest result in the [shared work log](../../Plan/WORK_LOG.md).
+2. Read [approved ADRs](DECISIONS.md), [product](../PRODUCT.md), [mandatory design](../DESIGN.md), and the relevant sections of [architecture](PROPOSAL.md), [planner core](PLANNER_CORE.md) and this document.
+3. Inspect working-tree changes and current file reservations before editing. Preserve other agents' unfinished work.
+4. Recover submitted answers from documents/logs; treat pending choice cards and recommendations as unanswered. Ask again only if the answer genuinely cannot be recovered.
+5. Continue the recorded task; do not restart completed research, install components or write app code merely because context was shortened.
+
+PLAN-001 handoff: Python/private PostgreSQL/backup defaults and the three new planner choices are submitted; all workstreams A–H above remain proposals where not explicitly confirmed. The current deliverable is bilingual design documentation and selectable decision batches. Runtime/schema installation and application programming remain unauthorized. Track subsequent answers in the shared log and relevant canonical documents before issuing the next dependent batch.
+
+## 11. Primary technical references
+
+- [Flutter supported platforms](https://docs.flutter.dev/reference/supported-platforms): platform direction; not proof of this application's combined performance.
+- [Python on Windows](https://docs.python.org/3/using/windows.html): application distribution/embedding; exact version and dependency packaging remain to be tested.
+- [Psycopg installation](https://www.psycopg.org/psycopg3/docs/basic/install.html): candidate driver/platform requirements.
+- [FastAPI deployment](https://fastapi.tiangolo.com/deployment/): candidate local API host, not selected.
+- [PostgreSQL pg_ctl](https://www.postgresql.org/docs/current/app-pg-ctl.html), [transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [date/time types](https://www.postgresql.org/docs/current/datatype-datetime.html): process, concurrency, dump and timezone constraints.
+- [llama.cpp](https://github.com/ggml-org/llama.cpp), [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx): candidate local inference/speech runtimes, with separately reviewed model assets.
+- [sherpa model catalog](https://k2-fsa.github.io/sherpa/onnx/pretrained_models/), [keyword spotting](https://k2-fsa.github.io/sherpa/onnx/kws/index.html), [older GigaAM package](https://huggingface.co/csukuangfj/sherpa-onnx-nemo-transducer-giga-am-russian-2024-10-24/tree/main): model-specific language and licensing review, not approval to distribute.
+- [Qwen3-TTS Base model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base), [CPU-capable demo source](https://github.com/QwenLM/Qwen3-TTS/blob/main/qwen_tts/cli/demo.py): speech candidate capabilities, not baseline performance or character rights.
+- [Google desktop OAuth](https://developers.google.com/identity/protocols/oauth2/native-app), [Calendar incremental sync](https://developers.google.com/workspace/calendar/api/guides/sync), [Gmail scopes](https://developers.google.com/workspace/gmail/api/auth/scopes): public-client authorization, synchronization and scope review.
+- [Microsoft desktop registration](https://learn.microsoft.com/entra/identity-platform/scenario-desktop-app-registration), [Graph event delta](https://learn.microsoft.com/graph/api/event-delta?view=graph-rest-1.0), [Windows DPAPI](https://learn.microsoft.com/en-us/windows/win32/api/dpapi/nf-dpapi-cryptprotectdata): desktop integration and local credential-protection constraints.
+
+The offline license-file workflow, proposed boundaries, UI grouping and defaults are project design recommendations, not claims that these sources approve the full product architecture.

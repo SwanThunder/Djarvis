@@ -2,7 +2,7 @@
 
 [Русская версия](PRODUCT.ru.md)
 
-Status: requirements captured from the owner's responses on 2026-11-03. Open questions and proposals are not approved decisions. ADR-001 selects Flutter UI and necessary Dart UI code; ADR-002 selects PostgreSQL as a local backend database on the user's device. Core language, detailed schema, runtime packaging, and the broader architecture remain under review. Programming is not authorized by these selections.
+Status: requirements captured from the owner's responses on 2026-11-03. Open questions and proposals are not approved decisions. ADR-001 selects Flutter UI and necessary Dart UI code; ADR-002 selects local PostgreSQL; ADR-003 selects Python for planner-core/background logic with a packaged runtime; ADR-004 selects app-managed lifecycle for its isolated local PostgreSQL instance. Exact versions, drivers, schema, packaging details, and broader architecture remain under review. These decisions do not authorize programming.
 
 ## Purpose and audience
 
@@ -24,13 +24,13 @@ The owner wants the entire requested product designed without a deadline or arbi
 
 ### Tasks and planning
 
-- Basic task fields: title, description, project, priority (low, normal, high, or urgent), deadline, scheduled time, duration, recurrence, and reminders; completion is tracked. A task with no duration can be saved; the planner asks for a duration before scheduling it. Users can toggle advanced subtasks, checklists, tags, and attachments; whether this is a global or per-task toggle is unresolved.
+- Basic task fields: title, description, project, priority (low, normal, high, or urgent), deadline, scheduled time, duration, recurrence, and reminders; completion is tracked. A task with no duration can be saved; the planner asks for a duration before scheduling it. Advanced subtasks, checklists, tags, and attachments are controlled by a global setting, and can be expanded independently on each task. Hiding advanced fields never deletes their data.
 - Calendar, recurring tasks, and projects.
 - Automatic day planning.
 - Voice creation and modification of tasks, habits, and their records.
 - Daily spoken plans triggered by user-configured times or situations.
 
-The automatic day planner considers meetings, deadlines, priorities, durations, habits, breaks, and the user's available hours. It proposes a plan and applies it after confirmation or remembered permission. Manually placed task times stay locked unless the user explicitly permits changing them. Task splitting is allowed only when the user opts in for that task; the planner never silently splits work. An overdue deadline and a missed scheduled time are distinct states and are displayed separately. A missed scheduled time is highlighted and announced aloud; its date is not changed automatically. Whether a per-task override is available remains unresolved. Recurrence follows its original schedule even when an occurrence is completed late: a task due November 1 every seven days and completed November 3 is next due November 8, not November 10. Missed occurrences remain separate outstanding debt. A date-only task defaults to the 06:00–22:00 placement window, using the task's own duration; this is not a 16-hour duration or global workday, and the deadline remains separate. The cutoff for an explicit deadline without a time remains unresolved. Exact date and timezone semantics, and other conflict rules, still need design. Ambiguous commands always require clarification of the target, even when task-change confirmations are disabled (for example, which of several meetings to move). Clarification resolves what the user means; it is separate from optional confirmation before acting.
+The automatic day planner considers meetings, deadlines, priorities, durations, habits, breaks, and the user's available hours. It proposes a plan and applies it after confirmation or remembered permission. Manually placed task times stay locked unless the user explicitly permits changing them. Task splitting is allowed only when the user opts in for that task; the planner never silently splits work. An overdue deadline and a missed scheduled time are distinct states and are displayed separately. A missed scheduled time is highlighted and announced aloud; its date is not changed automatically. Whether a per-task override is available remains unresolved. Recurrence follows its original schedule even when an occurrence is completed late: a task due November 1 every seven days and completed November 3 is next due November 8, not November 10. Missed occurrences remain separate outstanding debt. For a planning date with no time, the allowed placement window is 06:00–22:00, using the task's own duration; this is not a 16-hour duration or global workday. An explicit deadline date without a time always prompts the user for a time on each entry; do not assign midnight or 22:00 automatically. Exact timezone semantics and other conflict rules still need design. Ambiguous commands always require clarification of the target, even when task-change confirmations are disabled (for example, which of several meetings to move). Clarification resolves what the user means; it is separate from optional confirmation before acting.
 
 ### Habits
 
@@ -40,7 +40,7 @@ The automatic day planner considers meetings, deadlines, priorities, durations, 
 - Personalized plans, analysis of missed habits, and gradual goal increases or workload changes proposed by the assistant. The assistant never applies goal or load changes without user approval; the task-change no-confirmation preference does not override this restriction.
 - Users choose and configure which of these behaviors are active.
 
-Pause and correction rules, the cutoff for counting a flexible weekly schedule as missed, and streak rules still need design.
+Habit weeks start Monday. Paused days are excluded from habit assessment, and streaks are frozen during a pause. Corrections preserve history. The quota for a flexible weekly schedule in a partially paused week still needs refinement; exact streak definitions for fixed-day and flexible schedules remain open.
 
 ### Assistant and interface
 
@@ -66,7 +66,7 @@ Initial integrations include Google Calendar, Outlook, and Gmail. Google Calenda
 
 The assistant remembers the user's name or nickname. The user can enter a city manually or optionally enable automatic city detection with permission; a city is sufficient for weather, and precise GPS location is not required. Conversation history is stored locally; users choose its retention period and can disable history or delete all history. This does not approve additional persistent memories by default. Timezone behavior and any future cloud processing remain undecided.
 
-Automatic local backups are required. Backup interval, location, retention, encryption, and restore experience, and how history deletion interacts with backup copies, require design. Do not promise secure physical erasure.
+Automatic local backups are required daily and before data-structure or migration updates. Keep seven days of backups by default; the schedule and retention are configurable. Backup location, encryption, restore experience, and how history deletion interacts with backup copies still require design. Do not promise secure physical erasure.
 
 ### Commercial model and localization
 
@@ -96,12 +96,12 @@ The owner explicitly wants recognizable voices for the exact named characters, n
 ## Decisions needed before architecture
 
 1. Current subscription price and plan structure; future API-key support with the previously requested 50% BYOK pricing; offline license issuance and renewal, device-trial design, licensing security, retention, reinstalls, and hardware changes. Online entitlement registration is excluded. The seven-day per-device trial and feature unavailability after expiry are set.
-2. Future cloud storage/synchronization, offline planner behavior, backup interval/location/retention/encryption/restore experience, history deletion's interaction with backups, and export/deletion of other user data. Current-version AI inference is local only.
+2. Future cloud storage/synchronization, offline planner behavior, backup location/encryption/restore experience, history deletion's interaction with backups, and export/deletion of other user data. Daily backups, pre-structure/migration backups, seven-day default retention, and configurable schedule/retention are set. Current-version AI inference is local only.
 3. Validate local model compatibility and CPU performance against the Windows 10/11 target of 8 GiB RAM without a discrete GPU; this target is not a validated minimum, and the current 4B development model has not been validated for CPU-only use at 8 GiB.
 4. Wake-phrase detection implementation; microphone mute indicators, persistence, and re-enable controls; inactivity-timeout defaults and configuration; the English equivalent of «Хватит»; call/game and quiet-hours detection and schedule; whether proactive triggers are enabled by default, exact trigger timing, and absence detection.
 5. Character presentation and implementation of recognizable exact-character voices; identify the intended voice actor and language versions, and assess usage permissions.
 6. How remembered permission for task plan changes is scoped and revoked; whether a per-task missed-date override is available. Confirmation rules for device control remain open; sending email, deleting files, and overwriting files always require confirmation.
 7. Calendar conflict-resolution interaction details and notes/projects integration needs; bidirectional Google Calendar and Outlook sync, with user choice for same-event conflicts, are requirements.
-8. Whether the advanced task-fields toggle is global or per-task; cutoff for an explicit deadline without a time; exact task date/timezone semantics and other detailed scheduling/conflict rules; habit pause/correction rules, flexible-schedule miss cutoff, and streak semantics.
+8. Cutoff for an explicit deadline without a time is resolved by always asking the user for a time; exact task date/timezone semantics and other detailed scheduling/conflict rules; quota for a partially paused flexible week and exact streak definitions for fixed-day/flexible schedules.
 
 Next: resolve these product questions, review full user journeys, and then propose an architecture for explicit owner approval.

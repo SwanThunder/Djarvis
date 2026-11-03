@@ -2,7 +2,7 @@
 
 [Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md) · [Planner core proposal](PLANNER_CORE.md)
 
-Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001 and local PostgreSQL backend database decision in ADR-002. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints and these narrowly scoped choices come from the product discussion; all other technology and implementation choices below remain proposed.
+Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001, local PostgreSQL decision in ADR-002, Python core/background direction in ADR-003, and app-managed isolated PostgreSQL lifecycle in ADR-004. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints and these narrowly scoped choices come from the product discussion; all other technology and implementation choices below remain proposed.
 
 ## 1. Design constraints
 
@@ -46,7 +46,7 @@ The owner's [visual specification](../DESIGN.md) is the required Djarvis design,
 | UI framework and necessary UI implementation | Flutter/Dart (selected by ADR-001) | .NET MAUI/C# was considered and not selected |
 | Local language inference | Bundled llama.cpp-based worker using pinned GGUF artifacts | Exact runtime build, process protocol, and supported CPU/GPU backends |
 | Voice processing | Local provider interfaces; evaluate sherpa-onnx components | Final wake, ASR, TTS, and voice assets need separate tests and licenses |
-| Backend database | PostgreSQL local to the user's device (ADR-002) | Driver, version, schema, migrations, local lifecycle/packaging, and connection/pooling model |
+| Backend database | PostgreSQL local to the user's device (ADR-002) | Driver, version, schema, migrations, private-instance distribution/packaging, and connection/pooling model |
 | Windows integration | A platform adapter for microphone, tray, startup, notifications, credentials, and device actions | Concrete plugins/native bindings selected after review |
 
 The owner selected Flutter for the UI and necessary Dart UI implementation only (ADR-001), in the context of the required circular design, Windows-first target, and later Android support. This is not a measured RAM or speed advantage over .NET MAUI, which was considered in the initial proposal but is not an active UI alternative. Flutter currently lists Windows 10/11 and Android among supported deployment targets. Exact Flutter/Dart SDK versions and dependencies remain unselected. [Flutter support](https://docs.flutter.dev/reference/supported-platforms), [historical MAUI comparison](https://learn.microsoft.com/dotnet/maui/supported-platforms).
@@ -57,9 +57,9 @@ Windows application compatibility and the operating system's support lifecycle a
 
 ## 4. Processes and lifecycle
 
-Propose one per-user background application host, an on-demand interface, and worker processes for heavyweight inference. The host owns the database, scheduler, permission decisions, and worker lifecycle. The framework-specific split between UI and host is a design item to settle before implementation.
+Propose one per-user background application host, an on-demand interface, and worker processes for heavyweight inference. The host owns the database, scheduler, permission decisions, and worker lifecycle. Python is approved for planner-core/background logic in ADR-003; Flutter/Dart remains the UI. ADR-004 approves application-managed start/stop of an isolated local PostgreSQL instance. The Python version, driver, local transport/framework, runtime packaging, database distribution/binaries, and installer dependencies remain open.
 
-As a separate, unapproved proposal, evaluate a separately packaged native Dart host sharing pure Dart domain packages with the Flutter interface. ADR-001 does not select Dart for the planner core or background host. Dart documents native executables and C API interoperability; these capabilities do not prove that a particular Flutter plugin works without its UI engine. Select headless-compatible platform bindings explicitly. [Native compilation](https://dart.dev/tools/dart-compile), [C interoperability](https://dart.dev/interop/c-interop).
+The Python runtime must be packaged and managed by the application so the intended user flow needs no terminal, global Python setup, or manual package installation. The packaging mechanism and process/IPC framework remain unselected. Do not infer a Python version, driver, freezing/embedded runtime method, or installer dependencies from this requirement.
 
 - Closing the main window leaves the host and tray active. Configurable Windows startup starts the host in the user's session.
 - "Fully exit" stops the host and its workers, cancels audio work, and releases microphone capture. A supervisor must not restart an intentionally exited session.
@@ -124,9 +124,9 @@ Core entities: Profile, Task, TaskOccurrence, Project, Note, CalendarEvent, Habi
 
 Task occurrences preserve debt; habit logs preserve misses without creating debt. Deadlines and planned execution time are separate. Recurrence retains its original calendar/interval anchor despite late completion. A date-only task uses a default 06:00–22:00 placement window with its own duration, without an implicit deadline. Preserve timezone, all-day-date, DST, and original occurrence identity in the detailed temporal specification.
 
-PostgreSQL is selected as the local backend database; its driver, version, schema, migrations, local lifecycle/packaging, and connection model remain open. Use transactions for related changes and appropriate revision checks. PostgreSQL documents MVCC and transaction isolation; implementation details remain proposed. Automatic local backups may use `pg_dump` for a consistent single-database snapshot, with coordination for attachments and restore still to be designed. Do not treat a raw database-file copy as a backup. [Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [MVCC](https://www.postgresql.org/docs/current/mvcc.html), [transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [backup file formats](https://www.postgresql.org/docs/current/backup-file.html).
+PostgreSQL is selected as the local backend database; its driver, version, schema, migrations, private-instance distribution/packaging, and connection model remain open. Use transactions for related changes and appropriate revision checks. PostgreSQL documents MVCC and transaction isolation; implementation details remain proposed. Automatic local backups may use `pg_dump` for a consistent single-database snapshot, with coordination for attachments and restore still to be designed. Do not treat a raw database-file copy as a backup. [Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [MVCC](https://www.postgresql.org/docs/current/mvcc.html), [transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [backup file formats](https://www.postgresql.org/docs/current/backup-file.html).
 
-Proposed production layout is under the current user's application-data directory, with distinct data, attachments, model cache, backups, and logs. Repository `data/` and `cache/` are development locations, not a requirement to put customer data beside an installed executable. Backup paths and retention remain configurable design items.
+Proposed production layout is under the current user's application-data directory, with distinct data, attachments, model cache, backups, and logs. Repository `data/` and `cache/` are development locations, not a requirement to put customer data beside an installed executable. The app manages an isolated local PostgreSQL instance; exact binary distribution, data-directory layout and permissions remain open.
 
 ## 10. Conversation, voice, and proactive behavior
 
@@ -156,9 +156,9 @@ Gmail is also an initial adapter, separate from calendar synchronization. Specif
 
 History is local with user-selected retention, an off switch, and delete-all. Keep conversation history separate from approved profile preferences. Do not create new long-term memories merely because a conversation exists.
 
-Use versioned local snapshots including database and referenced attachment metadata; exclude model weights and credentials from normal user backups. Define crash-consistent attachment handling, retention, optional encryption, restore preview, and migration compatibility. Deletion and retention policies must also govern application-managed backups and restoration; do not silently resurrect deleted conversation history. External copies cannot be promised physically erased by this application.
+Create automatic local backups daily and before data-structure or migration updates. Keep seven days by default, with configurable schedule and retention. Use versioned snapshots including database and referenced attachment metadata; exclude model weights and credentials from normal user backups. Define crash-consistent attachment handling, backup location, optional encryption, restore preview, and migration compatibility. Deletion and retention policies must also govern application-managed backups and restoration; do not silently resurrect deleted conversation history. External copies cannot be promised physically erased by this application.
 
-Before migrations and hard-to-reverse changes, make a verified recoverable snapshot. Expiry preserves data; renewal restores feature access. Exact backup schedule, destination, restore authorization, and expiry-screen behavior require owner review.
+Before migrations, make a verified recoverable snapshot as part of the required pre-structure/migration backup. Expiry preserves data; renewal restores feature access. Backup destination, restore authorization, and expiry-screen behavior require owner review.
 
 ## 13. Offline trial and subscription
 
@@ -182,7 +182,7 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 ## 16. Verification and approval sequence
 
-1. Map the required visual design to Djarvis screens and review component boundaries. Flutter/Dart UI is already selected by ADR-001; decide the planner-core/background-host boundaries and any core language/runtime separately, recording further decisions only after owner agreement.
+1. Map the required visual design to Djarvis screens and review component boundaries. Flutter/Dart UI, Python core/background language, local PostgreSQL, and app-managed isolated database lifecycle are selected in ADR-001–004; decide remaining host boundaries and exact runtime/database packaging only after owner agreement.
 2. Specify entities, commands, permission state transitions, dates/recurrence, sync conflicts, and recovery. Resolve product defaults alongside these contracts.
 3. Approve isolated feasibility checks for CPU-only 8 GiB performance, voice interruption/custom wake phrases, Windows integration, and offline licensing behavior.
 4. Select exact engine/model/voice versions and redistribution terms from evidence. Define measured startup, latency, memory, and accuracy acceptance targets.
@@ -190,4 +190,4 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 Verification must cover duplicate intents, stale confirmations, ambiguous commands, denied capabilities, trial expiry, offline clock changes, interrupted downloads, corrupt assets, low memory, inference crashes, microphone release on exit/mute, restart-safe reminders, backup restoration, history deletion, recurring debt versus habit misses, and two-sided calendar conflicts. This is a future verification plan; no such application tests have been run yet.
 
-The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Flutter is approved only for the UI. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and remaining core/runtime direction. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.
+The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Flutter is approved for the UI, Python for core/background logic, and the app-managed isolated local PostgreSQL lifecycle is approved within the limited ADR scopes. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and remaining packaging/runtime details. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.

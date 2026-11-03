@@ -171,3 +171,25 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-002 records local PostgreSQL; manual blocks locked, splitting opt-in, distinct-day habit frequency, original recurrence dates, and independent placement window/deadline captured. Local deployment, transaction guard, backup/attachment coordination, and runtime requirements remain detailed proposals; core language is not implicitly selected.
 - Remaining work: review core language, detailed schema/temporal defaults, local PostgreSQL lifecycle/packaging, and combined 8 GiB performance before implementation.
 - Commit: `Select local PostgreSQL and refine planner semantics`.
+
+## PLAN-001 — Resolve remaining work with selectable decisions
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates the cross-component plan; focused research/drafting is delegated where useful.
+- Authorization: owner requested working through every remaining item and presenting questions as selectable answers with free-form input available.
+- Status: design plan prepared and checked; unresolved choices await the owner.
+- Files reserved: agent-01 owns both logs and `docs/architecture/REMAINING_PLAN.md`; reference-review updates both decision registers, product definitions, core proposals, architecture proposals, and README files for submitted choices. reference-review translates `docs/architecture/REMAINING_PLAN.ru.md`; agent-01 reviews the main plan and all changes. Rules, visual design, and source files remain unchanged.
+- Scope: prepare concrete proposals and completion checks for architecture, local PostgreSQL, UI, planner features, voice, integrations/licensing, installer/validation, and later Android. Present decision cards in manageable batches; selected defaults are not approval until submitted.
+- Checks: primary sources and requirements reviewed; an independent audit prompted explicit ambiguity, unknown mail result, offline-mode and split-task rules. Verified 11 new-plan sections, 33 decision IDs, 21 source URLs, local links across changed documents and whitespace. Rules and mandatory design remain unchanged. Application/performance tests were not run.
+- Result: bilingual design plan covers all eight workstreams, components, failure paths, open decisions and completion evidence. ADR-003/004 and submitted answers are recorded in canonical documents. README links and context-recovery instructions are included. No programming or component installation.
+- Remaining work: owner choices for unresolved decisions; full architecture and implementation approval remain separate.
+- Commit: `Develop remaining design plan and record Python runtime choices`.
+
+### PLAN-001 continuation checkpoint
+
+- Submitted choices: Python core/background with packaged runtime; app-managed isolated local PostgreSQL without console; daily and pre-structure/migration backups, seven-day default retention, configurable. Recorded in ADR-003/004 and synchronized product/core documents.
+- Further submitted choices: ask for time on every explicit deadline entered with a date only; global advanced-field display plus per-task expansion; habit week starts Monday, pauses exclude days and freeze streaks, corrections preserve history. Partially paused flexible-week quota and exact streak definitions remain open.
+- Prepared review artifact: `docs/architecture/REMAINING_PLAN.md` / `.ru.md`, workstreams A–H with proposed components, data/command boundaries, failure paths, open IDs and acceptance evidence. Recommendations are not approvals.
+- Pending selectable batch: F5 offline license-file purchase/account model; F6 seven-day trial start; F8 renewal/deletion/backup access after expiry. No submitted answers yet at this checkpoint; recommended selections are not consent.
+- Owner requested re-reading project files after context shortening. Recovery order: local entry instructions/rules → active shared log → approved ADRs/product/design → relevant architecture/core/remaining plan → working-tree changes and file ownership. Continue existing work; do not infer missing answers or coding permission.
+- Current ownership: agent-01 reviews/finishes the plan, canonical documentation and both logs; reference-review has completed the Russian translation; source research and review have finished read-only. Keep the local entry files, original design, voices, cache and secrets outside publication.
