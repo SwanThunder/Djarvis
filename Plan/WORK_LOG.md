@@ -118,3 +118,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: confirmed history, city location, calendar sync, backup, and expiry data rules recorded in both languages; no application code or architecture changes.
 - Remaining work: clarify Windows support, deployment, and background behavior before architecture proposals.
 - Commit: `Record data retention and integration requirements`.
+
+## ARCH-001 — Windows constraints and first architecture proposal
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates architecture; reference-review updates confirmed product requirements; technical source research is delegated separately.
+- Authorization: owner confirmed Windows 10/11, an 8 GiB target without a required discrete GPU, configurable autostart/tray/explicit exit, and automatic hardware-adapted model installation. Earlier discussion requested a first architecture proposal before programming.
+- Status: proposal preparation complete; architecture approval pending.
+- Files reserved: reference-review updated `docs/PRODUCT.md`, `docs/PRODUCT.ru.md`, and `docs/architecture/PROPOSAL.ru.md`; agent-01 reviews these and updates both logs, `docs/architecture/PROPOSAL.md`, and `README.md` / `README.ru.md`. A technical delegate reviewed the proposal read-only. No changes to approved-decision register.
+- Scope: record confirmed requirements, research primary technical sources, and prepare a bilingual architecture proposal with clear approval boundaries. No application implementation, installer execution, or production stack approval.
+- Checks: confirmed requirements reviewed in both languages; primary sources checked for framework/platform support, local inference, native integration, SQLite snapshots, OAuth, calendar sync, and Gmail scopes. Technical review found no central requirement conflict; Gmail coverage and Windows lifecycle clarity added. Bilingual section/source/diagram parity, local links, whitespace, staged scope, and publication exclusions checked. No application or 8 GiB performance tests claimed.
+- Result: first bilingual architecture proposal prepared with component boundaries, preferred technology candidates, process lifecycle, model profiles/installation, domain model, permissions, data recovery, integrations, offline license limitations, Android boundaries, and a staged approval plan. README points to the current documents. No application code, installer, production dependencies, or approved architecture decisions added.
+- Remaining work: owner review of architecture and unresolved design choices before programming.
+- Commit: `Propose Windows architecture and adaptive model setup`.

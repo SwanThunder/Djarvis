@@ -37,9 +37,10 @@ assets/           Static assets
 - Read the [project rules](docs/PROJECT_RULES.md) before each task.
 - Check and update the [shared work log](Plan/WORK_LOG.md) before editing files.
 - Record approved architecture decisions in the [decision register](docs/architecture/DECISIONS.md).
+- Review the [product definition](docs/PRODUCT.md) and [first architecture proposal](docs/architecture/PROPOSAL.md); proposed technologies are not yet approved.
 - Maintain English and Russian documentation as separate synchronized files.
 - Present and discuss the implementation plan before programming; begin only after owner approval.
 
 Repository: [SwanThunder/Djarvis](https://github.com/SwanThunder/Djarvis).
 
-The next step is to agree on MVP scope and application architecture. A GitHub copy of source files does not back up the excluded database or personal data; those require separate backups before risky changes.
+The next step is to review component boundaries and the proposed technology direction, then specify detailed contracts and approve an implementation plan. The full requested product scope remains documented. A GitHub copy of source files does not back up the excluded database or personal data; those require separate backups before risky changes.
