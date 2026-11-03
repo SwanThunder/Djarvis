@@ -1,0 +1,48 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Runtime data; keep directory markers
+/data/**
+!/data/**/
+!/data/**/.gitkeep
+/cache/**
+!/cache/**/
+!/cache/**/.gitkeep
+/logs/**
+!/logs/**/
+!/logs/**/.gitkeep
+/tmp/**
+!/tmp/**/
+!/tmp/**/.gitkeep
+
+# Local databases and sidecar files
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# JavaScript dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
