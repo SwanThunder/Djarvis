@@ -2,7 +2,7 @@
 
 [Русская версия](DESIGN.ru.md) · [Product definition](PRODUCT.md)
 
-Status: this is the owner's required Djarvis visual design: visual system, sidebar/top-bar shell, assistant-above-day-panel composition, palettes, material modes, accessibility, and no background image. Detailed page-level grouping and the default theme are still unspecified. This document does not select the application architecture or authorize programming. Source: `design/design 1.0.txt`, preserved locally without changes.
+Status: this is the owner's required Djarvis visual design: visual system, sidebar/top-bar shell, assistant-above-day-panel composition, palettes, material modes, accessibility, and no background image. Detailed page-level grouping and the default theme are still unspecified. Flutter is separately selected only for the UI by [ADR-001](architecture/DECISIONS.md); this document does not select the application architecture or authorize programming. Source: `design/design 1.0.txt`, preserved locally without changes.
 
 ## Product mapping and composition
 

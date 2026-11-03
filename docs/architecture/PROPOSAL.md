@@ -1,8 +1,8 @@
 # Architecture proposal — first review
 
-[Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md)
+[Русская версия](PROPOSAL.ru.md) · [Product requirements](../PRODUCT.md) · [Required visual design](../DESIGN.md) · [Decision register](DECISIONS.md) · [Planner core proposal](PLANNER_CORE.md)
 
-Date: 2026-11-03. Status: PROPOSED, not approved. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints come from the product discussion; every technology and implementation choice below remains proposed.
+Date: 2026-11-03. Status: PROPOSED, not approved, except for the limited UI decision in ADR-001. This is a reviewable design, not permission to program or a claim that performance targets have been met. No application components, installer, or licensing mechanism have been implemented. Approved constraints come from the product discussion; Flutter/Dart for UI is the sole approved technology choice. All other technology and implementation choices below remain proposed.
 
 ## 1. Design constraints
 
@@ -39,17 +39,17 @@ The language model proposes typed intents. Only the application core can commit 
 
 ## 3. Technology candidates
 
-The owner's [visual specification](../DESIGN.md) is the required Djarvis design, not an optional style alternative. Technology candidates must implement it: Dark Glassmorphism/Bento, three exact palettes, independent Glass/Solid materials, the circular assistant above the day panel, and all six combinations. The previous technology preference is unapproved and must be evaluated against these requirements. CSS/React examples in the local brief do not independently select a production stack.
+The owner's [visual specification](../DESIGN.md) is the required Djarvis design, not an optional style alternative. Technology choices must implement it: Dark Glassmorphism/Bento, three exact palettes, independent Glass/Solid materials, the circular assistant above the day panel, and all six combinations. Flutter/Dart for UI is approved by ADR-001; CSS/React examples in the local brief do not select any additional production stack.
 
-| Area | Preferred candidate for discussion | Alternative / unresolved choice |
+| Area | Status / candidate | Alternative / unresolved choice |
 | --- | --- | --- |
-| Interface and reusable application packages | Flutter/Dart | .NET MAUI/C# with the same boundaries |
+| UI framework and necessary UI implementation | Flutter/Dart (selected by ADR-001) | .NET MAUI/C# was considered and not selected |
 | Local language inference | Bundled llama.cpp-based worker using pinned GGUF artifacts | Exact runtime build, process protocol, and supported CPU/GPU backends |
 | Voice processing | Local provider interfaces; evaluate sherpa-onnx components | Final wake, ASR, TTS, and voice assets need separate tests and licenses |
 | Structured local data | SQLite with a serialized write owner and versioned migrations | Driver, attachment layout, and encryption policy |
 | Windows integration | A platform adapter for microphone, tray, startup, notifications, credentials, and device actions | Concrete plugins/native bindings selected after review |
 
-Flutter is my preferred candidate because the custom circular interface and later Android interface can share a UI framework and application packages. This is a design judgment, not a measured RAM or speed advantage over MAUI. Flutter currently lists Windows 10/11 and Android among supported deployment targets; MAUI also documents Windows and Android targets. Exact release versions must be pinned after selection. [Flutter support](https://docs.flutter.dev/reference/supported-platforms), [MAUI support](https://learn.microsoft.com/dotnet/maui/supported-platforms).
+The owner selected Flutter for the UI and necessary Dart UI implementation only (ADR-001), in the context of the required circular design, Windows-first target, and later Android support. This is not a measured RAM or speed advantage over .NET MAUI, which was considered in the initial proposal but is not an active UI alternative. Flutter currently lists Windows 10/11 and Android among supported deployment targets. Exact Flutter/Dart SDK versions and dependencies remain unselected. [Flutter support](https://docs.flutter.dev/reference/supported-platforms), [historical MAUI comparison](https://learn.microsoft.com/dotnet/maui/supported-platforms).
 
 llama.cpp provides local CPU/GPU inference and uses GGUF; its runtime code has an MIT license. sherpa-onnx supplies offline speech-related components across desktop/mobile platforms. Runtime licenses do not grant rights to every model, voice, or character. [llama.cpp](https://github.com/ggml-org/llama.cpp), [runtime license](https://github.com/ggml-org/llama.cpp/blob/master/LICENSE), [speech project](https://github.com/k2-fsa/sherpa-onnx).
 
@@ -59,7 +59,7 @@ Windows application compatibility and the operating system's support lifecycle a
 
 Propose one per-user background application host, an on-demand interface, and worker processes for heavyweight inference. The host owns the database, scheduler, permission decisions, and worker lifecycle. The framework-specific split between UI and host is a design item to settle before implementation.
 
-If Flutter is approved, evaluate a separately packaged native Dart host sharing pure Dart domain packages with the interface. Dart documents native executables and C API interoperability; these capabilities do not prove that a particular Flutter plugin works without its UI engine. Select headless-compatible platform bindings explicitly. [Native compilation](https://dart.dev/tools/dart-compile), [C interoperability](https://dart.dev/interop/c-interop).
+As a separate, unapproved proposal, evaluate a separately packaged native Dart host sharing pure Dart domain packages with the Flutter interface. ADR-001 does not select Dart for the planner core or background host. Dart documents native executables and C API interoperability; these capabilities do not prove that a particular Flutter plugin works without its UI engine. Select headless-compatible platform bindings explicitly. [Native compilation](https://dart.dev/tools/dart-compile), [C interoperability](https://dart.dev/interop/c-interop).
 
 - Closing the main window leaves the host and tray active. Configurable Windows startup starts the host in the user's session.
 - "Fully exit" stops the host and its workers, cancels audio work, and releases microphone capture. A supervisor must not restart an intentionally exited session.
@@ -109,6 +109,8 @@ Model preparation runs automatically; its progress and recoverable errors belong
 Dates, facts, counts, task states, and habit statistics come from deterministic domain logic, not invented model text. Automatic day planning uses explicit constraints; AI can explain a proposal, but cannot override conflicts or silently move overdue tasks.
 
 ## 8. Command execution contract
+
+Detailed proposed entities, commands, planning rules, and transaction/provider result boundaries are specified in the [planner core design](PLANNER_CORE.md). That detailed design is not yet approved; Flutter UI approval alone does not select it.
 
 Proposed lifecycle: recognized text or UI command → typed intent → resolve target and dates → clarify ambiguity → validate current revisions and policy → request confirmation if required → atomic commit / queued provider action → result and audit entry.
 
@@ -180,7 +182,7 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 ## 16. Verification and approval sequence
 
-1. Review the already specified visual requirements and their mapping to Djarvis screens, then review component boundaries and choose the primary UI/core technology; record an approved architecture decision only after owner agreement.
+1. Map the required visual design to Djarvis screens and review component boundaries. Flutter/Dart UI is already selected by ADR-001; decide the planner-core/background-host boundaries and any core language/runtime separately, recording further decisions only after owner agreement.
 2. Specify entities, commands, permission state transitions, dates/recurrence, sync conflicts, and recovery. Resolve product defaults alongside these contracts.
 3. Approve isolated feasibility checks for CPU-only 8 GiB performance, voice interruption/custom wake phrases, Windows integration, and offline licensing behavior.
 4. Select exact engine/model/voice versions and redistribution terms from evidence. Define measured startup, latency, memory, and accuracy acceptance targets.
@@ -188,4 +190,4 @@ Keep native workers, application assets, model manifests, schema migrations, and
 
 Verification must cover duplicate intents, stale confirmations, ambiguous commands, denied capabilities, trial expiry, offline clock changes, interrupted downloads, corrupt assets, low memory, inference crashes, microphone release on exit/mute, restart-safe reminders, backup restoration, history deletion, recurring debt versus habit misses, and two-sided calendar conflicts. This is a future verification plan; no such application tests have been run yet.
 
-The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and framework direction. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.
+The required visual direction is supplied by the owner; it is not being replaced by this architecture proposal. Flutter is approved only for the UI. Initial review should align Djarvis screen composition with that design, then settle the modular core/worker split and remaining core/runtime direction. Model quality on baseline hardware, requested production voices, offline-license assurance, account/purchase workflow, exact Windows architecture coverage, and remaining behavioral defaults stay visible as unresolved items rather than assumed approvals.

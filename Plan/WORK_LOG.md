@@ -145,3 +145,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: mandatory Djarvis design captured in bilingual `docs/DESIGN` files and linked from product, architecture, and README. Technology candidates remain unapproved and subordinate to the owner's design. Original source preserved unchanged with a local Git exclusion; no UI code or dependencies added.
 - Remaining work: review the Djarvis layout and design defaults before finalizing framework and implementation choices.
 - Commit: `Align product and architecture with required visual design`.
+
+## CORE-001 — Flutter decision and detailed planner-core design
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 designs the core; reference-review records the Flutter approval and aligns existing documentation; technical review/source checks delegated read-only.
+- Authorization: owner accepted Flutter and requested a detailed discussion of planner core, data, and component interactions. This approves the UI framework, not application programming or all remaining architecture choices.
+- Status: detailed proposal prepared; core approval pending.
+- Files reserved: reference-review updated both decision registers, product definitions, architecture proposals, visual specifications, and README files and now translates `docs/architecture/PLANNER_CORE.ru.md`. Agent-01 reviews those changes and owns both logs and `docs/architecture/PLANNER_CORE.md`. Technical review of the core is read-only.
+- Scope: record ADR-001 for Flutter UI and prepare a reviewable bilingual core design covering entities, recurrence, habits, time blocks, planning proposals, command policy, transactions, reminders, sync, and recovery. No application code or dependency installation.
+- Checks: approved Flutter scope and three confirmed task rules reviewed against owner responses; technical review covered temporal identity, recurrence debt versus habit misses, stale plans, storage constraints, and provider outcomes. Local commits distinguished from queued/confirmed external work; manual start-only markers left explicitly undecided. Bilingual sections, sources, command identifiers, diagram flow, links, whitespace, and publication scope checked. No application tests or schema execution claimed.
+- Result: ADR-001 records Flutter UI approval; existing documents aligned; bilingual detailed core proposal describes records, commands/queries, permissions, planning, transactions/outbox, reminders, provider reconciliation, history/recovery, and failure behavior. Four task priorities, separate overdue/missed-time indicators, and duration clarification are confirmed; remaining design choices remain proposals. No application code or dependencies added.
+- Remaining work: owner review of proposed core rules and unresolved choices before implementation approval.
+- Commit: `Document Flutter decision and detailed planner core design`.
