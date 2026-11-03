@@ -280,3 +280,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: B1/E7 accepted and B3 partly accepted recorded in all four specification pairs; future checks and handoff updated. Encryption, recovery and automatic-expiry/archive mechanics remain open.
 - Continuation: supersedes pending B1/B3/E7 in PLAN-006. Next prepared cards: B2 backup encryption and separate recovery key, B3 full/selective restore. No answers submitted; no coding approval.
 - Commit: `Record backup location, history inclusion and retention`.
+
+## PLAN-008 — Windows-protected backup keys and full restore
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review records bilingual decisions/specifications.
+- Authorization: owner selected B2 encryption with a Windows-protected key, no separate password and no additional recovery key; B3 full snapshot restoration after preview and a backup of current data. This supersedes password/portable-key proposals within that scope.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns DECISIONS, PRODUCT, PLANNER_CORE, PROPOSAL and REMAINING_PLAN in both languages. Other files, rules, design, source and local assets are unchanged.
+- Scope: record a narrowly scoped ADR and synchronize approved choices; retain exact crypto/API/key scope/archive format, failure handling and history-expiry details as open. Explain lack of guaranteed recovery/portability without accessible Windows-protected key, without claiming every Windows configuration is identical. Prepare next selectable decisions; no actual encryption/restore/database operations or programming.
+- Checks: five bilingual pairs checked for heading counts, IDs, source URL equality, local links and whitespace. Reviewed no-password/no-extra-recovery-key policy, limited ADR scope, full-restore prerequisites, preserved trial/license boundaries and lack of guaranteed portability without the key. Rules/design/code/assets unchanged; no encryption, restore or application tests run.
+- Result: ADR-006 records the approved key/restore direction; product, core, proposal and remaining-plan versions are synchronized. Exact cryptography/key scope/format and failure handling remain open; misleading portable-backup wording removed.
+- Continuation: supersedes pending B2/full-restore cards from PLAN-007. Next prepared choices are B3 automatic history-expiry handling in managed copies, F1 calendar export scope and F2 provider deletion handling; no answers submitted. No coding approval.
+- Commit: `Record protected backup keys and full restore policy`.
