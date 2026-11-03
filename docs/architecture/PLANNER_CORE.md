@@ -142,11 +142,16 @@ Results distinguish `AppliedLocal`, `QueuedExternal`, `NeedsClarification`, `Nee
 | Apply a day plan | Revalidate snapshot and a grant/confirmation covering the exact operation |
 | Change habit goal/load | Propose and wait for acceptance |
 | Send email | Always confirm exact recipients, body, and attachments |
+| Gmail access | One user-controlled toggle bundles read/search, draft, and send; individual capability switches are not selected |
 | Delete/overwrite a user file | Always confirm the exact affected path/action |
 | Resolve two-sided calendar conflict | User chooses the version |
+| Launch a user-selected application | Revocable permission allows launch without repeated confirmation; no generic SQL/shell/script execution, arbitrary arguments, file deletion/overwrite, or OS-consent bypass |
+| Windows shutdown/restart/account logout | Confirm every action; task grants and Gmail permission do not bypass confirmation |
 | Other device actions | Capability must be enabled; remaining confirmation rules require design |
 
 Validate drafts before asking for confirmation, then revalidate after it. Bind confirmation to operation parameters and expected revisions, not a generic remembered "yes". A permission edit is itself an explicit settings/consent action, not an instruction accepted from a webpage or email body. Grants are revocable and must be checked at execution, including queued work.
+
+Application-launch permission applies only to the user-selected application list and does not grant unrestricted command execution. Exact application identity and argument-validation API remain proposed. Windows shutdown, restart, and account logout confirmation applies to each action, is not bypassed by task/Gmail grants, and is distinct from Full Exit or dialogue Stop («Хватит»/“Stop”).
 
 ## 10. Local transactions and durable events
 
@@ -188,6 +193,8 @@ Sync adapters map provider IDs/revisions and original recurring-instance IDs to 
 Confirmed F1: bidirectional synchronization covers calendar events and task time blocks in user-selected Google Calendar/Outlook calendars. Habit synchronization is off unless separately enabled by the user. The exact projection format and mapping of provider edits to local commands remain proposed.
 
 Confirmed F2: if the provider deletes an event and its local version has not changed since the last sync, ask for confirmation before removing the local event. Changes on both sides still require the user's conflict choice. Removing an exported time block does not implicitly delete its underlying task, habit or user file. Pending-deletion states and cross-provider propagation require contract review.
+
+Confirmed F3: Gmail uses one general user-controlled permission toggle bundling read/search, draft, and send. Every send still requires confirmation of the exact recipients, body, and attachments. Minimal OAuth scopes, exact SDK, local cache policy, and provider verification are unselected; this does not grant broad mailbox administration or authorize a silent full mailbox mirror.
 
 Calendar creation can use provider-supported client IDs and conditional updates where available, followed by reconciliation after uncertain outcomes. Google documents client-generated IDs, resource constraints, and conditional update behavior. [Creation guide](https://developers.google.com/workspace/calendar/api/guides/create-events), [resource versioning](https://developers.google.com/workspace/calendar/api/guides/version-resources).
 

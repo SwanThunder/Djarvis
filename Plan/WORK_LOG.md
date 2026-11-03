@@ -306,3 +306,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: B3 expiry policy and F1/F2 sync policies recorded in product/core/proposal/remaining-plan documents, ADR-006 consequences updated. Runtime/format/projection/deletion-execution details remain unapproved; future checks and handoff updated.
 - Continuation: supersedes pending B3/F1/F2 from PLAN-008. Next prepared cards: F3 separate Gmail read/draft/send permissions; A3 application-launch permission; A3 disruptive Windows actions. None is answered; no coding approval.
 - Commit: `Record archive expiry and calendar sync policies`.
+
+## PLAN-010 — Gmail bundle and device-action confirmations
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agent: agent-01 coordinates/reviews; reference-review updates bilingual specifications.
+- Authorization: owner selected F3 one Gmail switch bundling read/search, drafts and send, with confirmation for every send unchanged; A3 user-selected revocable application allowlist permits launches without repeated confirmation; shutdown, restart and Windows-account logout always require confirmation.
+- Status: documentation completed and verified; remaining choices await the owner.
+- Files reserved: agent-01 owns both logs; reference-review owns PRODUCT, PLANNER_CORE, PROPOSAL and REMAINING_PLAN in both languages. Other files, rules, design, source and local assets are unchanged.
+- Scope: record the selected bundled permission (not granular UI switches), approved launch scope and three mandatory Windows confirmations; preserve task/file/habit/mail boundaries and OS gates. Leave exact provider scopes, cache, executable/argument identity and other device actions open. Prepare selectable appearance defaults; no real mail/device actions or programming.
+- Checks: four bilingual pairs verified for heading counts, card IDs, source URL sets, local links and whitespace. Reviewed explicit core matrix/body and removal of granular-Gmail contradictions; preserved capability gate for other device actions. Rules/design/code/assets unchanged; no real mail/device actions or application tests run.
+- Result: bundled F3 policy and scoped A3 launch/Windows confirmation policies recorded in product/core/proposal/remaining-plan versions. Exact scopes/cache/application identity/arguments and other device actions remain open; future checks and handoff updated.
+- Continuation: supersedes pending F3/A3 cards in PLAN-009. C1 default palette/material and C2 density are prepared and unanswered. Owner requested a structured project status during this task; provide it after saving these decisions. No coding approval.
+- Commit: `Record Gmail bundle and device confirmation policies`.
