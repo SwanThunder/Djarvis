@@ -40,3 +40,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: bilingual product definition saved with required capabilities, reference findings, proposed voice directions, and clearly unresolved decisions. No architecture was selected and no application code was written.
 - Remaining work: owner answers on AI billing, privacy/offline behavior, accounts, characters and voices, action permissions, situation triggers, and integration priorities; then detailed user journeys and architecture review.
 - Commit: `Document product requirements and reference review`.
+
+## PRODUCT-002 — Product choices from owner follow-up
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates and reviews; reference-review updates the bilingual product definition.
+- Authorization: owner supplied decisions on billing, local storage, optional accounts, circular visual design, wake listening, proactive triggers, task permissions, integrations, and exact character identities.
+- Status: requirements update complete; detailed product design pending.
+- Scope: incorporate these decisions without selecting architecture or programming. Verify the supplied anime reference and keep production voice/character usage arrangements explicitly unverified.
+- Files reserved: delegate uses `docs/PRODUCT.md` and `docs/PRODUCT.ru.md`; agent-01 uses `Plan/WORK_LOG.md` and `Plan/WORK_LOG.ru.md`.
+- Checks: bilingual changes reviewed against all eight owner answers; corrected task opt-out scope, preserved morning/day/evening briefings and the settings section, and distinguished closing the window from explicit quit. Supplied anime page identifies Sebastian; specific dub actors and usage permissions remain unverified. Document structure, links, whitespace, staged paths, and branding scan checked before commit.
+- Result: product choices captured in both languages; no architecture selected and no application programming. Voice sample remains local and unstaged.
+- Remaining work: clarify cloud AI processing and local access before subscription; continue detailed task/day-planning scenarios. Voice versions, usage permissions, plan limits, and other open questions remain documented.
+- Commit: `Refine product choices from owner feedback`.
