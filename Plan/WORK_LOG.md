@@ -92,3 +92,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: `djarvis-qwen3.5-4b:latest` installed in the existing runtime and unloaded after evaluation. Bilingual model notes record provenance, exact hash, local checks, and initial latency.
 - Remaining work: production quality/performance evaluation, first-initialization delay, voice pipeline selection, and deployment strategy require a separately approved plan.
 - Commit: `Record offline product requirements and local model evaluation`.
+
+## PRODUCT-005 — Voice dialogue, quiet behavior, and clarification
+
+- Date: 2026-11-03, Europe/Moscow.
+- Agents: agent-01 coordinates and reviews; reference-review updates the product definition.
+- Authorization: owner answered all five voice-behavior questions.
+- Status: complete for the documented scope.
+- Files reserved: delegate uses `docs/PRODUCT.md` and `docs/PRODUCT.ru.md`; agent-01 uses the two work logs.
+- Scope: document editable character-name wake phrases, dialogue timeout/stop command, speech interruption and microphone mute button, quiet hours and call/game notification fallback, and mandatory clarification of ambiguous commands. No application implementation or architecture selection.
+- Checks: both language diffs reviewed against all five answers; microphone mute stops capture for wake detection and dialogue; only proactive speech is suppressed during quiet hours/calls/games; ambiguity clarification remains mandatory independently of task confirmation preferences. Links, structure, whitespace, staged file scope, and publication exclusions checked.
+- Result: voice and notification behavior captured in both languages; no application code or architecture selected.
+- Remaining work: continue product design with data handling and integration actions.
+- Commit: `Record voice interaction and notification behavior`.

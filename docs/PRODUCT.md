@@ -28,7 +28,7 @@ The owner wants the entire requested product designed without a deadline or arbi
 - Voice creation and modification of tasks, habits, and their records.
 - Daily spoken plans triggered by user-configured times or situations.
 
-The automatic day planner considers meetings, deadlines, priorities, durations, habits, breaks, and the user's available hours. It proposes a plan and applies it after confirmation or remembered permission. A missed task is highlighted and announced aloud; its date is not changed automatically. Whether a per-task override is available remains unresolved. Recurrence can be calendar-fixed or relative to completion; missed occurrences remain outstanding debt. Conflict handling and the distinction between a deadline and a scheduled work period still need design.
+The automatic day planner considers meetings, deadlines, priorities, durations, habits, breaks, and the user's available hours. It proposes a plan and applies it after confirmation or remembered permission. A missed task is highlighted and announced aloud; its date is not changed automatically. Whether a per-task override is available remains unresolved. Recurrence can be calendar-fixed or relative to completion; missed occurrences remain outstanding debt. Conflict handling and the distinction between a deadline and a scheduled work period still need design. Ambiguous commands always require clarification of the target, even when task-change confirmations are disabled (for example, which of several meetings to move). Clarification resolves what the user means; it is separate from optional confirmation before acting.
 
 ### Habits
 
@@ -43,10 +43,12 @@ Pause and correction rules, the cutoff for counting a flexible weekly schedule a
 ### Assistant and interface
 
 - Main screen: a futuristic circular visualization of the assistant, inspired by the cinematic JARVIS presentation, and a day dashboard below it.
-- Full spoken conversations with voiced responses. When the main window is closed, the assistant continues waiting in the background for its wake phrase. Window close therefore differs from explicitly quitting the assistant; tray controls and startup behavior still need design.
+- Full spoken conversations with voiced responses. The default wake phrase is the selected character's name: Jarvis, Rick, or Sebastian; the user can change it. After activation, conversation continues without repeating the wake phrase until a configurable inactivity timeout or the command «Хватит» (the English equivalent is unspecified). The user can interrupt speech output by speaking a new utterance. When the main window is closed, the assistant continues waiting in the background for its wake phrase. Window close therefore differs from explicitly quitting the assistant; tray controls and startup behavior still need design.
+- Provide an instant microphone-mute button that stops microphone capture for both wake detection and active conversation. The state indicator, persistence, and re-enable controls still need design.
 - General conversation, internet information search, and weather lookup.
 - Multiple selectable personalities using the exact named characters and recognizable voices requested by the owner; original substitute characters are not the target. References include JARVIS, Rick Sanchez, and Sebastian from *Black Butler* (the Sebastian identification is inferred from the owner's series reference; the precise voice actor and language version are unconfirmed). The supplied MP3 remains local. Commercial usage permissions have not been verified. The anime reference is [Black Butler (2008)](https://rutube.ru/plst/510981/); [WIPO copyright material](https://www.wipo.int/documents/d/copyright/docs-en-wo_inf_108.pdf) is background for a later rights review, not a legal conclusion.
 - Proactive behavior is configurable: morning plans, daytime reminders, and evening reviews can be enabled or disabled. Triggers include the first entry each day, an approaching meeting, a missed habit, and returning after an absence. Defaults and exact timing remain to be designed.
+- Quiet hours, active calls, and games suppress proactive speech; show ordinary notifications instead. Detection details and the quiet-hours schedule remain to be designed.
 - The user chooses the time and/or situation for spoken updates, including the listed triggers.
 
 ### Connections and capabilities
@@ -89,7 +91,7 @@ The owner explicitly wants recognizable voices for the exact named characters, n
 1. Current subscription price and plan structure; future API-key support with the previously requested 50% BYOK pricing; offline license issuance and renewal, device-trial design, licensing security, retention, reinstalls, and hardware changes. Online entitlement registration is excluded. The seven-day per-device trial and feature unavailability after expiry are set.
 2. Future cloud storage/synchronization, offline planner behavior, and user-data retention/recovery/export/deletion. Current-version AI inference is local only.
 3. Supported Windows versions, baseline hardware, tray controls, explicit quit, and startup behavior; background wake listening when the main window is closed is required.
-4. Microphone indicators, voice interruption, whether proactive triggers are enabled by default, and exact trigger timing and absence detection.
+4. Wake-phrase detection implementation; microphone mute indicators, persistence, and re-enable controls; inactivity-timeout defaults and configuration; the English equivalent of «Хватит»; call/game and quiet-hours detection and schedule; whether proactive triggers are enabled by default, exact trigger timing, and absence detection.
 5. Character presentation and implementation of recognizable exact-character voices; identify the intended voice actor and language versions, and assess usage permissions.
 6. How remembered permission for task plan changes is scoped and revoked; whether a per-task missed-date override is available. Keep separate confirmation rules for email, file deletion, and device control.
 7. Calendar sync direction and conflict handling, Outlook sync details, and notes/projects integration needs.
