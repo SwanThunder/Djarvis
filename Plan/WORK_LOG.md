@@ -389,7 +389,7 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner requested (1) a bilingual project status summary, (2) the first batch of selectable owner questions on open items, and (3) a review of the new local dashboard layout brief.
-- Status: documentation complete and checked; commit/publication pending (see Remaining).
+- Status: documentation complete and checked; published.
 - Files reserved: both work logs; new `docs/STATUS.md`, `docs/STATUS.ru.md`, `docs/architecture/DASHBOARD_LAYOUT_REVIEW.md`, `docs/architecture/DASHBOARD_LAYOUT_REVIEW.ru.md`; link lines in `README.md` / `README.ru.md`; local `.git/info/exclude` (not published). Original brief `design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt` stays read-only. Other canonical documents change only if submitted answers require it.
 - Scope: documentation only. No application code, installation, downloads or database operations. Layout review is a comparison against `docs/DESIGN.md`; adopting its points into the mandatory design requires owner confirmation.
 - Pre-check: no active entries; latest task PLAN-015 complete and published. This agent has file transfer access only and cannot run Git on the owner's machine; working-tree state was judged by file timestamps against the last commit.
@@ -397,66 +397,66 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: new bilingual `docs/STATUS` and `docs/architecture/DASHBOARD_LAYOUT_REVIEW`; accepted choices added to bilingual DESIGN (new main-screen layout section) and PRODUCT (PLAN-016 section); README pair links both new documents. Brief SHA-256 `b8a782015dfa3434dda0f02e500e0d6c2224a41221847d2e6b2d1e0bf27aaa0d` is NOT yet in the local publication exclusion list: remote tools may not write to `.git`; an agent with Git access must add `/design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt` to `.git/info/exclude`. Original unchanged.
 - Checks: heading parity of four language pairs (STATUS 6/6, review 9/9, DESIGN 11/11, PRODUCT 15/15) and L1–L7 IDs in both review versions; local links resolve against the repository tree; no development-tool names in changed files; no trailing whitespace in new files. `git diff --check`, staging review and publication scan were not run because this agent has no Git access on the owner's machine. No application tests (documentation only).
 - Remaining: commit and push by an agent with Git access after reviewing the exact staged set (exclude the brief and local entry files). Owner choices: L2a secondary gesture, L6 top-bar functions, L7 card mapping with DD09, and the open items listed in `docs/STATUS.md`.
-- Commit: pending.
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
 
 ## SKILLS-001 — Exclude local skill sources and the layout brief from publication
 
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner granted access to resolve the publication conflict for the local `Skills/` folder and confirmed that no mention of the development tools may be published.
-- Status: complete; commit pending.
+- Status: complete; published.
 - Files: `.gitignore`, both work logs.
 - Scope: ignore `/Skills/` (local skill sources mention development tools) and `/design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt` (owner original whose text names a development tool). The ignore entries themselves contain no tool names. `.git/info/exclude` cannot be written by this agent; `.gitignore` is used instead. Supersedes the PLAN-016 note that the brief still had to be excluded.
 - Checks: `.gitignore` unchanged on disk since the last commit before editing; new lines contain no tool names. `git status`/`git check-ignore` not run (no Git access).
 - Remaining: commit together with PLAN-016 by an agent with Git access; verify with `git check-ignore -v Skills design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt` that both are ignored and that neither is already tracked.
-- Commit: pending.
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
 
 ## PLAN-017 — Main-screen open items and project rule amendment
 
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner answers to a selectable batch: mute via right-click/menu-key menu on the floating button; top bar with day selector, quick create and notifications (no profile); card mapping from the layout review accepted as written; record the skill-storage rule in the project rules. The owner also confirmed that no mention of the development tools may be published.
-- Status: documentation complete and checked; commit pending.
+- Status: documentation complete and checked; published.
 - Files: both logs; bilingual `docs/PROJECT_RULES`, `docs/DESIGN`, `docs/PRODUCT`, `docs/STATUS`, `docs/architecture/DASHBOARD_LAYOUT_REVIEW`.
 - Scope: resolve L2a, L6 and L7; add rules section 14 (agent skills stored in local `Skills/`, excluded from version control) and tighten section 9 wording (no mention of development tools or the AI assistants used for development in published files, paths, commit messages or metadata). Rule changes are by explicit owner approval. No application code.
 - Checks: heading parity of five language pairs (PROJECT_RULES 15/15, STATUS 6/6, DESIGN 11/11, PRODUCT 15/15, review 9/9); no tool names in changed files; stale open-item wording removed from STATUS and the review. Git checks not run (no Git access).
 - Remaining: navigation grouping and labels (DD09); commit PLAN-016, SKILLS-001 and PLAN-017 by an agent with Git access.
-- Commit: pending.
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
 
 ## PLAN-018 — License device limit, transfer, clock rollback; commit preparation
 
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner answers: up to three devices per license; hardware-independent license file; 48-hour clock-rollback tolerance, then block; payment deferred. Owner asked to complete the pending commit together.
-- Status: documentation complete and checked; commit and push run by the owner with the prepared script.
+- Status: documentation complete and checked; committed and published.
 - Files: both logs; bilingual `docs/architecture/DECISIONS` (ADR-010), `docs/PRODUCT`, `docs/STATUS`; local ignored helper `tmp/commit-plan016-018.ps1`.
 - Scope: record ADR-010 and sync product/status; prepare one commit for PLAN-016, SKILLS-001, PLAN-017 and PLAN-018. This agent cannot push (no repository write access) and cannot run Git on the owner's machine.
 - Checks: in a clean clone of `origin/main` (72f96b3) with these 17 files applied: `git diff --check` passed; `Skills/` and the layout brief are ignored and untracked; no development-tool names in added lines or the commit message; ADR count 10/10 in both registers.
 - Remaining: run the script; record the resulting commit hash here. Open: price, license issuer, payment, voices, providers, DD09.
-- Commit: pending (owner runs `tmp/commit-plan016-018.ps1`).
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
 
 ## PLAN-019 — Personas, search/weather, navigation, device confirmations, backup folder
 
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner answers in two selectable batches; owner asked to complete the remaining list autonomously.
-- Status: documentation complete and checked; commit pending (owner runs the prepared script).
+- Status: documentation complete and checked; published.
 - Files: both logs; bilingual `docs/architecture/DECISIONS` (ADR-011–013), `docs/PRODUCT`, `docs/DESIGN`, `docs/STATUS`, `docs/architecture/DASHBOARD_LAYOUT_REVIEW`; ignored helper `tmp/commit-plan016-019.ps1`.
 - Scope: ADR-011 — original personas replace third-party characters and actor voices; `Vois/join-5tracks.mp3` (72 s mono speech, no source metadata) stays a local personal reference only. ADR-012 — search with a user-owned API key, browser handoff without one; MET Norway weather; price and license issuance deferred with payment. ADR-013 — personas Edward, Professor Volt, Nova; sidebar order; confirmation for closing programs, sleep and lock; default backup folder `Documents\Djarvis Backups`.
 - Not done: feasibility checks and runs on the owner's machine — no console on the owner's computer (local command tool fails on a missing `AppData\Roaming\npm` folder; folder access to fix it was refused by the safety system). Push is not possible from this agent (no repository write access).
 - Checks: in a clean clone of `origin/main` with the changed files: `git diff --check` passed; no development-tool names in added lines or the commit message; ADR count 13/13 in both registers; local-only paths ignored.
 - Remaining: run `tmp/commit-plan016-019.ps1`; voice model selection, search provider, live-data protection, BYOK plan, technical finalization, feasibility checks, final architecture and implementation plan.
-- Commit: pending.
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
 
 ## PLAN-020 — Speech engines, search provider, live-data protection
 
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-02.
 - Authorization: owner answers after a researched selectable batch.
-- Status: documentation complete and checked; commit pending.
+- Status: documentation complete and checked; published.
 - Files: both logs; bilingual `DECISIONS` (ADR-014), `PRODUCT`, `STATUS`.
 - Scope: Vosk TTS (ru) + Kokoro (en) with voices per persona; Tavily with the user's key; Windows-account ACL plus BitLocker recommendation for live data. Research sources: Piper license change (active engine GPL-3.0), Silero non-commercial license, Vosk TTS and Kokoro Apache-2.0 weights, Tavily and Brave current pricing.
 - Not done: feasibility measurements on the owner's machine (no console: the local command tool must be restarted with the desktop app after the npm folder fix; terminals cannot be typed into through screen control).
 - Checks: ADR count 14/14 in both registers; Git checks repeated before commit.
 - Remaining: technical finalization (transport, schema, cryptography, migrations, packaging), feasibility checks, final architecture and implementation plan.
-- Commit: pending.
+- Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
