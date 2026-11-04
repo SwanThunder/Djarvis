@@ -2,12 +2,13 @@
 
 [Русская версия](STATUS.ru.md) · [Product](PRODUCT.md) · [Design](DESIGN.md) · [Decisions](architecture/DECISIONS.md) · [Component plan](architecture/COMPONENT_PLAN.md) · [Work log](../Plan/WORK_LOG.md)
 
-Snapshot: 2026-11-04, Europe/Moscow, after PLAN-020. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
+Snapshot: 2026-11-04, Europe/Moscow, after PLAN-021. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
 
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
 - Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), fourteen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Next gate: final architecture and implementation plan for explicit owner approval.
 
 ## 2. Accepted decisions
@@ -51,6 +52,6 @@ All directions below are unapproved technical proposals unless listed in section
 ## 5. Remaining work
 
 1. Resolve section 4 in small batches.
-2. Authorized feasibility checks: local model on CPU/8 GiB, ASR/TTS, PostgreSQL and Python packaging.
+2. Remaining feasibility: speech recognition and wake phrase, a real 8 GiB CPU-only machine, Vosk 0.9 listening test, GPL phonemizer review.
 3. Agent-side technical finalization: transport, schema, cryptography, migrations.
 4. Final architecture and implementation plan → owner approval → programming.

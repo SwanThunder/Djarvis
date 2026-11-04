@@ -460,3 +460,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: ADR count 14/14 in both registers; Git checks repeated before commit.
 - Remaining: technical finalization (transport, schema, cryptography, migrations, packaging), feasibility checks, final architecture and implementation plan.
 - Commit: [62d7347](https://github.com/SwanThunder/Djarvis/commit/62d7347).
+
+## PLAN-021 — Publication of PLAN-016–020 and feasibility checks
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-02.
+- Authorization: owner asked to proceed autonomously after restarting the local command tool; downloads approved explicitly (speech ~0.8 GB, PostgreSQL zip ~0.3 GB, Python embeddable ~0.01 GB) into ignored `cache/feasibility/`.
+- Status: complete; published.
+- Files: both logs; new bilingual `docs/architecture/FEASIBILITY`; bilingual `docs/STATUS`. Local only: `cache/feasibility/` (venv, models, PostgreSQL and Python archives, samples, scripts, results).
+- Publication: PLAN-016–020 published as 62d7347, journal hash record as b0bf375. The prepared script first stopped safely on its own bug (`git check-ignore -q` with two paths); fixed and rerun.
+- Scope: CPU-only model run with the existing model; Vosk TTS 0.7 and Kokoro int8 speed/memory with per-persona samples; PostgreSQL 18.6 zip binaries without service/admin; Python 3.12.10 embeddable. Vosk 0.9 (746 MB) was not downloaded because it exceeded the approved size. Calling the runtime CLI started the installed runtime's desktop app; the model was unloaded afterwards. The temporary database password was random and discarded.
+- Checks: results recorded in FEASIBILITY with eight design findings; Git checks before commit.
+- Remaining: speech recognition and wake phrase; real 8 GiB machine; Vosk 0.9 listening; GPL phonemizer review; technical finalization and the final architecture and implementation plan.
+- Commit: this entry is published with the feasibility report.
