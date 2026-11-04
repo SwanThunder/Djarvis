@@ -29,7 +29,7 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 | Engines and protection | Vosk TTS (ru) + Kokoro (en); Tavily search with user key; Windows ACL + BitLocker hint for live data | ADR-014 |
 | Backups | Daily and pre-migration; 7-day default retention, configurable; Windows-protected key, no extra password or recovery key; full-snapshot restore after preview and current-data backup; 30-day default history retention, configurable/disableable | ADR-006 |
 | Planner | Deadline first, then priority; DST gap/fold require confirmation; completion releases only that occurrence's future placements; overdue tasks stay eligible; parent close offers "Close task" / "Finish subtasks" | ADR-007, ADR-008 |
-| Habits and subtasks | Abstinence success only by explicit mark; quantity mode per habit; timer plus manual duration, timer runs through sleep/exit/shutdown and splits at midnight; multi-level subtasks with confirmed parent defaults | ADR-008, ADR-009 |
+| Habits and subtasks | Abstinence success only by explicit mark; quantity mode per habit; timer plus manual duration, independent simultaneous timers for different habits, timer runs through sleep/exit/shutdown and splits at midnight; multi-level subtasks with confirmed parent defaults | ADR-008, ADR-009 |
 | Design | Midnight Electric + Glass, compact uncrowded density, v2.1 visual rules; assistant circle above the day panel; day panel follows layout brief v1.0 grid | DESIGN |
 | Microphone button | Floating, hideable; press = overlay plus immediate listening; right-click/menu key = mute/unmute; visible unavailable state with reason | PLAN-016/017, DESIGN |
 | Main screen | Top bar: day selector, search, quick create, notifications (no profile); card contents accepted | PLAN-017, DESIGN |
@@ -58,6 +58,6 @@ All directions below are unapproved technical proposals unless listed in section
 ## 5. Remaining work
 
 1. Read the [readiness report](architecture/READINESS.md) and approve the [implementation plan](architecture/IMPLEMENTATION_PLAN.md), schema, API and modules; then separately authorize P0.
-2. Before implementation, resolve document mismatches: the register's outdated ADR count, the subtask button label in new technical documents, and tray ownership in the plan diagram. The latest owner answer about concurrent timers for different habits still needs recording in canonical decisions.
+2. The decision register, subtask button, tray diagram and concurrent-timer rule were aligned in PLAN-026. The implementation package still awaits owner review.
 3. After programming: live checks of assistant, microphone and wake phrase, task tracking and reminders; Vosk 0.9 listening for the 16 GB+ profile.
 4. Resolve section 4; verify the target profile on a real 8 GiB machine in P7.

@@ -529,3 +529,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Git audit: local HEAD and origin/main are identical at 245878c; no modified or staged tracked files before this task. One unrelated untracked spreadsheet is preserved. Local resources and agent instructions remain excluded from Git. The bilingual status summary was stale and has been updated in scope.
 - Verification: compared both status languages, 16 decision IDs and local Markdown links; staged file scope and whitespace checked. Previous feasibility and SQL checks were reviewed as documented, not rerun. No application tests were possible because there is no application code.
 - Commit: [519e278](https://github.com/SwanThunder/Djarvis/commit/519e2788d4d3130042270f1507c1a56ded1a0c95).
+
+## PLAN-026 — Reconcile accepted timer and architecture handoff
+
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01 coordinates, records accepted policies and reviews; technical-doc-cleanup edits disjoint bilingual architecture files.
+- Authorization: owner asked to continue the remaining pre-programming items; earlier answer permits simultaneous independent timers of different habits.
+- Status: documentation complete and checked; publication pending.
+- Files reserved by agent-01: both logs and bilingual DECISIONS, PRODUCT, FOUNDATION_DESIGN, PLANNER_CORE and STATUS. Technical-doc-cleanup owns bilingual API, SCHEMA, READINESS and IMPLEMENTATION_PLAN. No other files or app code.
+- Scope: correct the remaining documentation mismatches, add the accepted timer rule, verify the architecture package for owner review, and preserve the separate implementation approval gate.
+- Result: ADR-009, product and planner documents now allow independent concurrent timers for different habits. API/schema use the approved child-button wording, the proposed timer constraint is explicitly per habit, and the plan diagram places the tray icon with the UI. The decision-register count is 16; the readiness report distinguishes approved behavior from proposed schema/API/module rules.
+- Verification: 10 bilingual pairs checked for headings, ADR IDs and local links; targeted tray/timer consistency checks and whitespace check passed. Prior feasibility/SQL experiments were not rerun, and no application code or app tests were changed.
+- Remaining: owner reviews and approves the implementation plan, schema, API and modules, then separately authorizes P0. Live feature checks follow programming; voice/service license terms, signing, payment and Android remain later gates.

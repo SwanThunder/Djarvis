@@ -16,8 +16,8 @@ flowchart LR
     AST --> AUD["AudioSession<br/>wake phrase · recognition · synthesis"]
     APP --> INT["Adapters<br/>calendars · mail · search · weather · Windows"]
     APP --> SAFE["Backups · license · migrations"]
-    TRAY["Notification-area icon"]
   end
+  UI --> TRAY["Notification-area icon"]
   CORE -- asyncpg --> PG[("PostgreSQL 18<br/>private cluster")]
   AST -- "HTTP, loopback" --> LLM["djarvis-llm.exe<br/>llama.cpp, on demand"]
   INT -- HTTPS --> EXT["Google · Microsoft · Tavily · MET Norway"]

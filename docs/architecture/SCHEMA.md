@@ -225,7 +225,7 @@ Rules checked by the core (not expressible as `CHECK`):
 - **Q2 (recurring parent):** subtasks of a recurring task are templates without their own recurrence rule. When creating each occurrence of the parent, the core creates one occurrence of each subtask with the `parent_occurrence_id` of that occurrence; the checklist is copied from `checklist_template_item` into the occurrence's `checklist_item`. Marks from a past repetition do not carry over to the next one. Editing the template affects occurrences not yet created and, depending on the chosen scope, the open ones.
 - **Q4 (moving a branch):** a task with subtasks can be moved into any project and under any task except its own descendants. The children's project does not change by itself.
 - A new subtask gets the parent's suggested project and priority only after confirmation; the deadline is set separately; later edits of the parent do not propagate to the children (ADR-009).
-- "Close task" completes only the parent's occurrence; "Finish subtasks" changes nothing (ADR-008).
+- "Finish subtasks" returns to the child list and leaves the parent incomplete; "Close task" completes only the selected parent occurrence (ADR-008).
 - Creating occurrences of a recurring task is a background job: from `generated_until` to a horizon of 60 days ahead, `INSERT … ON CONFLICT DO NOTHING`. Missed occurrences stay open — that is debt. Cancelled ones are not created again because their row already exists.
 - Editing a recurrence asks for the scope: "only this occurrence", "this and future", "the whole series". "This and future" closes the rule with `until_date` and creates a new rule with a new anchor; completed occurrences do not change.
 
@@ -366,6 +366,7 @@ CREATE TABLE app.timer_session (
   -- [common]
 );
 CREATE UNIQUE INDEX one_live_timer ON app.timer_session (habit_id) WHERE state <> 'stopped';
+-- At most one live timer per habit; independent timers for different habits are allowed.
 
 CREATE TABLE app.habit_goal_proposal (                  -- assistant proposals; applied only after consent
   id            uuid PRIMARY KEY DEFAULT uuidv7(),

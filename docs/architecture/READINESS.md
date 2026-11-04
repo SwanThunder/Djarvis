@@ -21,15 +21,15 @@ One action remains for the owner: read and approve the four structure documents 
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
 | Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | being read by the owner |
-| Database schema v1: 45 tables | [SCHEMA](SCHEMA.md) | new; the SQL runs in PostgreSQL 18 |
-| API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | new |
-| Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | new |
-| Structural questions Q1–Q5 | SCHEMA §12, ADR-016 | resolved by the owner |
+| Database schema v1: 45 tables | [SCHEMA](SCHEMA.md) | proposed; pending owner approval; SQL runs in PostgreSQL 18 |
+| API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | proposed; pending owner approval |
+| Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | proposed; pending owner approval |
+| Structural questions Q1–Q5 | SCHEMA §12, ADR-016 | owner decisions recorded; structure pending approval |
 
 ## 3. How the structure itself was verified
 
 - **Requirements coverage.** Every required feature from PRODUCT is mapped to schema tables, API commands and a module (§5). There are no uncovered features.
-- **Schema.** All the SQL from SCHEMA was run in a temporary PostgreSQL 18 cluster: 63 statements, 45 tables, no errors. The cluster was deleted. It was separately verified that the database itself rejects violations of product rules: a task without a priority, a deadline without a time, a second occurrence of a one-off task, a second running timer, a block whose end is earlier than its start, a permission to delete files, a repeat of the same habit mark. All 13 cases behaved as intended.
+- **Schema.** All the SQL from SCHEMA was run in a temporary PostgreSQL 18 cluster: 63 statements, 45 tables, no errors. The cluster was deleted. It was separately verified that the database itself rejects violations of product rules: a task without a priority, a deadline without a time, a second occurrence of a one-off task, a second live timer for the same habit (live timers for different habits are allowed), a block whose end is earlier than its start, a permission to delete files, a repeat of the same habit mark. All 13 cases behaved as intended. This verifies the proposed schema, which remains pending owner approval.
 - **Consistency.** Command names in the API match the names in the schema and modules; links between documents were checked; both language versions were compared for structure.
 - **What this verification does not prove:** that the program will work. That will be shown by the tests in each phase and the real-world checks after programming.
 
@@ -68,9 +68,9 @@ One action remains for the owner: read and approve the four structure documents 
 | Ru/en, appearance, accessibility | `profile.locale`, `setting.appearance` | `UpdateProfile`, `UpdateSetting` | `ui` |
 | Installation without a terminal, models on first launch, updates on command | — | API section 13 | `host`, `packaging` |
 
-## 6. Technical rules fixed by this report
+## 6. Proposed technical rules pending owner approval
 
-Minor rules that were previously listed as open in CP05–CP07 and are now closed at the structure level (changed only by agreement):
+Minor structural proposals from CP05–CP07 for the owner's review; this report does not lock them:
 
 1. Tie-break in the auto-plan: with equal deadline and priority, the task created earlier goes first (`uuidv7` order). The plan is deterministic.
 2. Occurrences of recurring tasks are created 60 days ahead; the `generated_until` cursor does not lose debt during a long absence.
