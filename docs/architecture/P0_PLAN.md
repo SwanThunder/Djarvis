@@ -1,8 +1,8 @@
-# P0 — skeleton plan for discussion
+# P0 — skeleton plan
 
 [Русская версия](P0_PLAN.ru.md) · [phases and criteria](IMPLEMENTATION_PLAN.md) · [modules](MODULES.md) · [API](API.md) · [technical choices](TECHNICAL_DESIGN.md) · [readiness](READINESS.md)
 
-Status: **proposal for discussion**, PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026). The owner asked not to write code yet. This document does not authorize P0.
+Status: **plan in progress** (ADR-033), prepared in PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026); all six steps are accepted (ADR-027–032); the owner authorized P0 within this plan on 2026-11-05 (ADR-033).
 
 ## 1. P0 outcome
 
@@ -58,4 +58,4 @@ Full domain-command idempotency, revisions, planner, schema migrations, voice an
 
 ## 6. Next decision
 
-All six plan steps have been discussed and accepted by the owner (ADR-027–032). At the owner's explicit request, no code is being written yet. This plan can be refined through discussion; separate permission to start P0 is needed only when the owner decides to move to implementation.
+All six plan steps have been discussed and accepted by the owner (ADR-027–032). The owner authorized P0 within this plan on 2026-11-05 (ADR-033). Step 1 is done (PLAN-045) and goes through its own pull request under ADR-032; the CI run and the Djarvis.exe build are verified in that pull request, and it is merged only after the owner's explicit "yes". Next is step 2, "Embedded runtimes" (ADR-028). Steps run in order, each as a separate pull request; P1 begins only after the owner accepts P0 from the screen recording (§5, ADR-032).

@@ -4,6 +4,12 @@
 !.env.example
 *.key
 *.pem
+*.pfx
+*.p12
+*.jks
+*.snk
+id_rsa*
+id_ed25519*
 
 # Runtime data; keep directory markers
 /data/**
@@ -35,6 +41,7 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+*.egg-info/
 
 # JavaScript dependencies and build output
 node_modules/

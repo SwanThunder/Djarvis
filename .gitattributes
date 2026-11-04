@@ -1,0 +1,35 @@
+# Normalize text files to LF in the repository and the working tree.
+* text=auto eol=lf
+
+# Windows tooling expects CRLF.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.rc text eol=crlf
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+
+# Binary assets.
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.bmp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.zip binary
+*.7z binary
+*.pdf binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
+*.exe binary
+*.dll binary

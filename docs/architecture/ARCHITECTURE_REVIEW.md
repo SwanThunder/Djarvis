@@ -36,4 +36,4 @@ Flutter remains the sole UI and tray owner. The Python core provides one rule bo
 
 The proposed architecture is checked in P0 by starting embedded Python and private PostgreSQL, connecting the UI with a token, reopening the window, second launch and Full Exit. P1 checks idempotency, revisions, events and crash recovery. Real 8 GiB acceptance is in P7. These criteria are already approved; this summary does not expand the phases.
 
-**Next step:** discuss the [P0 plan](P0_PLAN.md); no code is being written at the owner’s request.
+**Next step:** step 2 of the [P0 plan](P0_PLAN.md); P0 is authorized (ADR-033).
