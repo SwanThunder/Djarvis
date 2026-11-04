@@ -139,6 +139,8 @@ A `.djbackup` archive before encryption is an uncompressed tar:
 
 Not included (CP15): license and trial, OAuth tokens, IPC secrets, model weights, caches, permissions and unconfirmed requests.
 
+**Open inconsistency (PLAN-034):** the full `pg_dump --schema=app` above would include grants, pending approvals and the external-action queue despite this exclusion list. Export scope and restore rules need the owner policy choice before schema approval; this command must not be implemented as written.
+
 ### 3.2 Encrypted container "DJB1"
 
 | Part | Contents |

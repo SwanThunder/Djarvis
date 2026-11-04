@@ -464,11 +464,15 @@ CREATE TABLE app.provider_mapping (
   calendar_id      uuid NOT NULL REFERENCES app.provider_calendar(id) ON DELETE CASCADE,
   remote_object_id text NOT NULL,
   remote_etag      text,
+  object_kind      text NOT NULL CHECK (object_kind IN ('event','placement')),
   event_id         uuid REFERENCES app.calendar_event(id) ON DELETE SET NULL,
   placement_id     uuid REFERENCES app.schedule_placement(id) ON DELETE SET NULL,
   base_snapshot    jsonb NOT NULL,                      -- последняя согласованная версия для сравнения
   last_synced_at   timestamptz NOT NULL,
-  UNIQUE (calendar_id, remote_object_id)
+  UNIQUE (calendar_id, remote_object_id),
+  CHECK (num_nonnulls(event_id, placement_id) <= 1),
+  CHECK ((object_kind = 'event' AND placement_id IS NULL)
+      OR (object_kind = 'placement' AND event_id IS NULL))
   -- [общие]
 );
 
@@ -484,7 +488,7 @@ CREATE TABLE app.sync_conflict (
 );
 ```
 
-Ссылка `provider_mapping` на размещение, а не на задачу: удаление блока у провайдера не удаляет задачу или привычку (PRODUCT). Gmail не хранит почту в базе: письма читаются по запросу, черновики и отправка идут через `outbox` (§8).
+`provider_mapping.object_kind` сохраняет тип сопоставления после удаления локальной цели. Одновременно ссылаться на событие и блок нельзя; обе ссылки могут стать NULL как метка для сверки удаления. Ссылка на размещение, а не на задачу: удаление блока у провайдера не удаляет задачу или привычку (PRODUCT). Gmail не хранит почту в базе: письма читаются по запросу, черновики и отправка идут через `outbox` (§8).
 
 ## 8. Действия, разрешения, очередь
 

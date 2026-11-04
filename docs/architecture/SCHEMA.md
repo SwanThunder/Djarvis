@@ -464,11 +464,15 @@ CREATE TABLE app.provider_mapping (
   calendar_id      uuid NOT NULL REFERENCES app.provider_calendar(id) ON DELETE CASCADE,
   remote_object_id text NOT NULL,
   remote_etag      text,
+  object_kind      text NOT NULL CHECK (object_kind IN ('event','placement')),
   event_id         uuid REFERENCES app.calendar_event(id) ON DELETE SET NULL,
   placement_id     uuid REFERENCES app.schedule_placement(id) ON DELETE SET NULL,
   base_snapshot    jsonb NOT NULL,                      -- last reconciled version, used for comparison
   last_synced_at   timestamptz NOT NULL,
-  UNIQUE (calendar_id, remote_object_id)
+  UNIQUE (calendar_id, remote_object_id),
+  CHECK (num_nonnulls(event_id, placement_id) <= 1),
+  CHECK ((object_kind = 'event' AND placement_id IS NULL)
+      OR (object_kind = 'placement' AND event_id IS NULL))
   -- [common]
 );
 
@@ -484,7 +488,7 @@ CREATE TABLE app.sync_conflict (
 );
 ```
 
-`provider_mapping` references a placement, not a task: deleting a block at the provider does not delete the task or habit (PRODUCT). Gmail does not store mail in the database: messages are read on demand, and drafts and sending go through the `outbox` (§8).
+`provider_mapping.object_kind` retains the mapping type after its local target is deleted. It cannot reference an event and a block at once; both references may be NULL as a deletion-reconciliation marker. A mapping references the placement, not the task: deleting a provider block does not delete its task or habit (PRODUCT). Gmail does not store mail in the database: messages are read on demand, and drafts and sending go through the `outbox` (§8).
 
 ## 8. Actions, permissions, queue
 

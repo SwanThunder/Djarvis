@@ -2,7 +2,7 @@
 
 [Русская версия](ARCHITECTURE_REVIEW.ru.md) · [full plan](IMPLEMENTATION_PLAN.md) · [technical details](TECHNICAL_DESIGN.md) · [decisions](DECISIONS.md) · [readiness report](READINESS.md)
 
-Status: owner review proposal, PLAN-033, 2026-11-05. Phases P0–P7 and their criteria are already approved (ADR-018); T1–T6 are already approved (ADR-015). The current decision concerns only architecture §1 and repository layout §2 of the full plan. Database schema, API, modules and P0 authorization are separate decisions.
+Status: process architecture and repository layout §§1–2 approved by the owner (ADR-022), 2026-11-05; additional technical details remain proposed. Phases P0–P7 and their criteria are already approved (ADR-018); T1–T6 are already approved (ADR-015). Architecture §1 and repository layout §2 of the full plan have been approved by the owner. Database schema, API, modules and P0 authorization are separate decisions.
 
 ## 1. Processes and ownership
 
@@ -36,4 +36,4 @@ Flutter remains the sole UI and tray owner. The Python core provides one rule bo
 
 The proposed architecture is checked in P0 by starting embedded Python and private PostgreSQL, connecting the UI with a token, reopening the window, second launch and Full Exit. P1 checks idempotency, revisions, events and crash recovery. Real 8 GiB acceptance is in P7. These criteria are already approved; this summary does not expand the phases.
 
-**Decision now:** accept or revise only the process architecture and repository layout in §§1–2 of the full plan. Then follow the previously chosen order: schema → API → modules, followed by a separate P0 decision.
+**Next step:** follow the previously chosen order: schema → API → modules, followed by a separate P0 decision.

@@ -632,3 +632,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: bilingual headings/links, decision count, change scope and git diff --check; no code, database or SQL was run. Local data and the owner spreadsheet were preserved.
 - Remaining: owner choice on architecture §1 and layout §2 of the full plan, then schema → API → modules, and a separate P0 decision.
 - Commit: [fe6d168](https://github.com/SwanThunder/Djarvis/commit/fe6d168).
+
+## PLAN-034 — Architecture approval and schema review
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner explicitly approved process architecture and repository layout in IMPLEMENTATION_PLAN §§1–2 and chose to proceed to the schema. P0, schema, API and module approvals were not given.
+- Status: architecture approval recorded and schema review prepared; restore-policy choice pending; documentation only.
+- Files: both logs; bilingual DECISIONS, IMPLEMENTATION_PLAN, ARCHITECTURE_REVIEW, READINESS, STATUS, README, SCHEMA, TECHNICAL_DESIGN and a new SCHEMA_REVIEW.
+- Scope: record the narrow approval, review schema v1 around primary entities and backup restore, prepare a concrete summary and owner questions without running SQL or application code.
+- Result: ADR-022 records approval of architecture/layout §§1–2 without P0. The review groups 46 tables into nine areas, describes the main planner path and identifies two issues: a proposed mapping-integrity correction and the contradiction between a full pg_dump and stated exclusion of grants/pending actions. The backup-content policy was sent to the owner as a choice. Schema/API/modules remain unapproved.
+- Checks: 46 CREATE TABLE declarations in both language versions, 22 ADRs, headings/links across nine bilingual pairs and git diff --check; revised SQL was not executed under the owner validation decision. Unrelated local file preserved.
+- Remaining: receive restore-policy answer, align archive contents/schema, then seek separate schema approval; API and modules follow, then separate P0 authorization.

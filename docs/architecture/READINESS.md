@@ -2,11 +2,11 @@
 
 [Русская версия](READINESS.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Database schema](SCHEMA.md) · [API](API.md) · [Modules](MODULES.md) · [Technical design](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Status](../STATUS.md)
 
-Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-033; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository structure, schema, API and modules await separate review, and P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
+Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-034; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), while schema, API and modules await separate review, and P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
 
 ## 1. Summary
 
-Component, data, interaction, error and verification designs are documented. These are **review materials**, not authorization to write code. Before P0, the owner separately reviews architecture/repository layout, schema, API and modules, then explicitly authorizes P0. Changes after ADR-019–021 and the revised schema must be included in that review.
+Component, data, interaction, error and verification designs are documented. These are **review materials**, not authorization to write code. Before P0, the owner reviews schema, API and modules after the approved architecture/layout, then explicitly authorizes P0. Changes after ADR-019–021 and the revised schema must be included in that review.
 
 ## 2. What is ready
 
@@ -14,12 +14,12 @@ Component, data, interaction, error and verification designs are documented. The
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…021 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…022 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
 | Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | P0–P7 and criteria approved (ADR-018); architecture/repository structure pending; P0 not authorized |
-| Database schema v1: 46 tables | [SCHEMA](SCHEMA.md) | revised proposal; pending owner approval; revised SQL has not been executed |
+| Database schema v1: 46 tables | [SCHEMA](SCHEMA.md), [summary](SCHEMA_REVIEW.md) | revised proposal; pending owner approval; revised SQL has not been executed |
 | API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | proposed; pending owner approval |
 | Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | proposed; pending owner approval |
 | Structural questions Q1–Q5 | SCHEMA §12, ADR-016 | owner decisions recorded; structure pending approval |
@@ -35,7 +35,7 @@ Component, data, interaction, error and verification designs are documented. The
 
 | № | Action | Impact |
 | --- | --- | --- |
-| 1 | Review the [architecture/layout summary](ARCHITECTURE_REVIEW.md) with [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | phases and criteria are already approved (ADR-018) |
+| 1 | Architecture and layout in [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) §§1–2 | approved (ADR-022) |
 | 2 | Approve [SCHEMA](SCHEMA.md), [API](API.md), [MODULES](MODULES.md) | become the basis of the P0–P1 code |
 | 3 | Allow P0 to start | start of programming |
 
