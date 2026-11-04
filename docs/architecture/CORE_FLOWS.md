@@ -31,7 +31,9 @@ The planner takes a consistent snapshot of the selected day, available hours, me
 
 The output is a proposal rather than a hidden calendar write: blocks, placement reasons, free windows and items that did not fit. Before applying it, the core checks input revisions: a changed meeting or task requires a fresh proposal. Acceptance stores blocks with one command, schedules or updates reminders and refreshes the day. Saved permission to apply without confirmation only applies within its scope; habit goal changes always need a separate acceptance.
 
-**Proposal for owner review:** the plan draft can be edited before application, with constraints rechecked after each edit. After an unexpected meeting or missed block, the app suggests replanning but does not move pinned items without explicit consent. These two UX policies are not yet owner-approved.
+**Owner-approved (ADR-020):** blocks in a draft may be dragged and edited; the user then accepts the entire plan. Draft edits do not change already accepted blocks. If a new meeting overlaps an accepted task, the app shows the conflict and proposes a new plan, applied after confirmation or under a saved grant covering the action. Manually pinned blocks retain their protection.
+
+**Proposed contract:** editing a draft increments its revision and rechecks available hours, meetings, durations and overlaps. On acceptance, the core checks source freshness and the draft revision and stores the whole change in one transaction. A user-edited block becomes pinned. If a new meeting arrives after acceptance, the task block remains visible with a conflict until user choice; a new proposal considers the meeting and cannot move pinned blocks without explicit permission. The fields and commands are not yet approved.
 
 ## 4. End-to-end assistant and reminders
 
@@ -50,6 +52,8 @@ The Djarvis calendar is independent. Google/Outlook adapters turn external chang
 - One task created from the form and from voice has the same required fields and permission checks.
 - A repeated command or restart after commit creates neither a second task nor a second reminder.
 - Planning does not hide unplaced tasks, explains their status and rejects acceptance of a stale snapshot.
+- Dragging in a draft does not change the accepted schedule; acceptance applies every valid edit as one action, while a revision conflict applies none.
+- A new meeting that overlaps an accepted task is visible beside it and offers replanning; without confirmation or a current grant the task is not moved.
 - A new meeting, quiet mode, missing model and missing network produce clear states without data loss.
 - Restoring user data does not extend the trial or replace an external connection token.
 

@@ -596,3 +596,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: language versions have the same six sections and five groups, source links checked, git diff --check; no application or SQL checks were run because code did not change.
 - Remaining: receive owner choices on the two UX questions, then review the main task and day-plan path in detail. P0 is withheld.
 - Commit: [4aa177b](https://github.com/SwanThunder/Djarvis/commit/4aa177b).
+
+## PLAN-031 — Editable day-plan draft and new-meeting conflict
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner chose dragging/editing blocks in a draft before accepting the whole plan; when a new meeting occupies an accepted task's time, show the conflict and propose a new plan, applied after confirmation or a saved grant.
+- Status: complete as approved-UX documentation and a technical proposal; no programming.
+- Files: both logs and bilingual DECISIONS, PRODUCT, CORE_FLOWS, PLANNER_CORE, API, SCHEMA, STATUS.
+- Scope: record only the two accepted UX rules and propose a compatible draft/conflict contract. Do not approve schema/API/modules or begin P0.
+- Result: ADR-020 records the two owner choices. PRODUCT, CORE_FLOWS, PLANNER_CORE and STATUS were updated; unapproved API/SCHEMA now propose a draft-edit command, draft revision and user-edit marker. Whole-plan acceptance checks source and draft freshness; a new meeting does not silently move a task. Schema and API remain under review; P0 is withheld.
+- Checks: bilingual versions, 20 ADRs and exact API/schema changes reviewed; links and git diff --check checked. No SQL or application code was executed under the previously chosen validation sequence.
+- Remaining: review the proposed draft/conflict contract with schema/API/modules, then separately authorize P0.

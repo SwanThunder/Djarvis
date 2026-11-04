@@ -120,6 +120,10 @@ Propose a deterministic planning service with a model-independent input snapshot
 5. Return a proposal: additions/moves, unchanged locked items, and unplaced items with reasons such as no fitting interval or a deadline that cannot be met. Do not silently extend available hours, move meetings, change deadlines, or label an infeasible day as solved.
 6. Apply only after required confirmation or a grant covering this precise task-planning operation. Revalidate the snapshot, permissions, entitlement, and time before committing.
 
+Accepted UX (ADR-020): the user drags and edits blocks in a draft, then accepts the whole plan. If a new meeting occupies the time of an accepted task, show both items as a conflict and propose a new plan; apply it after confirmation or under a saved planning grant. Until the choice, the task has not been moved. Pinned placement protection remains in force.
+
+Technical proposal: the draft stores its own revision and marks user-edited blocks. Each edit checks hard constraints without changing the active schedule. `ApplyDayPlan` receives expected source and draft revisions, checks them, and commits the entire change set in one transaction; a stale draft returns `Conflict`. User edits become pinned placements. When a new meeting arrives, the day read model detects its overlap with an active placement; the planner builds a new proposal with that meeting as a hard constraint. Draft storage, exact overlap detection and conflict presentation remain part of the unapproved schema/API.
+
 The assistant can explain the result in character, but factual times, feasibility, counts, and changes come from structured core data. Habit goal changes remain outside an automatically accepted task plan.
 
 ## 8. Commands and queries

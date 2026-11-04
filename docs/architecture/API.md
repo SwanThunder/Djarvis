@@ -61,9 +61,10 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The com
 | `CheckOffSegment` | command | yes | mark a part of a split task — progress only |
 | `SetPlacementLock` | command | — | lock or unlock a block |
 | `BuildDayPlan` | command | yes | build a proposal for a date; the response is `DayPlanProposal` or `NeedsInput` (no duration) |
-| `ApplyDayPlan` | command | yes | apply the proposal; if the planning revision has changed — `Conflict` and the proposal is `stale`. Requires confirmation or the `plan.apply` permission |
+| `EditDayPlanDraft` | command | — | proposed command: drag/edit a draft item with expected revision; checks constraints without changing the accepted plan |
+| `ApplyDayPlan` | command | yes | apply the whole draft as one action; changed source revision → `Conflict` and a `stale` proposal; changed draft revision alone → `Conflict` with the current draft; requires confirmation or `plan.apply` permission |
 | `RejectDayPlan` | command | yes | reject the proposal |
-| `GetDayView` | query | yes | the day: blocks, events, habits, overdue, missed, top 3, free time — the source for the Today screen and the spoken plan |
+| `GetDayView` | query | yes | the day: blocks, events, new-meeting conflicts with accepted tasks, habits, overdue, missed, top 3, free time — the source for the Today screen and the spoken plan |
 | `GetWeekView` | query | — | the week for the calendar |
 | `GetDayPlanProposal` | query | — | the proposal with reasons for what is unplaced |
 

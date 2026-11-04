@@ -269,6 +269,7 @@ CREATE TABLE app.day_plan_proposal (
   local_date        date NOT NULL,
   tz                text NOT NULL,
   planning_revision bigint NOT NULL,                    -- снимок planning_guard
+  draft_revision    bigint NOT NULL DEFAULT 1 CHECK (draft_revision > 0),          -- меняется при каждой правке черновика
   origin            text NOT NULL CHECK (origin IN ('ui','voice','proactive')),
   state             text NOT NULL DEFAULT 'proposed' CHECK (state IN ('proposed','applied','rejected','stale')),
   created_at        timestamptz NOT NULL DEFAULT now(),
@@ -278,6 +279,7 @@ CREATE TABLE app.day_plan_proposal (
 CREATE TABLE app.day_plan_item (
   id             uuid PRIMARY KEY DEFAULT uuidv7(),
   proposal_id    uuid NOT NULL REFERENCES app.day_plan_proposal(id) ON DELETE CASCADE,
+  edited_by_user boolean NOT NULL DEFAULT false,        -- изменённый блок закрепляется при применении
   kind           text NOT NULL CHECK (kind IN ('place','move','keep','break','unplaced')),
   occurrence_id  uuid REFERENCES app.task_occurrence(id) ON DELETE CASCADE,
   habit_id       uuid REFERENCES app.habit(id) ON DELETE CASCADE,
@@ -290,7 +292,7 @@ CREATE TABLE app.day_plan_item (
 );
 ```
 
-- Каждая команда, меняющая задачи, вхождения, размещения, события, доступные часы, перерывы или привычки с размещением, в той же транзакции увеличивает `planning_guard.revision`. Применение плана сверяет ревизию; при несовпадении предложение становится `stale`, и план строится заново (CP02 §3.3).
+- Каждая команда, меняющая задачи, вхождения, размещения, события, доступные часы, перерывы или привычки с размещением, в той же транзакции увеличивает `planning_guard.revision`. Правка элемента черновика увеличивает только `draft_revision` и не меняет принятые размещения. Применение всего плана сверяет обе ревизии; изменённые входы дают `Conflict` и делают предложение устаревшим; изменённый другим действием черновик даёт `Conflict` с его актуальной версией. Вручную изменённые в черновике блоки сохраняются закреплёнными. Это проект контракта схемы/API, ещё не утверждённый владельцем (CP02 §3.3, ADR-020).
 - Завершение вхождения переводит его **будущие** активные размещения в `released`; прошедшие остаются историей (ADR-007). **В3:** если вхождение выполнено посреди активного блока, у блока `end_at` становится моментом выполнения (прошедшая часть остаётся историей), остаток времени освобождается.
 - Пропущенное время (размещение прошло, вхождение не выполнено) и просроченный срок вычисляются запросом и не хранятся.
 

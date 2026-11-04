@@ -269,6 +269,7 @@ CREATE TABLE app.day_plan_proposal (
   local_date        date NOT NULL,
   tz                text NOT NULL,
   planning_revision bigint NOT NULL,                    -- snapshot of planning_guard
+  draft_revision    bigint NOT NULL DEFAULT 1 CHECK (draft_revision > 0),          -- increments for each draft edit
   origin            text NOT NULL CHECK (origin IN ('ui','voice','proactive')),
   state             text NOT NULL DEFAULT 'proposed' CHECK (state IN ('proposed','applied','rejected','stale')),
   created_at        timestamptz NOT NULL DEFAULT now(),
@@ -278,6 +279,7 @@ CREATE TABLE app.day_plan_proposal (
 CREATE TABLE app.day_plan_item (
   id             uuid PRIMARY KEY DEFAULT uuidv7(),
   proposal_id    uuid NOT NULL REFERENCES app.day_plan_proposal(id) ON DELETE CASCADE,
+  edited_by_user boolean NOT NULL DEFAULT false,        -- edited block is pinned when applied
   kind           text NOT NULL CHECK (kind IN ('place','move','keep','break','unplaced')),
   occurrence_id  uuid REFERENCES app.task_occurrence(id) ON DELETE CASCADE,
   habit_id       uuid REFERENCES app.habit(id) ON DELETE CASCADE,
@@ -290,7 +292,7 @@ CREATE TABLE app.day_plan_item (
 );
 ```
 
-- Every command that changes tasks, occurrences, placements, events, available hours, breaks or habits with placement increments `planning_guard.revision` in the same transaction. Applying a plan checks the revision; on mismatch the proposal becomes `stale` and the plan is rebuilt (CP02 §3.3).
+- Every command that changes tasks, occurrences, placements, events, available hours, breaks or habits with placement increments `planning_guard.revision` in the same transaction. Editing a draft item increments only `draft_revision` and does not change accepted placements. Applying the whole plan checks both revisions; changed source data returns `Conflict` and stales the proposal; a concurrent draft edit returns `Conflict` with the current draft. Blocks edited in the draft are pinned when stored. This is a proposed schema/API contract, not yet approved by the owner (CP02 §3.3, ADR-020).
 - Completing an occurrence moves its **future** active placements to `released`; past ones remain as history (ADR-007). **Q3:** if an occurrence is completed in the middle of an active block, the block's `end_at` becomes the moment of completion (the past part remains as history) and the remaining time is released.
 - Missed time (the placement has passed, the occurrence is not completed) and an overdue deadline are computed by a query and not stored.
 
