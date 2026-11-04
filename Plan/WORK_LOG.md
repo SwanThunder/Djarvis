@@ -631,3 +631,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: bilingual ARCHITECTURE_REVIEW summarizes process owners, local transport, command flow, layout, recovery and the present approval boundary. READINESS now covers ADR-021 and ADR-020–021 flows; its stale code-readiness claim was removed. README distinguishes the empty scaffold from proposed core/ + ui/ and local working data; TECHNICAL_DESIGN no longer assigns the tray icon twice and labels its old schema example conceptual. P0, schema, API and modules were not approved.
 - Checks: bilingual headings/links, decision count, change scope and git diff --check; no code, database or SQL was run. Local data and the owner spreadsheet were preserved.
 - Remaining: owner choice on architecture §1 and layout §2 of the full plan, then schema → API → modules, and a separate P0 decision.
+- Commit: [fe6d168](https://github.com/SwanThunder/Djarvis/commit/fe6d168).
