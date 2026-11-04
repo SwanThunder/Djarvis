@@ -691,4 +691,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-026 records owner approval of module responsibilities/dependencies/phases and the explicit instruction not to write code yet. MODULES and its review now show approved status. The bilingual P0_PLAN defines six work steps, concrete file areas, startup/shutdown, failure and data-safety behavior, and four acceptance checks, distinguishing the P0 skeleton from P1 domain/API implementation. README, readiness and status were aligned.
 - Checks: 26 ADRs in both languages; paired heading counts and local links for touched documents; `git diff --check`. No application code, database, process or runtime tests were created or run.
 - Remaining: discuss P0 scope with the owner and refine the proposal if requested. Starting P0 still needs separate explicit authorization; the owner currently asked not to write code.
-- Commit: pending.
+- Commit: [d3e8724](https://github.com/SwanThunder/Djarvis/commit/d3e8724).
