@@ -99,8 +99,8 @@ Confirmed: all four measurement types, fixed-day and flexible-frequency schedule
 | Type | Proposed stored observation | Interpretation needing precise rules |
 | --- | --- | --- |
 | Yes/no | Explicit completion/check-in | Which day or frequency period the check-in counts toward |
-| Quantity | Decimal amount and unit | Sum toward that period's goal; no implicit unit conversion |
-| Duration | Integer elapsed seconds | Sum toward a duration target; timer UX is a separate choice |
+| Quantity | Decimal amount and unit | Per-habit mode: sum portions (default) or enter daily total; see ADR-009. No implicit unit conversion |
+| Duration | Integer elapsed seconds | Sum toward a duration target; timer and manual entry are both supported |
 | Abstinence | Explicit check-in and/or violation count | No recorded observation must not silently mean confirmed success |
 
 Propose a HabitPeriod with fixed timezone boundaries and a goal/settings snapshot. Statistics use the historical target, not today's edited target. Confirmed: a correction may be backdated to any past date during the habit's lifetime, but not before the habit existed and not as a future actual success. Preserve correction history and recalculate historical statistics with the goal that applied on the corrected date. Exact storage/audit representation and statistics implementation remain proposed.
@@ -276,4 +276,4 @@ Overdue tasks remain eligible for automatic plan proposals without changing thei
 
 When completing a parent with unfinished children, show “Close task” and “Finish subtasks”. “Finish subtasks” returns to the child list without completing the parent. “Close task” completes only the selected parent occurrence; children remain active and linked, with their own deadlines and placements unchanged. Release only the completed parent's own future placements, preserving history. Other recurrence occurrences are unaffected. This explicit choice is required even when ordinary task-change confirmations are disabled; it determines the intended action.
 
-Exact schema, API names, child nesting/inheritance and handling of already-started placements remain open. These product choices do not authorize implementation.
+Exact schema, API names, already-started placement handling, and technical details for parent values remain open. For a new child, propose the parent's project and priority with explicit confirmation; set its deadline independently and do not propagate later parent changes. A running timer counts through sleep, full app exit, and shutdown until explicitly paused/stopped; on resume, show elapsed time, and allocate time across local midnight by day. Timestamp reconciliation, clock/timezone changes, overlap of manual entries and timer sessions, and crash recovery remain technical questions. These rules do not authorize implementation.

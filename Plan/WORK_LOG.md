@@ -370,3 +370,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: five bilingual pairs, decision IDs and local links checked; no application tests (documentation only).
 - Remaining: timer interruption behavior, field inheritance and mode switching; implementation requires approval.
 - Commit: [ef85f2f](https://github.com/SwanThunder/Djarvis/commit/ef85f2f66cbc1f55f32544037577ff6316cdb570).
+
+## PLAN-015 — Timer sleep policy, quantity-mode changes, and child defaults
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-01 coordinates and reviews; record-plan015 prepared documentation and released the files.
+- Authorization: owner confirmed that duration timers keep counting through sleep, full app exit, and computer shutdown until explicitly paused/stopped; elapsed time is shown on resume and split at local midnight by day. Owner also confirmed immediate current-day quantity-mode switching after recalculation preview, and parent project/priority proposals with explicit confirmation for new children; child deadlines remain independent and future parent changes do not propagate.
+- Status: complete; documentation reviewed.
+- Files: both work logs and bilingual PRODUCT, FOUNDATION_DESIGN, PLANNER_CORE, DECISIONS, and REMAINING_PLAN. Documentation only; no app code, tests, staging, commit, or push.
+- Scope: update accepted rules and supplement ADR-009; preserve prior requirements. Full-exit/shutdown behavior and midnight allocation are resolved as above; timestamp reconciliation, clock/timezone changes, manual/timer overlap, and crash recovery remain technical questions.
+- Checks: reviewed all 12 changed files, checked English/Russian policy parity and stale open-question wording, and ran `git diff --check` successfully. No application tests were run because no code changed.
+
+- Final review: agent-01 checked six language pairs, decision IDs and local links. Scope includes both follow-up answers: count full exit/shutdown until explicit pause/stop and split time at midnight. Root handles commit/publication after review; delegate performed neither.
