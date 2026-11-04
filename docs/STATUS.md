@@ -2,7 +2,7 @@
 
 [Русская версия](STATUS.ru.md) · [Product](PRODUCT.md) · [Design](DESIGN.md) · [Decisions](architecture/DECISIONS.md) · [Component plan](architecture/COMPONENT_PLAN.md) · [Work log](../Plan/WORK_LOG.md)
 
-Snapshot: 2026-11-04, Europe/Moscow, after PLAN-023. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
+Snapshot: 2026-11-04, Europe/Moscow, after PLAN-024. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
 
 ## 1. Overall
 
@@ -12,7 +12,8 @@ Snapshot: 2026-11-04, Europe/Moscow, after PLAN-023. This is a navigation summar
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
 - Technical decisions T1–T6 approved (ADR-015); the implementation plan is under owner review.
-- Next gate: structure fully worked out → full programming-readiness report → owner approval of the plan → P0. Real checks come after programming (owner's condition).
+- Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (45 tables), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
+- Next gate: the owner reviews and approves the plan, schema, API and modules → permission to start P0. Real checks come after programming (owner's condition).
 
 ## 2. Accepted decisions
 
@@ -33,6 +34,7 @@ Snapshot: 2026-11-04, Europe/Moscow, after PLAN-023. This is a navigation summar
 | Microphone button | Floating, hideable; press = overlay plus immediate listening; right-click/menu key = mute/unmute; visible unavailable state with reason | PLAN-016/017, DESIGN |
 | Main screen | Top bar: day selector, search, quick create, notifications (no profile); card contents accepted | PLAN-017, DESIGN |
 | Technical decisions | Loopback HTTP + WebSocket, interface in the tray; PostgreSQL 18 + asyncpg, forward-only migrations with backup; DJB1 backup under DPAPI; Inno Setup unsigned until public release; model unload after 5 min; Vosk TTS 0.7 | ADR-015 |
+| Structure | Subtasks: deletion with a prompt, copies in repetitions, move under any task; block truncated on completion; missed-announcement switch | ADR-016 |
 | Other | Updates notify only, install on user command; raw microphone audio RAM-only, never written to disk; sending mail, deleting or overwriting files always need confirmation | PRODUCT |
 
 ## 3. Components: proposed direction and open items
@@ -55,7 +57,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 ## 5. Remaining work
 
-1. Finish the structure and prepare a full programming-readiness report.
+1. Read the [readiness report](architecture/READINESS.md) and approve the plan, schema, API and modules.
 2. After programming: real checks — voice assistant, microphone and wake phrase (`cache/feasibility/mic_wake_test.py`), task tracking; Vosk 0.9 listening for the 16 GB+ profile.
 3. Resolve section 4; acceptance on a real 8 GiB machine happens in phase P7.
 4. The owner reviews and approves the [implementation plan](architecture/IMPLEMENTATION_PLAN.md); then P0.

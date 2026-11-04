@@ -175,3 +175,18 @@ Exact schema, API names, child nesting/inheritance and handling of already-start
   - T6: Russian synthesis uses Vosk TTS 0.7 in all profiles; 0.9 is a possible later higher-quality option for 16 GB+.
 - Consequences: Background memory in the 8 GiB profile is ≈ 0.7 GB including the tray interface; interface memory must be measured. Without signing, Windows SmartScreen warns during installation on test machines. Programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later (owner's condition, PLAN-023).
 - Approval basis: Owner's answers in PLAN-023 (2026-11-04).
+
+## ADR-016 — Subtasks, recurrence, blocks and missed-time announcement (Q1–Q5)
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior; schema and API are under owner review).
+- Context: While working out the [database schema](SCHEMA.md), five behavior questions remained that affect the data structure: deleting and moving a subtask branch, subtasks of a recurring task, completion in the middle of a block, and announcing missed time.
+- Considered options: Q1 — ask every time, always delete the branch, always lift the children. Q2 — a copy in each occurrence, one list per series, not allowed. Q3 — truncate the block, keep it whole. Q4 — under any task, only within its project, under any task with project inheritance. Q5 — a per-task switch, one general rule.
+- Decision:
+  - Q1: when a task with subtasks is deleted, the core asks every time: "Delete all" or "Keep subtasks" (lift them one level up).
+  - Q2: subtasks and the checklist of a recurring task are a template; each occurrence gets its own copy, and check marks do not carry over between repetitions.
+  - Q3: completion in the middle of a planned block truncates the block at the completion moment; the remaining time is freed.
+  - Q4: a branch can be moved under any task and into any project except its own descendants; the children's project does not change by itself.
+  - Q5: a task has a "Don't announce the miss aloud" switch; the missed highlight in the list always remains.
+- Consequences: The schema adds `task.announce_missed`, `task_occurrence.parent_occurrence_id`, `checklist_template_item`; the API adds `DeleteTask(children)`, `SetChecklistTemplate`. These decisions do not authorize programming before the plan is approved.
+- Approval basis: Owner's answers in PLAN-024 (2026-11-04).

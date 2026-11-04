@@ -501,3 +501,18 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-015; technical details updated for T1 (background memory ≈ 0.7 GB); plan marked as under owner review; STATUS updated. No code written.
 - Remaining: finish the structure and the full programming-readiness report; owner approval of the plan.
 - Commit: this entry is published together with ADR-015.
+
+## PLAN-024 — Structure finalization: database schema, API catalogue, modules, readiness report
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-02.
+- Authorization: owner asked to finish the structure to a level where programming can start; real checks come after programming.
+- Status: complete; structure documents await owner approval.
+- Files: both logs; new bilingual `docs/architecture/SCHEMA`, `API`, `MODULES`, `READINESS`; if needed `DECISIONS`, `IMPLEMENTATION_PLAN`, `docs/STATUS`.
+- Scope: documentation only; no code.
+- Owner decisions: Q1–Q5 (multiple-choice answers) → ADR-016.
+- Delegation: English versions of SCHEMA, API, MODULES, READINESS were translated by a lower-cost model from the Russian originals; the result was reviewed by agent-02.
+- Checks: all SQL from SCHEMA executed in a throwaway PostgreSQL 18 cluster from `cache/feasibility/pg` (63 statements, 45 tables, no errors; cluster removed); 13 database constraint checks all behaved as intended; links and anchors checked; language versions compared by structure; file set and metadata checked before commit.
+- Result: SCHEMA (full v1 schema), API (commands, queries, events, errors, assistant tools), MODULES (responsibilities, dependency rule, background jobs, interface, tests, phases), READINESS (readiness report: requirements ↔ structure, deferred checks), ADR-016, STATUS. No application code written.
+- Remaining: owner approval of IMPLEMENTATION_PLAN, SCHEMA, API, MODULES and permission to start P0.
+- Commit: this entry is published together with the PLAN-024 documents.
