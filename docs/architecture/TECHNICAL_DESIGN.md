@@ -55,7 +55,7 @@ A Windows named pipe does not open a port, but a Flutter client for it would req
 
 ### 2.3 Schema (version 1)
 
-The list below is an early conceptual illustration, not the current field and table inventory. Use [SCHEMA](SCHEMA.md) for implementation and schema approval: it currently proposes 46 tables awaiting separate owner approval.
+The list below is an early conceptual illustration, not the current field and table inventory. Use [SCHEMA](SCHEMA.md) for implementation: it is the approved 46-table logical schema (ADR-024).
 
 General rules:
 

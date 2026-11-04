@@ -1,8 +1,8 @@
-# Module structure — review for approval
+# Module structure — approved decision overview
 
 [Русская версия](MODULE_REVIEW.ru.md) · [full specification](MODULES.md) · [architecture and phases](IMPLEMENTATION_PLAN.md) · [approved API](API.md) · [schema](SCHEMA.md) · [decisions](DECISIONS.md)
 
-Status: module-proposal review, PLAN-037, 2026-11-05. Process architecture, layout, schema and API are approved (ADR-022, ADR-024–025). **Module boundaries are not yet approved; P0 remains unauthorized.**
+Status: approved module-structure overview, PLAN-038, 2026-11-05. Architecture, schema, API and modules are approved (ADR-022, ADR-024–026). **P0 remains unauthorized; no code is being written.**
 
 ## 1. Responsibility owners
 
@@ -28,7 +28,7 @@ One Python process runs an `asyncio` loop; recognition and synthesis run outside
 - `integrations.google` owns Gmail; both calendar adapters use a local queue. Email with an unknown outcome is not retried automatically, and a manual retry needs fresh confirmation.
 - `assistant` and `reminders` obtain data and execute actions through `app`; neither writes around it. A 50 ms event-loop delay is a development target, with watchdog violations recorded.
 
-These clarifications are in the **proposed** MODULES. They do not alter the approved API or schema.
+These clarifications are approved under ADR-026 and included in MODULES. They do not alter the approved API or schema.
 
 ## 4. Checks and implementation order
 
@@ -36,4 +36,4 @@ P0 creates the `host`, `db`, `api`, `contract` scaffold and UI connection. P1 im
 
 ## 5. Decision boundary
 
-Approving MODULES would fix responsibility owners, dependency direction, runtime interaction, background jobs and phase allocation. It would not imply that code exists or authorize P0. After the module decision, a separate explicit authorization to start P0 remains necessary.
+The approved MODULES fixes responsibility owners, dependency direction, runtime interaction, background jobs and phase allocation. It would not imply that code exists or authorize P0. The next decision is separate explicit authorization to start P0; the owner asked not to write code yet.

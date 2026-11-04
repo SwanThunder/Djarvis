@@ -2,7 +2,7 @@
 
 [Русская версия](MODULES.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Technical design](TECHNICAL_DESIGN.md) · [Database schema](SCHEMA.md) · [API](API.md)
 
-Status: module-structure proposal revised for review in PLAN-037, 2026-11-05. Schema and API are approved (ADR-024–025); modules remain unapproved. This document defines what each module is responsible for, what it may import, and through which interfaces it communicates with the others. The folder structure is in the [implementation plan](IMPLEMENTATION_PLAN.md) §2. No code is written until approval.
+Status: module structure approved by the owner (ADR-026), 2026-11-05. This document defines responsibility, allowed dependencies and interfaces between modules. The folder layout is in the [implementation plan](IMPLEMENTATION_PLAN.md) §2. P0 programming requires separate authorization; the owner asked not to write code yet.
 
 ## 1. Dependency rule of the core
 

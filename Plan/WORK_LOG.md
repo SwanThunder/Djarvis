@@ -680,3 +680,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 25 ADRs in both languages; paired headings and local links for touched architecture documents, and `git diff --check` passed. No application code, SQL or live component tests ran under the owner's validation sequence.
 - Remaining: separate owner approval of module boundaries; then explicit P0 authorization. Implementation and live verification follow authorization.
 - Commit: [a246098](https://github.com/SwanThunder/Djarvis/commit/a246098).
+
+## PLAN-038 — Module approval and P0 discussion pack
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner approved module structure and chose to discuss P0, then explicitly asked not to write code yet. P0 is not authorized.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, MODULES, MODULE_REVIEW, IMPLEMENTATION_PLAN, READINESS, STATUS, README, ARCHITECTURE_REVIEW, TECHNICAL_DESIGN and a new P0_PLAN.
+- Scope: record narrow module approval; prepare a concrete, reviewable P0 scope, order, checks and recovery plan without writing application code, creating a database or starting a process.
+- Result: ADR-026 records owner approval of module responsibilities/dependencies/phases and the explicit instruction not to write code yet. MODULES and its review now show approved status. The bilingual P0_PLAN defines six work steps, concrete file areas, startup/shutdown, failure and data-safety behavior, and four acceptance checks, distinguishing the P0 skeleton from P1 domain/API implementation. README, readiness and status were aligned.
+- Checks: 26 ADRs in both languages; paired heading counts and local links for touched documents; `git diff --check`. No application code, database, process or runtime tests were created or run.
+- Remaining: discuss P0 scope with the owner and refine the proposal if requested. Starting P0 still needs separate explicit authorization; the owner currently asked not to write code.
+- Commit: pending.
