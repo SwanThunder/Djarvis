@@ -728,3 +728,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 29 ADRs in both languages; paired headings and local links in touched architecture documents; `git diff --check` passed. No code, cluster, download, process or CI run occurred.
 - Remaining: owner review of P0 step 4, then steps 5–6. Separate P0 authorization is still absent and the no-code instruction remains active.
 - Commit: [b0d71e5](https://github.com/SwanThunder/Djarvis/commit/b0d71e5).
+
+## PLAN-042 — P0 local contract choice and step 5 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner accepted P0 step 4 (protected local UI/core connection, real system status and full exit, one Python-to-Flutter contract) and requested step 5. The no-code instruction remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the accepted P0 local-contract boundary and discuss the first Flutter UI/tray behavior. No code, database, download, CI or branch changes.
+- Result: ADR-030 records the approved P0 local-contract boundary: protected loopback UI/core communication, real `GetSystemStatus` and `RequestExit`, generated Flutter types from Python models, version/error handling. P0_PLAN marks step 4 accepted; readiness/status now point to step 5.
+- Checks: 30 ADRs in both languages; paired headings and local links for touched documents; `git diff --check` passed. No code, database, download, process or CI ran.
+- Remaining: owner review of P0 step 5, then step 6. P0 remains unauthorized and no-code instruction active.
+- Commit: pending.

@@ -2,7 +2,7 @@
 
 [Русская версия](READINESS.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Database schema](SCHEMA.md) · [API](API.md) · [Modules](MODULES.md) · [Technical design](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Status](../STATUS.md)
 
-Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-041; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026), while P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
+Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-042; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026), while P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
 
 ## 1. Summary
 
@@ -14,7 +14,7 @@ Component, data, interaction, error and verification designs are documented. The
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…029 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…030 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |

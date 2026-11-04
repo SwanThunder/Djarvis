@@ -25,6 +25,8 @@ Step 2 is accepted by the owner (ADR-028): embedded Python/PostgreSQL are in the
 
 Step 3 is accepted by the owner with a condition (ADR-029): the app manages its private database in the background without a console window or manual action. The UI shows normal loading or a clear recovery error; data remains after exit.
 
+Step 4 is accepted by the owner (ADR-030): the skeleton has a real protected local connection, `GetSystemStatus`, `RequestExit`, error/version handling and Flutter types generated from the Python contract. Remaining API commands arrive in later phases.
+
 The full layout remains in IMPLEMENTATION_PLAN §2. P0's contract is limited to real system status and lifecycle; the full command catalog and `0001_initial` migration follow in P1. P0 scripts assemble a minimal working folder; the full installer and signing belong to P7.
 
 ## 3. Startup and shutdown
