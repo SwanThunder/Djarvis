@@ -2,7 +2,7 @@
 
 [Русская версия](READINESS.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Database schema](SCHEMA.md) · [API](API.md) · [Modules](MODULES.md) · [Technical design](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Status](../STATUS.md)
 
-Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-043; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026), the P0 UI shell is selected (ADR-031), while P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
+Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-044; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026), the P0 UI shell is selected (ADR-031), P0 acceptance and merging are set (ADR-032), while P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
 
 ## 1. Summary
 

@@ -752,3 +752,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 31 ADRs in both versions; checked language pairs, links and `git diff --check`. No code or live checks ran.
 - Remaining: discuss P0 step 6. Programming still requires separate explicit authorization; no code is being written now.
 - Commit: [28d8552](https://github.com/SwanThunder/Djarvis/commit/28d8552).
+
+## PLAN-044 — Acceptance and merge procedure for P0 step 6
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-02.
+- Basis: the owner continued the P0 discussion with agent-02 (agent-01 stopped before step 6) and answered four multiple-choice questions. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record P0 acceptance, merge procedure, main protection and pull request size. No code, CI, branch rules or database.
+- Result: ADR-032 — one P0 step = one pull request; a branch rule blocks merging on failed checks; agent-02 merges only after the owner's explicit "yes" for each pull request; P0 is accepted from a screen recording. Step 6 in P0_PLAN is marked accepted; all six plan steps are accepted. The DECISIONS introduction now includes the missing ADR-031 and an updated count.
+- Checks: 32 ADRs in both versions; language pairs and `git diff --check` checked. No code, CI or GitHub settings changed.
+- Remaining: the owner's separate explicit authorization to start P0; no code until then.
+- Commit: this entry is published together with the PLAN-044 documents.
