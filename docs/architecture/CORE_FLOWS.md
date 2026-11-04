@@ -33,7 +33,9 @@ The output is a proposal rather than a hidden calendar write: blocks, placement 
 
 **Owner-approved (ADR-020):** blocks in a draft may be dragged and edited; the user then accepts the entire plan. Draft edits do not change already accepted blocks. If a new meeting overlaps an accepted task, the app shows the conflict and proposes a new plan, applied after confirmation or under a saved grant covering the action. Manually pinned blocks retain their protection.
 
-**Proposed contract:** editing a draft increments its revision and rechecks available hours, meetings, durations and overlaps. On acceptance, the core checks source freshness and the draft revision and stores the whole change in one transaction. A user-edited block becomes pinned. If a new meeting arrives after acceptance, the task block remains visible with a conflict until user choice; a new proposal considers the meeting and cannot move pinned blocks without explicit permission. The fields and commands are not yet approved.
+**Owner-approved (ADR-021):** after an unfinished task misses its block, Djarvis highlights the miss and proposes replanning the remaining day, applied after confirmation or under a saved grant. Dragging a draft block into occupied time previews shifts of affected unpinned blocks before accepting the entire result. Pinned blocks stay in place; the miss does not complete the task or change its deadline.
+
+**Proposed contract:** editing a draft increments its revision and rechecks available hours, meetings, durations and overlaps. On acceptance, the core checks source freshness and the draft revision and stores the whole change in one transaction. A user-edited block becomes pinned. If a new meeting arrives after acceptance, the task block remains visible with a conflict until user choice; a new proposal considers the meeting and cannot move pinned blocks without explicit permission. The fields and commands are not yet approved. A technical proposal for draft shifts preserves the duration and order of affected unpinned blocks; if hard constraints prevent all placements, show the reason without changing the accepted plan. After a miss, build a proposal only for the remaining day, preserving the past block and original deadline.
 
 ## 4. End-to-end assistant and reminders
 
@@ -52,7 +54,8 @@ The Djarvis calendar is independent. Google/Outlook adapters turn external chang
 - One task created from the form and from voice has the same required fields and permission checks.
 - A repeated command or restart after commit creates neither a second task nor a second reminder.
 - Planning does not hide unplaced tasks, explains their status and rejects acceptance of a stale snapshot.
-- Dragging in a draft does not change the accepted schedule; acceptance applies every valid edit as one action, while a revision conflict applies none.
+- Dragging in a draft does not change the accepted schedule; a preview shows shifts to affected unpinned blocks, acceptance applies the result as one action, and a revision conflict applies none.
+- An unfinished task’s missed block remains visible and offers a remaining-day plan; without confirmation or a current grant accepted blocks do not move.
 - A new meeting that overlaps an accepted task is visible beside it and offers replanning; without confirmation or a current grant the task is not moved.
 - A new meeting, quiet mode, missing model and missing network produce clear states without data loss.
 - Restoring user data does not extend the trial or replace an external connection token.

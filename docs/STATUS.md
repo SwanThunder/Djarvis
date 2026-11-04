@@ -7,7 +7,7 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
-- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), twenty narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), twenty-one narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
@@ -29,7 +29,7 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 | Engines and protection | Vosk TTS (ru) + Kokoro (en); Tavily search with user key; Windows ACL + BitLocker hint for live data | ADR-014 |
 | Backups | Daily and pre-migration; 7-day default retention, configurable; Windows-protected key, no extra password or recovery key; full-snapshot restore after preview and current-data backup; 30-day default history retention, configurable/disableable | ADR-006 |
 | Planner | Deadline first, then priority; DST gap/fold require confirmation; completion releases only that occurrence's future placements; overdue tasks stay eligible; parent close offers "Close task" / "Finish subtasks" | ADR-007, ADR-008 |
-| Day plan | Editable draft with drag and block editing, then accept the whole plan; a new meeting shows a conflict and offers replanning under confirmation or a saved grant | ADR-020 |
+| Day plan | Editable draft with drag and shift preview for unpinned blocks, then accept the whole plan; a new meeting or missed block shows a conflict/miss and offers replanning under confirmation or a saved grant | ADR-020, ADR-021 |
 | Habits and subtasks | Abstinence success only by explicit mark; quantity mode per habit; timer plus manual duration, independent simultaneous timers for different habits, timer runs through sleep/exit/shutdown and splits at midnight; multi-level subtasks with confirmed parent defaults | ADR-008, ADR-009 |
 | Design | Midnight Electric + Glass, compact uncrowded density, v2.1 visual rules; assistant circle above the day panel; day panel follows layout brief v1.0 grid | DESIGN |
 | Microphone button | Floating, hideable; press = overlay plus immediate listening; right-click/menu key = mute/unmute; visible unavailable state with reason | PLAN-016/017, DESIGN |

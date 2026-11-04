@@ -60,8 +60,8 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The com
 | `RemovePlacement` | command | yes | remove a block (the task is not deleted) |
 | `CheckOffSegment` | command | yes | mark a part of a split task — progress only |
 | `SetPlacementLock` | command | — | lock or unlock a block |
-| `BuildDayPlan` | command | yes | build a proposal for a date; the response is `DayPlanProposal` or `NeedsInput` (no duration) |
-| `EditDayPlanDraft` | command | — | proposed command: drag/edit a draft item with expected revision; checks constraints without changing the accepted plan |
+| `BuildDayPlan` | command | yes | build a proposal for a date or the remaining day after a miss; response is `DayPlanProposal` or `NeedsInput` (no duration) |
+| `EditDayPlanDraft` | command | — | proposed command: edit with expected revision; occupied time returns a shift preview for unpinned blocks and reasons if impossible; accepted plan stays unchanged |
 | `ApplyDayPlan` | command | yes | apply the whole draft as one action; changed source revision → `Conflict` and a `stale` proposal; changed draft revision alone → `Conflict` with the current draft; requires confirmation or `plan.apply` permission |
 | `RejectDayPlan` | command | yes | reject the proposal |
 | `GetDayView` | query | yes | the day: blocks, events, new-meeting conflicts with accepted tasks, habits, overdue, missed, top 3, free time — the source for the Today screen and the spoken plan |

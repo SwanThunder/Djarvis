@@ -608,3 +608,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: bilingual versions, 20 ADRs and exact API/schema changes reviewed; links and git diff --check checked. No SQL or application code was executed under the previously chosen validation sequence.
 - Remaining: review the proposed draft/conflict contract with schema/API/modules, then separately authorize P0.
 - Commit: [3263d4d](https://github.com/SwanThunder/Djarvis/commit/3263d4d).
+
+## PLAN-032 — Missed block and draft shift preview
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner chose highlighting a missed block and proposing to replan the remaining day, applied under confirmation or saved grant; dragging into occupied draft time proposes shifts of affected unpinned draft blocks with a preview, accepted as one result.
+- Status: complete as approved UX policy and proposed contract documentation; no programming.
+- Files: both logs and bilingual DECISIONS, PRODUCT, CORE_FLOWS, PLANNER_CORE, API and STATUS. No code, database or unrelated files.
+- Scope: record the two UX policies and align the main planning-flow proposal without approving schema/API/modules or starting P0.
+- Result: ADR-021 records both owner choices. PRODUCT, CORE_FLOWS, PLANNER_CORE, API and STATUS were aligned: an unfinished task miss offers a remaining-day plan; dragging into occupied draft time previews shifts of unpinned blocks before whole-plan acceptance. Shift algorithm and exact API response remain technical proposals; schema/API/modules are unapproved and P0 is withheld.
+- Checks: bilingual headings and links, 21 ADRs, exact edits and git diff --check reviewed. No code or SQL was run.
+- Remaining: review the main-flow technical contracts with schema/API/modules, then separately decide on P0.

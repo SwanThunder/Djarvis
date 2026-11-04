@@ -122,6 +122,10 @@ Propose a deterministic planning service with a model-independent input snapshot
 
 Accepted UX (ADR-020): the user drags and edits blocks in a draft, then accepts the whole plan. If a new meeting occupies the time of an accepted task, show both items as a conflict and propose a new plan; apply it after confirmation or under a saved planning grant. Until the choice, the task has not been moved. Pinned placement protection remains in force.
 
+Accepted UX (ADR-021): an elapsed block for an unfinished task remains missed and highlighted; Djarvis proposes replanning the remaining day and applies it after confirmation or under a saved grant. Dragging into occupied draft time previews shifts of affected unpinned blocks before accepting the whole result. This does not automatically complete the task or move its deadline.
+
+Technical proposal: `BuildDayPlan` for the remaining day starts no earlier than the current instant and preserves past placements as history. `EditDayPlanDraft` returns the updated draft with shifts and reasons without changing accepted placements; pinned blocks and meetings remain constraints. If the proposed shift cannot fit, return a reason/alternative for user choice. The shift algorithm and precise API response remain unapproved.
+
 Technical proposal: the draft stores its own revision and marks user-edited blocks. Each edit checks hard constraints without changing the active schedule. `ApplyDayPlan` receives expected source and draft revisions, checks them, and commits the entire change set in one transaction; a stale draft returns `Conflict`. User edits become pinned placements. When a new meeting arrives, the day read model detects its overlap with an active placement; the planner builds a new proposal with that meeting as a hard constraint. Draft storage, exact overlap detection and conflict presentation remain part of the unapproved schema/API.
 
 The assistant can explain the result in character, but factual times, feasibility, counts, and changes come from structured core data. Habit goal changes remain outside an automatically accepted task plan.
