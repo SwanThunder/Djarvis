@@ -2,13 +2,11 @@
 
 [English version](READINESS.md) · [План реализации](IMPLEMENTATION_PLAN.ru.md) · [Схема базы](SCHEMA.ru.md) · [API](API.ru.md) · [Модули](MODULES.ru.md) · [Технические детали](TECHNICAL_DESIGN.ru.md) · [Решения](DECISIONS.ru.md) · [Статус](../STATUS.ru.md)
 
-Снимок: 2026-11-04, Europe/Moscow, после PLAN-024. Подготовил agent-02 по условию владельца (ADR-015): программирование начинается только после полной проработки структуры и этого отчёта. Реальные проверки — голосовой помощник, микрофон, отслеживание задач и другие — проводятся после программирования.
+Снимок обновлён 2026-11-05, Europe/Istanbul, PLAN-033; исходный отчёт подготовлен agent-02 в PLAN-024. Фазы Ф0–Ф7 и критерии утверждены (ADR-018); архитектура/структура репозитория, схема, API и модули ожидают отдельного рассмотрения, а Ф0 — явного разрешения. Реальные проверки проводятся после программирования по решению владельца.
 
 ## 1. Итог
 
-**Структура проработана до уровня, с которого можно писать код фазы Ф0 и дальше по плану.** Для каждого компонента есть: что он делает, с какими данными работает, какие команды принимает, с кем и через какой интерфейс общается, как обрабатывает ошибки и чем проверяется. Блокирующих технических вопросов нет.
-
-Осталось одно действие владельца: прочитать и утвердить четыре документа структуры (§4). После этого — разрешение начать Ф0.
+Компоненты, данные, взаимодействие, ошибки и проверки описаны в проектных документах. Это **материал для рассмотрения**, а не разрешение писать код. Прежде чем начинать Ф0, владелец отдельно рассматривает архитектуру/каталоги, схему, API и модули, затем явно разрешает Ф0. Изменения после ADR-019–021 и новая редакция схемы должны учитываться при этом рассмотрении.
 
 ## 2. Что готово
 
@@ -16,7 +14,7 @@
 | --- | --- | --- |
 | Продукт: все обязательные функции | [PRODUCT](../PRODUCT.ru.md) | согласовано владельцем |
 | Визуальный дизайн | [DESIGN](../DESIGN.ru.md), локальные брифы v2.1 и v1.0 | согласовано |
-| Решения по продукту и технологиям | [DECISIONS](DECISIONS.ru.md), ADR-001…018 | утверждены |
+| Решения по продукту и технологиям | [DECISIONS](DECISIONS.ru.md), ADR-001…021 | утверждены |
 | Компоненты CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.ru.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | подробные проекты |
 | Выполнимость на CPU | [FEASIBILITY](FEASIBILITY.ru.md) | модель, речь, распознавание, PostgreSQL, Python проверены на машине владельца |
 | Технические решения | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.ru.md), T1–T6 | утверждены (ADR-015) |
@@ -37,7 +35,7 @@
 
 | № | Действие | Влияние |
 | --- | --- | --- |
-| 1 | Рассмотреть архитектуру и структуру репозитория в [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.ru.md) | фазы и критерии уже приняты (ADR-018) |
+| 1 | Рассмотреть [обзор архитектуры и каталогов](ARCHITECTURE_REVIEW.ru.md) вместе с [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.ru.md) | фазы и критерии уже приняты (ADR-018) |
 | 2 | Утвердить [SCHEMA](SCHEMA.ru.md), [API](API.ru.md), [MODULES](MODULES.ru.md) | становятся основой кода Ф0–Ф1 |
 | 3 | Разрешить начать Ф0 | старт программирования |
 
@@ -50,6 +48,7 @@
 | Повторения с исходным якорем, долг, отсутствующий день месяца, зона | `recurrence_rule`, `recurrence_exception` | `CreateTask`, `EditTask(scope)` | `domain.recurrence` |
 | Чек-листы, теги, вложения, скрытие расширенных полей без удаления | `checklist_*`, `tag`, `task_tag`, `attachment`, `setting.advanced_fields` | `SetChecklist*`, `SetTags`, `AddAttachment` | `domain.tasks`, `storage` |
 | Автоплан дня: срок → приоритет, закреплённые блоки, дробление по согласию, перерывы по настройке, окно 06:00–22:00 | `schedule_placement`, `day_plan_*`, `planning_guard`, `availability_window`, `setting.breaks` | `BuildDayPlan`, `ApplyDayPlan`, `GetDayView` | `domain.planner` |
+| Черновик плана, предпросмотр сдвига, конфликт встречи и предложение после пропуска (ADR-020–021) | `day_plan_proposal`, `day_plan_item`, `schedule_placement`, `planning_guard` | `EditDayPlanDraft`, `BuildDayPlan`, `ApplyDayPlan`, `GetDayView` | `domain.planner`, `app.commands` |
 | Просрочка и пропуск — разные состояния; объявление пропуска | вычисляется; `task.announce_missed` | `GetDayView`, задание `placement_missed` | `domain.time`, `reminders` |
 | Привычки 4 типов, расписания, паузы, серии, исправления задним числом | `habit*`, `habit_entry` | `RecordHabitEntry`, `CorrectHabitEntry`, `GetHabitStats` | `domain.habits` |
 | Таймер через сон и выключение, деление по полуночи | `timer_session`, `timer_interval`, `habit_entry` | `Start/Pause/Resume/StopTimer`, `ResolveTimerClock` | `domain.habits` |

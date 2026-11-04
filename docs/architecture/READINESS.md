@@ -2,13 +2,11 @@
 
 [Русская версия](READINESS.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Database schema](SCHEMA.md) · [API](API.md) · [Modules](MODULES.md) · [Technical design](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Status](../STATUS.md)
 
-Snapshot: 2026-11-04, Europe/Moscow, after PLAN-024. Prepared by agent-02 under the owner's condition (ADR-015): programming starts only after the structure is fully worked out and this report is issued. Real-world checks — the voice assistant, microphone, task tracking and others — are carried out after programming.
+Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-033; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository structure, schema, API and modules await separate review, and P0 needs explicit authorization. Real-world checks occur after programming per the owner decision.
 
 ## 1. Summary
 
-**The structure is worked out to the level from which code for phase P0 and onward can be written according to the plan.** For every component there is: what it does, what data it works with, which commands it accepts, who it communicates with and through which interface, how it handles errors, and how it is verified. There are no blocking technical questions.
-
-One action remains for the owner: read and approve the four structure documents (§4). After that — permission to start P0.
+Component, data, interaction, error and verification designs are documented. These are **review materials**, not authorization to write code. Before P0, the owner separately reviews architecture/repository layout, schema, API and modules, then explicitly authorizes P0. Changes after ADR-019–021 and the revised schema must be included in that review.
 
 ## 2. What is ready
 
@@ -16,7 +14,7 @@ One action remains for the owner: read and approve the four structure documents 
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…018 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…021 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
@@ -37,7 +35,7 @@ One action remains for the owner: read and approve the four structure documents 
 
 | № | Action | Impact |
 | --- | --- | --- |
-| 1 | Review plan architecture and repository structure in [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | phases and criteria already approved (ADR-018) |
+| 1 | Review the [architecture/layout summary](ARCHITECTURE_REVIEW.md) with [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | phases and criteria are already approved (ADR-018) |
 | 2 | Approve [SCHEMA](SCHEMA.md), [API](API.md), [MODULES](MODULES.md) | become the basis of the P0–P1 code |
 | 3 | Allow P0 to start | start of programming |
 
@@ -50,6 +48,7 @@ One action remains for the owner: read and approve the four structure documents 
 | Repetitions with the original anchor, debt, missing day of the month, zone | `recurrence_rule`, `recurrence_exception` | `CreateTask`, `EditTask(scope)` | `domain.recurrence` |
 | Checklists, tags, attachments, hiding advanced fields without deleting them | `checklist_*`, `tag`, `task_tag`, `attachment`, `setting.advanced_fields` | `SetChecklist*`, `SetTags`, `AddAttachment` | `domain.tasks`, `storage` |
 | Day auto-plan: deadline → priority, locked blocks, splitting by consent, breaks per settings, 06:00–22:00 window | `schedule_placement`, `day_plan_*`, `planning_guard`, `availability_window`, `setting.breaks` | `BuildDayPlan`, `ApplyDayPlan`, `GetDayView` | `domain.planner` |
+| Plan draft, shift preview, meeting conflict and proposal after a miss (ADR-020–021) | `day_plan_proposal`, `day_plan_item`, `schedule_placement`, `planning_guard` | `EditDayPlanDraft`, `BuildDayPlan`, `ApplyDayPlan`, `GetDayView` | `domain.planner`, `app.commands` |
 | Overdue and missed are different states; announcing a miss | computed; `task.announce_missed` | `GetDayView`, job `placement_missed` | `domain.time`, `reminders` |
 | Habits of 4 types, schedules, pauses, streaks, backdated corrections | `habit*`, `habit_entry` | `RecordHabitEntry`, `CorrectHabitEntry`, `GetHabitStats` | `domain.habits` |
 | Timer across sleep and shutdown, splitting at midnight | `timer_session`, `timer_interval`, `habit_entry` | `Start/Pause/Resume/StopTimer`, `ResolveTimerClock` | `domain.habits` |

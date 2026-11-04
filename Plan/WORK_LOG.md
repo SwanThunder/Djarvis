@@ -620,3 +620,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: bilingual headings and links, 21 ADRs, exact edits and git diff --check reviewed. No code or SQL was run.
 - Remaining: review the main-flow technical contracts with schema/API/modules, then separately decide on P0.
 - Commit: [abd19ca](https://github.com/SwanThunder/Djarvis/commit/abd19ca).
+
+## PLAN-033 — Architecture review and readiness refresh
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner said “let's begin” after the list of remaining steps. Continue with the first step: review process architecture and repository structure; the earlier withholding of P0 has not been explicitly reversed.
+- Status: review package prepared; documentation only.
+- Files: both logs; bilingual READINESS, TECHNICAL_DESIGN, README and a new ARCHITECTURE_REVIEW. No other files.
+- Scope: correct stale readiness/README statements and the tray-icon ownership contradiction; prepare a compact, reviewable architecture/repository summary without code or approval of schema/API/modules.
+- Result: bilingual ARCHITECTURE_REVIEW summarizes process owners, local transport, command flow, layout, recovery and the present approval boundary. READINESS now covers ADR-021 and ADR-020–021 flows; its stale code-readiness claim was removed. README distinguishes the empty scaffold from proposed core/ + ui/ and local working data; TECHNICAL_DESIGN no longer assigns the tray icon twice and labels its old schema example conceptual. P0, schema, API and modules were not approved.
+- Checks: bilingual headings/links, decision count, change scope and git diff --check; no code, database or SQL was run. Local data and the owner spreadsheet were preserved.
+- Remaining: owner choice on architecture §1 and layout §2 of the full plan, then schema → API → modules, and a separate P0 decision.

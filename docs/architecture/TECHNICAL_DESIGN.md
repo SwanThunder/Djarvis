@@ -11,7 +11,7 @@ Status: proposal by agent-02 (PLAN-022), 2026-11-04. Decisions T1–T6 approved 
 | Process | What it is | Owns |
 | --- | --- | --- |
 | `Djarvis.exe` | Flutter interface | App windows, input, display, notification-area icon. No access to the database or secrets |
-| `djarvis-core.exe` | Embedded Python 3.12 (renamed launcher of the official embeddable package, `-I` mode) | All commands, policy, scheduler, database, reminders, audio, notification-area icon |
+| `djarvis-core.exe` | Embedded Python 3.12 (renamed launcher of the official embeddable package, `-I` mode) | All commands, policy, scheduler, database, reminders and audio; the interface owns the notification-area icon |
 | `postgres.exe` | Private PostgreSQL 18 | Data only; started and stopped by the core |
 | `djarvis-llm.exe` | llama.cpp server (MIT) | Language model; started by the core on demand and unloaded when idle |
 | speech workers | Core threads or subprocesses (Vosk, Kokoro, Vosk TTS) | Computation only; they do not write to the database |
@@ -54,6 +54,8 @@ A Windows named pipe does not open a port, but a Flutter client for it would req
 `asyncpg` (Apache-2.0): an asynchronous driver compatible with `aiohttp`. A pool of 2–4 connections. No ORM: SQL lives in repository modules by area and is verified by tests against a real PostgreSQL. psycopg 3 was not chosen because of its LGPL-3.0 license and an extra compatibility layer.
 
 ### 2.3 Schema (version 1)
+
+The list below is an early conceptual illustration, not the current field and table inventory. Use [SCHEMA](SCHEMA.md) for implementation and schema approval: it currently proposes 46 tables awaiting separate owner approval.
 
 General rules:
 
