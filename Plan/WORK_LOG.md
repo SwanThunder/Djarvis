@@ -727,4 +727,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-029 records app-managed private PostgreSQL without a visible console/manual setup, normal loading/recovery UI and persistence of data after exit. P0_PLAN step 3 and TECHNICAL_DESIGN startup were aligned; readiness/status moved to step 4.
 - Checks: 29 ADRs in both languages; paired headings and local links in touched architecture documents; `git diff --check` passed. No code, cluster, download, process or CI run occurred.
 - Remaining: owner review of P0 step 4, then steps 5–6. Separate P0 authorization is still absent and the no-code instruction remains active.
-- Commit: pending.
+- Commit: [b0d71e5](https://github.com/SwanThunder/Djarvis/commit/b0d71e5).
