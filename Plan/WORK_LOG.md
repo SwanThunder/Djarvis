@@ -369,3 +369,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Scope: record per-habit quantity modes, duration timer/manual input and multi-level subtasks. Preserve prior completion and correction policies; no implementation.
 - Checks: five bilingual pairs, decision IDs and local links checked; no application tests (documentation only).
 - Remaining: timer interruption behavior, field inheritance and mode switching; implementation requires approval.
+- Commit: [ef85f2f](https://github.com/SwanThunder/Djarvis/commit/ef85f2f66cbc1f55f32544037577ff6316cdb570).
