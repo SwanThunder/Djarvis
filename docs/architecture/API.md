@@ -2,7 +2,7 @@
 
 [Русская версия](API.ru.md) · [Technical design](TECHNICAL_DESIGN.md) · [Database schema](SCHEMA.md) · [Modules](MODULES.md) · [Foundation CP01–CP02](FOUNDATION_DESIGN.md)
 
-Status: API proposal revised for review in PLAN-036, 2026-11-05. The database schema and archive scope are approved (ADR-024); this API is not yet approved. It lists commands, queries and events between the UI, assistant and core. P0 remains unauthorized.
+Status: the v1 API catalog and four review clarifications were approved by the owner (ADR-025), 2026-11-05. It lists commands, queries and events between the UI, assistant and core. Detailed JSON schemas and implementation follow separate P0 authorization.
 
 ## 1. Conventions
 

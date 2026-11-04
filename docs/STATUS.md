@@ -2,18 +2,18 @@
 
 [Русская версия](STATUS.ru.md) · [Product](PRODUCT.md) · [Design](DESIGN.md) · [Decisions](architecture/DECISIONS.md) · [Component plan](architecture/COMPONENT_PLAN.md) · [Work log](../Plan/WORK_LOG.md)
 
-Snapshot: 2026-11-05, Europe/Istanbul, after schema approval in PLAN-036. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
+Snapshot: 2026-11-05, Europe/Istanbul, after API approval in PLAN-037. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
 
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
-- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), 24 narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), 25 narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
 - Technical decisions T1–T6 approved (ADR-015); its phases and acceptance criteria are approved (ADR-018); architecture and repository layout approved (ADR-022).
 - Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (46 tables, approved in ADR-024), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
-- Next gate: [API review](architecture/API_REVIEW.md), then API and module approval → separate P0 authorization. Real checks come after programming (owner condition).
+- Next gate: [module review](architecture/MODULE_REVIEW.md), then module approval → separate P0 authorization. Real checks come after programming (owner condition).
 
 ## 2. Accepted decisions
 
@@ -44,7 +44,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 | Group | Proposed direction | Open |
 | --- | --- | --- |
-| Foundations CP01–CP04 | Loopback HTTP + WebSocket with token; tray icon owned by the UI; PostgreSQL 18 zip, asyncpg, own migration runner; schema v1 ([TECHNICAL_DESIGN](architecture/TECHNICAL_DESIGN.md) §1–2) | T1–T2 accepted (ADR-015); schema approved (ADR-024), API awaits approval; migrations are written in P1 |
+| Foundations CP01–CP04 | Loopback HTTP + WebSocket with token; tray icon owned by the UI; PostgreSQL 18 zip, asyncpg, own migration runner; schema v1 ([TECHNICAL_DESIGN](architecture/TECHNICAL_DESIGN.md) §1–2) | T1–T2 accepted (ADR-015); schema and API approved (ADR-024–025); migrations are written in P1 |
 | Domain CP05–CP07 | Deterministic planner; local intent stored separately from resolved instants; immutable attachments | Review proposed structure, segment size/buffers, project/note fields, timer timezone/clock handling; branch move/deletion behavior is accepted in ADR-016 |
 | Assistant CP08–CP11 | Model proposes, typed tool registry executes; one audio state machine; durable reminders; llama.cpp on demand; Vosk small; misaki → Kokoro without GPL | Live microphone test, **voice licenses**, real 8 GiB machine, proactive cooldowns |
 | External CP12–CP14 | Provider adapters with local outbox; scoped Windows grants; Tavily with user key and MET Norway selected | Provider terms, OAuth details, app identity and argument validation |
@@ -58,7 +58,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 ## 5. Remaining work
 
-1. Architecture/layout are accepted (ADR-022). Schema and archive contents are approved (ADR-024). Review the [API summary](architecture/API_REVIEW.md), then modules; authorize P0 separately.
-2. API and module packages still await owner review; approved schema SQL has not run under the previously chosen validation sequence.
+1. Architecture/layout are accepted (ADR-022). Schema, archive contents and API are approved (ADR-024–025). Review the [module summary](architecture/MODULE_REVIEW.md); authorize P0 separately.
+2. Modules still await owner review; approved schema SQL has not run under the previously chosen validation sequence.
 3. After programming: live checks of assistant, microphone and wake phrase, task tracking and reminders; Vosk 0.9 listening for the 16 GB+ profile.
 4. Resolve section 4; verify the target profile on a real 8 GiB machine in P7.

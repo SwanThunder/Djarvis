@@ -2,7 +2,7 @@
 
 [Русская версия](MODULES.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Technical design](TECHNICAL_DESIGN.md) · [Database schema](SCHEMA.md) · [API](API.md)
 
-Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. This document defines what each module is responsible for, what it may import, and through which interfaces it communicates with the others. The folder structure is in the [implementation plan](IMPLEMENTATION_PLAN.md) §2. No code is written until approval.
+Status: module-structure proposal revised for review in PLAN-037, 2026-11-05. Schema and API are approved (ADR-024–025); modules remain unapproved. This document defines what each module is responsible for, what it may import, and through which interfaces it communicates with the others. The folder structure is in the [implementation plan](IMPLEMENTATION_PLAN.md) §2. No code is written until approval.
 
 ## 1. Dependency rule of the core
 
@@ -13,7 +13,11 @@ flowchart TB
   reminders --> app
   host --> api & app & db & storage & audio & assistant & reminders & integrations & safety
   app --> domain
-  app -. ports .-> storage & integrations & audio & safety
+  app --> app_ports["app.ports"]
+  storage -. implements .-> app_ports
+  integrations -. implements .-> app_ports
+  audio -. implements .-> app_ports
+  safety -. implements .-> app_ports
   storage --> domain
   integrations --> contract
   api --> contract
@@ -40,26 +44,26 @@ flowchart TB
 | `domain.policy` | Which commands require confirmation, which are covered by permissions, what is forbidden when access has expired | Storing permissions |
 | `app.commands` | The command pipeline (CP02): validation → target → revisions → access and permissions → invariants → one transaction (data + `processed_action` + audit + `outbox` + planning revision) → event after commit | Long operations inside a transaction |
 | `app.queries` | Read models for screens and the assistant (`GetDayView`, etc.); read only | Changes |
-| `app.approvals` | Confirmations tied to the exact content and revisions; expiry | — |
+| `app.approvals` | Confirmations bound to the action, caller, exact content and revisions; expiry and replay prevention | — |
 | `app.ports` | Interfaces: `UnitOfWork`, repositories per aggregate, `Clock`, `SecretStore`, `FileStore`, `CalendarProvider`, `MailProvider`, `SearchProvider`, `WeatherProvider`, `WindowsActions`, `SpeechOut`, `Notifier`, `BackupArchiver`, `EntitlementStore` | Implementations |
 | `storage` | Implementation of repositories and `UnitOfWork` on asyncpg; SQL by area; the migration runner; the attachment store `files/<sha256>` | Business rules |
 | `db` | Lifecycle of the private PostgreSQL (CP04): `initdb`, folder ACL, start with the log going to a file, readiness check, stop, the `RecoveryRequired`/`IncompatibleVersion` states | Data queries |
-| `api` | aiohttp: routes `/v1/commands`, `/v1/queries`, `/v1/events`; token, `Host`, `Origin`; translating errors into codes; protocol version | Logic |
-| `assistant` | Dialogue orchestration: context (persona, history within the retention period, day information), calling the model, parsing the proposed tool, passing the command to `app`, reply text sentence by sentence; personas; dialogue history | Access decisions (made by `app`) |
+| `api` | aiohttp: routes `/v1/commands`, `/v1/queries`, `/v1/events`; token, `Host`, HTTP `Origin` check; assigning command origin from caller identity; translating errors into codes; protocol version | Logic |
+| `assistant` | Dialogue orchestration: context (persona, history within the retention period, day information), calling the model, parsing the proposed tool, passing the command to `app`, reply text sentence by sentence; personas; dialogue history through `app` commands/ports | Access decisions (made by `app`) |
 | `assistant.llm` | Managing the `djarvis-llm.exe` process: start on demand, memory check, unload on idle (ADR-015), HTTP client to it | — |
 | `audio` | `AudioSession` (CP09): the sole owner of the microphone; state machine; wake phrase (Vosk with decoys, only at the start of a turn); turn recognition; synthesis (Vosk TTS / misaki → Kokoro) with text normalization; barge-in; mute | Writing audio to disk (forbidden) |
-| `reminders` | The `scheduled_job` scheduler: selecting ready jobs, execution, retry, summary of what was missed, quiet hours and suppression during calls/games | The reminder text itself (taken from `app.queries`) |
-| `integrations.google` / `.microsoft` | OAuth (system browser, PKCE), calendars, Gmail; the `outbox` dispatcher; comparison with `base_snapshot` and conflicts | Resolving conflicts without the user |
+| `reminders` | The `scheduled_job` scheduler: selecting ready jobs through a port, executing through `app`, retry, missed summary, quiet hours and suppression during calls/games | The reminder text itself (taken from `app.queries`) |
+| `integrations.google` / `.microsoft` | OAuth (system browser, PKCE), both calendars and Gmail only on Google; the `outbox` dispatcher; comparison with `base_snapshot` and conflicts | Resolving conflicts without the user |
 | `integrations.tavily` / `.met_norway` | Search and weather; weather cache for 30 minutes | Sending profile data beyond the query |
 | `integrations.windows` | Launching programs from the list (sha256 check), volume, brightness, lock, sleep, shutdown, file selection; Windows notifications; call/game detection; input idle | Arbitrary shell commands |
-| `safety.backup` | DJB1 format, DPAPI, backup on schedule and before a migration, retention period, preview and restore through an intermediate database | — |
+| `safety.backup` | DJB1 format, DPAPI, export by the approved table allowlist (SCHEMA §13), scheduled and pre-migration backup, retention, preview and staging restore without old grants/queues | — |
 | `safety.entitlement` | Ed25519 signature verification, per-device trial, the 48-hour rule for the clock, storage outside the database | Payment (deferred) |
 | `host` | Entry point of `djarvis-core.exe`: mutex, connection file, dependency assembly, starting the database and API, memory profile, resource download by manifest, local diagnostics without content, exit order | — |
 
 ## 3. How the core works at runtime
 
 - One process, one `asyncio` loop. Everything that waits for the network or the database is asynchronous.
-- Heavy computation is outside the loop: recognition and the wake phrase run in a separate thread with an audio queue; synthesis in a separate thread; the language model in a separate process, `djarvis-llm.exe`. The loop is never blocked for longer than 50 ms; this is checked by a watchdog timer in the debug build.
+- Heavy computation is outside the loop: recognition and the wake phrase run in a separate thread with an audio queue; synthesis in a separate thread; the language model in a separate process, `djarvis-llm.exe`. The target is to avoid blocking the loop for more than 50 ms; a debug-build watchdog records violations.
 - Transactions are short and do not wait for the user, the model or the network.
 - A failure of a worker thread or of the model process does not bring down the core: the audio state becomes "unavailable" with a reason, and the scheduler and the interface keep working.
 - Shutdown: `RequestExit` → stop capture → wait for or cancel jobs → close the connection pool → stop the model → stop PostgreSQL → delete the connection file.
@@ -74,7 +78,7 @@ flowchart TB
 | `morning_plan` / `evening_review` | time from settings or the first activity of the day | spoken plan or review based on `GetDayView` |
 | `proactive_check` | once a minute while the core is running | meeting soon, habit missed, return after absence |
 | `catch_up_summary` | after sleep or startup | one summary of what was missed |
-| `outbox_dispatch` | there are ready `outbox` records | sending to external services with retries; a message with an unknown outcome is not retried |
+| `outbox_dispatch` | there are ready `outbox` records | sending to external services with retries; email with an unknown outcome is not retried automatically, and a manual retry needs fresh exact confirmation (ADR-025) |
 | `calendar_sync` | every 15 minutes and on `SyncNow` | two-way synchronization of the selected calendars |
 | `backup` | daily at the configured time and before a migration | DJB1 backup, deleting expired ones |
 | `history_expiry` | once a day | deleting history older than the retention period |

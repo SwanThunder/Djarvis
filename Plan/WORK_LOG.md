@@ -668,3 +668,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 24 ADRs and 46 table definitions in both languages; paired heading counts and local links checked for the touched architecture documents; `git diff --check` passed. Application code, migration SQL and database behavior were not executed under the owner's validation sequence.
 - Remaining: separate owner decision on API, then modules, then explicit P0 authorization. Detailed JSON contracts and live tests follow authorization.
 - Commit: [a3164e5](https://github.com/SwanThunder/Djarvis/commit/a3164e5).
+
+## PLAN-037 — API approval and module review
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner approved API v1, including four review clarifications, and chose to proceed to modules. P0 remains unauthorized.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, API, API_REVIEW, MODULES, READINESS, STATUS, IMPLEMENTATION_PLAN and a new MODULE_REVIEW; bilingual CORE_FLOWS for status consistency.
+- Scope: record narrow API approval, compare module responsibilities/dependencies and background jobs with approved schema/API, correct proposal-level inconsistencies and prepare a concrete module overview for a separate owner decision. No code or database changes.
+- Result: ADR-025 records approval of API v1 and four clarifications. API and review status, readiness and project overview are updated. The bilingual MODULE_REVIEW maps six responsibility layers, dependency direction, runtime and phases. Proposed MODULES was clarified so concrete adapters implement `app.ports`, the core owns command origin/approval binding, Gmail is owned by Google, uncertain email retry needs reconfirmation, and backup uses the approved archive allowlist. Modules remain unapproved.
+- Checks: 25 ADRs in both languages; paired headings and local links for touched architecture documents, and `git diff --check` passed. No application code, SQL or live component tests ran under the owner's validation sequence.
+- Remaining: separate owner approval of module boundaries; then explicit P0 authorization. Implementation and live verification follow authorization.
+- Commit: pending.

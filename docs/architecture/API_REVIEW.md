@@ -1,8 +1,8 @@
-# Core API v1 — review for approval
+# Core API v1 — approved decision overview
 
 [Русская версия](API_REVIEW.ru.md) · [full catalog](API.md) · [approved schema](SCHEMA.md) · [decisions](DECISIONS.md) · [modules](MODULES.md)
 
-Status: API proposal review, PLAN-036, 2026-11-05. The logical schema and archive contents are approved (ADR-024). **The API is not yet approved; P0 is unauthorized.**
+Status: approved API catalog overview, PLAN-037, 2026-11-05. Schema and archive are approved (ADR-024), API under ADR-025. **P0 remains unauthorized.**
 
 ## 1. Boundary and shape
 
@@ -28,8 +28,8 @@ The [API catalog](API.md) contains the full command list, fields, events and err
 3. `ResolveUnknownOutbox` cannot resend email without fresh exact-content confirmation and a warning that the first attempt may have succeeded.
 4. `Restore` returns the approved user-data set under ADR-023–024; grants, connections and old queues do not return.
 
-These clarifications are in the **proposed** API. They do not change the approved schema, project rules or programming authorization.
+These clarifications are approved under ADR-025 and included in the API. They do not change the approved schema, project rules or programming authorization.
 
 ## 4. Decision boundary
 
-Approving the catalog would fix v1 command/query names, result classes, main fields, events and access rules. Detailed JSON schemas, client generation, implementation, contract tests and real PostgreSQL verification follow separate programming authorization. Modules are the next separate decision after the API; P0 requires its own explicit authorization.
+The approved catalog fixes v1 command/query names, result classes, main fields, events and access rules. Detailed JSON schemas, client generation, implementation, contract tests and real PostgreSQL verification follow separate programming authorization. Modules are the next separate decision after the API; P0 requires its own explicit authorization.
