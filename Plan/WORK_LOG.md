@@ -715,4 +715,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-028 records acceptance of embedded Python/PostgreSQL in the build, pinned checksum verification, separate first-run AI model downloads and separation of program/user data. P0_PLAN identifies step 2 as accepted; readiness/status updated. Step 3 remains under discussion.
 - Checks: 28 ADRs and matching headings/links in both languages; `git diff --check` passed. No code, runtime download, cluster, test or CI configuration was created or run.
 - Remaining: owner review of P0 step 3, then steps 4–6; P0 still requires separate explicit authorization and no code is to be written now.
-- Commit: pending.
+- Commit: [71c8519](https://github.com/SwanThunder/Djarvis/commit/71c8519).
