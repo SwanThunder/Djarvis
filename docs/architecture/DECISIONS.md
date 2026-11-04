@@ -330,3 +330,13 @@ Exact schema, API names, child nesting/inheritance and handling of already-start
 - Decision: in P0 the UI connects to the core over local HTTP/WebSocket with a token and address/origin checks. `GetSystemStatus` and `RequestExit` work for real; Python models are the source for generated Flutter types. Connection failures and version mismatch yield understandable outcomes and reconnect behavior.
 - Consequences: remaining approved API commands are implemented in P1 and later phases without temporary handlers presented as complete. Contract and negative checks follow separate P0 authorization. No code is written now.
 - Approval basis: the owner's explicit choice on P0 step 4 after PLAN-041, 2026-11-05.
+
+## ADR-031 — Main-screen shell in P0
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (P0 interface appearance; programming separately).
+- Context: P0 step 5 required a choice between a compact status screen and an early main-screen shell. The owner reviewed two text sketches and selected the second.
+- Considered options: a compact status-only screen; a main-screen shell with character, day panel and navigation.
+- Decision: P0 uses the main-screen shell under the approved design from the outset. It displays the real core status and version; task, habit and other domain sections are populated only in their later phases.
+- Consequences: incomplete sections appear empty or unavailable, with no invented data or controls implying a working feature. Closing to tray, reopening and full exit belong to step 5. This does not authorize code; P0 remains under discussion.
+- Approval basis: the owner's explicit reply "2" to the two P0 step 5 options after PLAN-042, 2026-11-05.

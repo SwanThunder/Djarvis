@@ -740,3 +740,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 30 ADRs in both languages; paired headings and local links for touched documents; `git diff --check` passed. No code, database, download, process or CI ran.
 - Remaining: owner review of P0 step 5, then step 6. P0 remains unauthorized and no-code instruction active.
 - Commit: [0af979b](https://github.com/SwanThunder/Djarvis/commit/0af979b).
+
+## PLAN-043 — Main-screen shell for P0 step 5
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner selected option 2, the future main-screen shell instead of the compact status screen. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the P0 interface appearance and boundary of empty sections, then discuss step 6; no code, database, build or CI changes.
+- Result: ADR-031 records the main-screen shell under the approved design: character, day panel, navigation, real core status and version. Future sections remain clearly empty or unavailable until their phases; window and tray lifecycle is preserved. P0 plan, readiness and status are aligned.
+- Checks: 31 ADRs in both versions; checked language pairs, links and `git diff --check`. No code or live checks ran.
+- Remaining: discuss P0 step 6. Programming still requires separate explicit authorization; no code is being written now.
+- Commit: to be added after recording the changes.
