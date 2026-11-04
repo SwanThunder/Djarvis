@@ -643,3 +643,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-022 records approval of architecture/layout §§1–2 without P0. The review groups 46 tables into nine areas, describes the main planner path and identifies two issues: a proposed mapping-integrity correction and the contradiction between a full pg_dump and stated exclusion of grants/pending actions. The backup-content policy was sent to the owner as a choice. Schema/API/modules remain unapproved.
 - Checks: 46 CREATE TABLE declarations in both language versions, 22 ADRs, headings/links across nine bilingual pairs and git diff --check; revised SQL was not executed under the owner validation decision. Unrelated local file preserved.
 - Remaining: receive restore-policy answer, align archive contents/schema, then seek separate schema approval; API and modules follow, then separate P0 authorization.
+- Commit: [f3825cd](https://github.com/SwanThunder/Djarvis/commit/f3825cd).
