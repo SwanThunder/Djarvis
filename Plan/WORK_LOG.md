@@ -739,4 +739,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-030 records the approved P0 local-contract boundary: protected loopback UI/core communication, real `GetSystemStatus` and `RequestExit`, generated Flutter types from Python models, version/error handling. P0_PLAN marks step 4 accepted; readiness/status now point to step 5.
 - Checks: 30 ADRs in both languages; paired headings and local links for touched documents; `git diff --check` passed. No code, database, download, process or CI ran.
 - Remaining: owner review of P0 step 5, then step 6. P0 remains unauthorized and no-code instruction active.
-- Commit: pending.
+- Commit: [0af979b](https://github.com/SwanThunder/Djarvis/commit/0af979b).
