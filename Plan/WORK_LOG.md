@@ -679,4 +679,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-025 records approval of API v1 and four clarifications. API and review status, readiness and project overview are updated. The bilingual MODULE_REVIEW maps six responsibility layers, dependency direction, runtime and phases. Proposed MODULES was clarified so concrete adapters implement `app.ports`, the core owns command origin/approval binding, Gmail is owned by Google, uncertain email retry needs reconfirmation, and backup uses the approved archive allowlist. Modules remain unapproved.
 - Checks: 25 ADRs in both languages; paired headings and local links for touched architecture documents, and `git diff --check` passed. No application code, SQL or live component tests ran under the owner's validation sequence.
 - Remaining: separate owner approval of module boundaries; then explicit P0 authorization. Implementation and live verification follow authorization.
-- Commit: pending.
+- Commit: [a246098](https://github.com/SwanThunder/Djarvis/commit/a246098).
