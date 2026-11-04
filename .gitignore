@@ -46,3 +46,9 @@ coverage/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Local skill sources (development-tool specific; never published)
+/Skills/
+
+# Local owner design brief
+/design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt

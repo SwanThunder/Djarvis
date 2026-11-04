@@ -2,7 +2,7 @@
 
 [Русская версия](DECISIONS.ru.md)
 
-Nine narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. ADR-009 records habit measurement modes and multi-level subtasks. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
+Fourteen narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. ADR-009 records habit measurement modes and multi-level subtasks. ADR-010 records license device limit, transfer and clock-rollback behavior. ADR-011 replaces third-party characters with original personas. ADR-012 selects user-owned search keys and MET Norway weather. ADR-013 names the personas and sets navigation, device-action confirmations and the default backup folder. ADR-014 selects the speech engines, the search provider and live-data protection. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
 
 ## ADR-001 — Flutter UI and necessary Dart UI implementation
 
@@ -106,3 +106,56 @@ Exact schema, API names, child nesting/inheritance and handling of already-start
 - Subtasks support multiple levels without a fixed product depth limit; the interface can collapse branches. This is not a promise of infinite device capacity. Cycle prevention and scalable tree loading are technical design requirements to review. For a new child, propose the parent's project and priority and require explicit confirmation; set the child's deadline independently. Future parent changes do not propagate to existing children. Cycle prevention and scalable tree loading remain technical questions; moving branches and deletion semantics remain owner choices. Existing parent-completion behavior remains unchanged.
 
 - Approval basis: Three owner answers recorded in PLAN-014 and subsequent clarifications recorded in PLAN-015 (2026-11-04). No schema, runtime algorithm or implementation is approved.
+
+## ADR-010 — License device limit, transfer and clock rollback
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only).
+- Context: ADR-005 left device count, reinstall/hardware-change behavior and clock tolerance open. There is no activation server.
+- Considered options: one, two or three devices; a hardware-independent license file, a device-bound file reissued on request, or device binding with limited self-service transfer; for clock rollback, a 48-hour tolerance then block, warning only, or immediate block.
+- Decision: One license covers up to three devices, counting current Windows PCs and the future Android app. The license file is not bound to hardware: it works on any device, so reinstalling Windows or changing PCs needs no reissue; the device limit is set by the license terms, not technically enforced. If the system clock moves back by more than 48 hours relative to the latest trusted time the application has seen, paid functions are blocked with a "check the date and time" status until the clock is corrected; smaller shifts and timezone changes are tolerated. The block follows ADR-005 expired-state behavior: data, renewal/import, deletion and backups remain available. Payment is out of scope for now and will be designed later.
+- Consequences: A shared license file cannot be prevented technically; this is an accepted tradeoff of the offline, hardware-independent model. The per-device seven-day trial remains as in ADR-005. Exact trusted-time storage, the license format/signature, issuer tooling, payment provider and price remain open. No implementation is authorized.
+- Approval basis: Owner's answers in PLAN-018 (2026-11-04).
+
+## ADR-011 — Original personas instead of third-party characters
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only); supersedes the requirement for the named third-party characters and their recognizable voices.
+- Context: The previously requested characters and their voices belong to rights holders and voice actors; a commercial release cannot use them without licenses.
+- Considered options: license the original characters and voices while developing on a neutral voice; create original personas inspired by the archetypes; postpone voices.
+- Decision: Djarvis ships its own original personas inspired by archetypes (for example a butler, a scientist, an AI assistant), with their own names and voices, without third-party character names, likenesses or actor voices. Voices come from locally running speech synthesis whose voice and model licenses allow commercial use, or from recordings made with written consent. The local file `Vois/join-5tracks.mp3` stays local as a personal reference only; it is not used as a product voice or as material for voice synthesis.
+- Consequences: Persona names, characters and voice selection are open owner choices. The rights review in CP10 now covers model/voice licenses and recording consent. Wake phrases default to the persona names. No implementation is authorized.
+- Approval basis: Owner's answer in PLAN-019 (2026-11-04).
+
+## ADR-012 — Web search with a user-owned key; MET Norway weather
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only).
+- Context: There is no own server, and commercial search APIs need a confidential key that must not be embedded in the client.
+- Considered options: user-owned key; browser handoff only; own proxy server (would violate the no-own-backend rule). For weather: MET Norway, paid Open-Meteo, user-owned key.
+- Decision: In-app web search uses a search API key that the user enters in settings and that is stored locally protected; without a key, search opens in the user's browser and Djarvis does not read the results. Weather uses MET Norway Locationforecast with attribution and an identifying User-Agent; the city comes from the user's setting and a local city catalog. Price and license issuance are deferred together with payment.
+- Consequences: The concrete search provider, key storage, provider terms and attribution, city catalog and traffic limits remain to be verified before release. Only the explicit query and the configured city are sent. No implementation is authorized.
+- Approval basis: Owner's answers in PLAN-019 (2026-11-04).
+
+## ADR-013 — Personas, navigation, device-action confirmations, backup folder
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only).
+- Context: ADR-011 left persona names open; DD09 navigation, device-action confirmations beyond shutdown/restart/logout, and the backup path were open.
+- Decision:
+  - Personas (names are also the default wake phrases): «Эдвард» / Edward — a courteous butler with dry humor; «Профессор Вольт» / Professor Volt — an eccentric, ironic but never rude scientist; «Нова» / Nova — a calm AI assistant with concise answers. Voices are selected to match each character under ADR-011.
+  - Sidebar, top to bottom: Today, Tasks, Calendar, Habits, Projects, Notes; Settings separately in the bottom service area.
+  - Closing programs and putting the PC to sleep or locking it require confirmation, in addition to the existing always-confirmed shutdown, restart, logout, file deletion and file overwrite. Launching user-selected programs and changing volume or brightness run without confirmation.
+  - Default backup folder: `Documents\Djarvis Backups`, changeable in settings.
+- Consequences: Exact voice models, persona style guidance, app identity/argument validation and backup-folder failure handling remain technical work. No implementation is authorized.
+- Approval basis: Owner's answers in PLAN-019 (2026-11-04).
+
+## ADR-014 — Speech engines, search provider, live-data protection
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product and technology direction; versions not selected).
+- Context: ADR-011–013 require commercially licensed offline voices, a user-key search provider and a live-data protection level. Research on 2026-11-04: the active Piper engine moved to GPL-3.0 (the MIT repository is archived) and voice licenses vary per voice; Silero models are non-commercial; Vosk TTS (Russian, multi-speaker) and Kokoro-82M (English and other languages, no Russian) publish Apache-2.0 weights.
+- Considered options: Vosk TTS + Kokoro; Piper for both languages; contracted voice actors. Tavily, Brave or both. Windows ACL with a BitLocker hint, field-level encryption, or ACL only.
+- Decision: Russian speech uses Vosk TTS synthetic voices (prefer voices not trained on a named real speaker); English speech uses Kokoro. Edward — low male voice (British in English); Professor Volt — second male voice, faster and higher; Nova — synthetic female voice. In-app web search supports Tavily with the user's own key. The live PostgreSQL data folder is restricted to the user's Windows account, and the application recommends enabling Windows BitLocker device encryption; archives remain encrypted per ADR-006.
+- Consequences: Before release, verify each selected voice's provenance and license, the exact model versions and any GPL-licensed phonemizer dependency (for example espeak-ng) and how it is shipped; measure CPU real-time factor and memory on the 8 GiB target. Tavily terms, attribution and request limits are verified before release. No implementation is authorized.
+- Approval basis: Owner's answers in PLAN-020 (2026-11-04).

@@ -43,6 +43,7 @@ assets/           Static assets
 - Use the [remaining design and decision plan](docs/architecture/REMAINING_PLAN.md) for all eight workstreams, selectable questions, acceptance criteria and context recovery.
 - Review the [detailed remaining component plan](docs/architecture/COMPONENT_PLAN.md) for CP01–CP20, dependencies, design deliverables and approval gates.
 - Review the concrete proposals for [foundation CP01–CP07](docs/architecture/FOUNDATION_DESIGN.md), [assistant CP08–CP14](docs/architecture/ASSISTANT_DESIGN.md) and [delivery CP15–CP20](docs/architecture/DELIVERY_DESIGN.md). Accepted owner choices and unapproved engineering recommendations are marked separately; these documents are not an implementation.
+- See the [project status summary](docs/STATUS.md) for accepted decisions, open questions and remaining work, and the [main-screen layout review](docs/architecture/DASHBOARD_LAYOUT_REVIEW.md) for the layout brief and floating microphone button.
 - Maintain English and Russian documentation as separate synchronized files.
 - Present and discuss the implementation plan before programming; begin only after owner approval.
 

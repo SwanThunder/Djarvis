@@ -2,7 +2,7 @@
 
 [Русская версия](PROJECT_RULES.ru.md)
 
-Status: approved by the owner on 2026-11-03, including amendments to the log location, repository publication, and rule changes.
+Status: approved by the owner on 2026-11-03, including amendments to the log location, repository publication, and rule changes; amended by the owner on 2026-11-04 (section 9 wording and section 14).
 
 These rules apply to both development agents for every project task and response. Check current rules and active log entries before acting. They govern development; future application behavior requires separate design and approval. Changes to the rules require explicit owner approval.
 
@@ -44,7 +44,7 @@ A task is complete when the agreed change is implemented, verified appropriately
 
 Repository: `https://github.com/SwanThunder/Djarvis.git`.
 
-Create a meaningful commit after each completed task. Include only relevant changes and preserve unrelated unfinished work. Before uploading, check the exact staged files, paths, commit metadata, and outgoing history for secrets, personal data, and development tool branding or attribution. Published files must not mention the development tool products. Keep provider-specific local instruction files outside version control; local exclusion configuration containing those names must not be published either.
+Create a meaningful commit after each completed task. Include only relevant changes and preserve unrelated unfinished work. Before uploading, check the exact staged files, paths, commit metadata, and outgoing history for secrets, personal data, and development tool branding or attribution. Published files, paths, commit messages and metadata must not mention the development tool products or the AI assistants used for development, in any form. Keep provider-specific local instruction files outside version control; local exclusion configuration containing those names must not be published either.
 
 Before database changes and other hard-to-reverse operations, create an appropriate backup and establish how to restore it. GitHub preserves only files and commits actually pushed; it does not back up the excluded local database, runtime files, or personal data. Never publish secrets or personal data.
 
@@ -63,3 +63,7 @@ After a task, report briefly: what changed, how it was checked, and what remains
 ## 13. Approved architecture decisions
 
 Save agreed decisions in `docs/architecture/DECISIONS.md` and `docs/architecture/DECISIONS.ru.md` so both agents use the same source. Record context, decision, consequences, and owner approval. Distinguish proposals from approved decisions. Changes to project rules themselves require explicit owner approval.
+
+## 14. Agent skills
+
+Store every skill an agent creates or changes for this project in the local `Skills/` folder (`F:\MVP Djarvis\Skills`), keeping one folder per skill with its instruction file. The folder is excluded from version control and is never published.

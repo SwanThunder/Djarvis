@@ -16,6 +16,18 @@ Status: this is the owner's required Djarvis visual design: visual system, sideb
 - Navigation and page headings use product language and established destinations. The top bar places context controls on the left, a search field near the center, and actions/profile controls on the right. The search scope and exact action set need definition for Djarvis; the design does not introduce CRM entities.
 - The original folder contains no accompanying image or video assets; visual similarity to a video was not assessed. No screenshot UI test has been run.
 
+## Main-screen layout (local brief v1.0, PLAN-016)
+
+The owner supplied `design/Djarvis_Main_Dashboard_Layout_Architecture_v1_0.txt` as the spatial layout of the main screen; it stays local and unchanged. Comparison, open items and a proposed slot mapping are in the [layout review](architecture/DASHBOARD_LAYOUT_REVIEW.md). Accepted by the owner:
+
+- The assistant circle stays at the top of the main screen, above the brief's Bento grid; that grid is the day panel. First row: four equal compact cards; second row about 60/40: a large card (calendar left, progress right) and two stacked cards on the right. Card contents (accepted, existing records only): top cards — today's planned tasks, overdue tasks, today's habits, next calendar event; large card — calendar with the selected date and existing events/placements, plus circular habit progress and rows for day-plan progress and overdue/missed-time indicators; right upper — day proposal review (morning/day/evening); right lower — two nearest upcoming items with status.
+- Top bar (accepted): day selector on the left, local search across tasks, habits, projects and notes in the center, and on the right a plus action for quick creation of a task, habit or note and a notifications list of reminders and pending confirmations. No profile element in the top bar.
+- Sidebar (accepted, ADR-013): Today, Tasks, Calendar, Habits, Projects, Notes; Settings in the bottom service area.
+- A floating microphone button sits at the bottom-right of the viewport above the grid, never inside a card and never covering required content. Primary press opens the voice-butler overlay and starts listening immediately, as if the wake phrase had been spoken; all capture gates apply. Right-click or the keyboard menu key opens a menu on the same button with mute/unmute; the muted state is visible.
+- When capture is not possible (expired access, OS denial, missing resources, manual mute) the button stays visible in a distinct unavailable state and shows the reason and the fixing action on press.
+- Appearance settings contain «Показывать кнопку микрофона» / "Show microphone button". Hiding reserves no space, does not disable the butler, and does not remove the mandatory mute control, which must remain reachable elsewhere.
+- Layer order: shell → dashboard → floating button → voice-butler overlay; the dashboard keeps its state under the overlay.
+
 ## Required palettes
 
 The listed HEX values are exact palette requirements. Assignment of primary, secondary, and accent roles is a recommendation; derived surface and text colors must preserve contrast.
