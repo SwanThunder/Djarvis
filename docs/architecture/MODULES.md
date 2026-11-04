@@ -36,7 +36,7 @@ flowchart TB
 | `domain.recurrence` | Expanding rules with the original anchor, a missing day of the month, exceptions, series edit scopes | Creating rows in the database |
 | `domain.time` | Local intents and instants, the 06:00–22:00 window, daylight-saving transitions (candidates for confirmation), "tomorrow" relative to the reference time | Reading the system clock |
 | `domain.planner` | Deterministic day-plan construction (CP05): constraints, "deadline → priority" order, splitting by consent, breaks per settings, reasons for non-placement | Applying the plan |
-| `domain.habits` | Periods, goals by version, pauses, streaks, pause weeks, quantity modes, splitting the timer at midnights | Real-time timers |
+| `domain.habits` | Periods, goals by version, pauses, streaks, pause weeks, quantity modes, splitting timer intervals at local midnights in the starting timezone, review proposal and credit after confirmation | Real-time timers |
 | `domain.policy` | Which commands require confirmation, which are covered by permissions, what is forbidden when access has expired | Storing permissions |
 | `app.commands` | The command pipeline (CP02): validation → target → revisions → access and permissions → invariants → one transaction (data + `processed_action` + audit + `outbox` + planning revision) → event after commit | Long operations inside a transaction |
 | `app.queries` | Read models for screens and the assistant (`GetDayView`, etc.); read only | Changes |

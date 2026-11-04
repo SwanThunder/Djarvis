@@ -12,7 +12,7 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
 - Technical decisions T1–T6 approved (ADR-015); its phases and acceptance criteria are approved (ADR-018); architecture and repository structure remain under review.
-- Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (45 tables), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
+- Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (46 tables, revised proposal), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
 - Next gate: the owner reviews plan architecture/repository structure and approves the schema, API and modules → permission to start P0. Real checks come after programming (owner's condition).
 
 ## 2. Accepted decisions

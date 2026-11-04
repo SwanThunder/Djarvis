@@ -21,7 +21,7 @@ One action remains for the owner: read and approve the four structure documents 
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
 | Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | P0–P7 and criteria approved (ADR-018); architecture/repository structure pending; P0 not authorized |
-| Database schema v1: 45 tables | [SCHEMA](SCHEMA.md) | proposed; pending owner approval; SQL runs in PostgreSQL 18 |
+| Database schema v1: 46 tables | [SCHEMA](SCHEMA.md) | revised proposal; pending owner approval; revised SQL has not been executed |
 | API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | proposed; pending owner approval |
 | Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | proposed; pending owner approval |
 | Structural questions Q1–Q5 | SCHEMA §12, ADR-016 | owner decisions recorded; structure pending approval |
@@ -29,7 +29,7 @@ One action remains for the owner: read and approve the four structure documents 
 ## 3. How the structure itself was verified
 
 - **Requirements coverage.** Every required feature from PRODUCT is mapped to schema tables, API commands and a module (§5). There are no uncovered features.
-- **Schema.** All the SQL from SCHEMA was run in a temporary PostgreSQL 18 cluster: 63 statements, 45 tables, no errors. The cluster was deleted. It was separately verified that the database itself rejects violations of product rules: a task without a priority, a deadline without a time, a second occurrence of a one-off task, a second live timer for the same habit (live timers for different habits are allowed), a block whose end is earlier than its start, a permission to delete files, a repeat of the same habit mark. All 13 cases behaved as intended. This verifies the proposed schema, which remains pending owner approval.
+- **Schema.** All the SQL from SCHEMA was run in a temporary PostgreSQL 18 cluster: 63 statements, 45 tables, no errors. The cluster was deleted. It was separately verified that the database itself rejects violations of product rules: a task without a priority, a deadline without a time, a second occurrence of a one-off task, a second live timer for the same habit (live timers for different habits are allowed), a block whose end is earlier than its start, a permission to delete files, a repeat of the same habit mark. All 13 cases behaved as intended. This verified the former 45-table draft. The revised 46-table draft with persisted timer intervals has not been executed; the owner deferred further checks until programming.
 - **Consistency.** Command names in the API match the names in the schema and modules; links between documents were checked; both language versions were compared for structure.
 - **What this verification does not prove:** that the program will work. That will be shown by the tests in each phase and the real-world checks after programming.
 
@@ -52,7 +52,7 @@ One action remains for the owner: read and approve the four structure documents 
 | Day auto-plan: deadline → priority, locked blocks, splitting by consent, breaks per settings, 06:00–22:00 window | `schedule_placement`, `day_plan_*`, `planning_guard`, `availability_window`, `setting.breaks` | `BuildDayPlan`, `ApplyDayPlan`, `GetDayView` | `domain.planner` |
 | Overdue and missed are different states; announcing a miss | computed; `task.announce_missed` | `GetDayView`, job `placement_missed` | `domain.time`, `reminders` |
 | Habits of 4 types, schedules, pauses, streaks, backdated corrections | `habit*`, `habit_entry` | `RecordHabitEntry`, `CorrectHabitEntry`, `GetHabitStats` | `domain.habits` |
-| Timer across sleep and shutdown, splitting at midnight | `timer_session` | `Start/Pause/Resume/StopTimer`, `ResolveTimerClock` | `domain.habits` |
+| Timer across sleep and shutdown, splitting at midnight | `timer_session`, `timer_interval`, `habit_entry` | `Start/Pause/Resume/StopTimer`, `ResolveTimerClock` | `domain.habits` |
 | Goal change — only with consent | `habit_goal_proposal` | `ProposeHabitGoalChange`, `DecideHabitGoalProposal` | `domain.policy` |
 | Calendar, projects, notes | `calendar_event`, `project`, `note` | API sections 6 and 8 | `app`, `storage` |
 | Voice dialogue, wake phrase, 30 s wait, «Хватит», barge-in, mute | `setting.voice` | API section 12, `audio_state` events | `audio`, `assistant` |

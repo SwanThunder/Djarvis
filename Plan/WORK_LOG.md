@@ -571,3 +571,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Schema review findings (read-only): proposed foreign keys may connect different profiles without a database constraint; the described timer state for clock rollback is absent from its allowed SQL states; interval reconciliation after crashes/timezone changes still needs a concrete contract. Backup/license exclusions and anchored recurrence had no clear contradiction in this pass. Schema remains a proposal.
 - Verification: five bilingual pairs matched on headings, ADR IDs and local links; both registers have 18 ADRs; whitespace check passed. No application, database, or runtime test was run.
 - Commit: [9a5e3de](https://github.com/SwanThunder/Djarvis/commit/9a5e3de).
+
+## PLAN-029 — Profile isolation and timer interval schema review
+
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01 designs and reviews; schema-review supplied a read-only consistency audit and has released all files.
+- Authorization: owner chose one Djarvis profile per Windows account and confirmed that a clock-rollback timer interval is shown for confirmation/correction before it is credited. Schema review follows the approved phase review; schema itself is not approved.
+- Status: complete; documentation only.
+- Files: both shared logs and bilingual PRODUCT, DECISIONS, SCHEMA, API, MODULES, READINESS and STATUS. No app code, database operation, or unrelated local files.
+- Scope: record the narrow owner choices; prepare a reviewable singleton-profile and timer-interval schema proposal, clarify acceptance evidence after changing the former 45-table draft, and preserve the schema approval gate.
+- Result: ADR-019 and PRODUCT record the owner choices: one profile per Windows account, review uncertain intervals before credit, and use the interval starting timezone after a detected change. The proposed schema has 46 tables: a singleton profile constraint and persisted timer intervals. API, modules, readiness and status were aligned. Schema, API and modules remain unapproved; P0 is withheld.
+- Checks: 46 CREATE TABLE declarations in both language versions, key terminology parity and git diff --check. Revised SQL and tests were not run because the owner deferred further checks until programming; the former 13 checks cover only the 45-table draft. Unrelated local file preserved.
+- Remaining: review main components per owner request; separate schema, then API and module review before P0.

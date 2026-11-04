@@ -2,7 +2,7 @@
 
 [English version](SCHEMA.md) · [Технические детали](TECHNICAL_DESIGN.ru.md) · [API](API.ru.md) · [Модули](MODULES.ru.md) · [Ядро планировщика](PLANNER_CORE.ru.md) · [Решения](DECISIONS.ru.md)
 
-Статус: предложение agent-02 (PLAN-024), 2026-11-04. На проверке у владельца. Это полная структура первой миграции `0001_initial`: все таблицы, поля, ключи и ограничения. Код и SQL-файлы миграций не пишутся до утверждения. Ответы владельца на вопросы В1–В5 (PLAN-024) внесены в схему и собраны в §12.
+Статус: предложение agent-02 (PLAN-024), обновлено в PLAN-029, 2026-11-04. На проверке у владельца. Это проект структуры первой миграции `0001_initial`: все таблицы, поля, ключи и ограничения. Код и SQL-файлы миграций не пишутся до утверждения. Ответы владельца на вопросы В1–В5 (PLAN-024) внесены в схему и собраны в §12.
 
 ## 1. Общие правила
 
@@ -11,7 +11,7 @@
 | Схема | Все таблицы в схеме `app`; служебные — в `meta` |
 | Ключи | `uuid DEFAULT uuidv7()` — упорядочены по времени, пригодны для будущей синхронизации |
 | Ревизии | У каждой изменяемой записи `revision bigint NOT NULL DEFAULT 1`, `created_at`, `updated_at` (`timestamptz`). Общий триггер `meta.touch()` перед `UPDATE` увеличивает `revision` и ставит `updated_at = now()`. Ядро обновляет с условием `WHERE id = $1 AND revision = $ожидаемая`; ноль строк — это `Conflict` |
-| Профиль | `profile_id` есть у корневых сущностей (задача, привычка, проект, заметка, событие и т. д.). Дочерние записи получают профиль через родителя |
+| Профиль | Частный кластер и файлы принадлежат одной учётной записи Windows. В кластере не более одной строки `app.profile`; `profile_id` есть у корневых сущностей, дочерние получают профиль через родителя. Это исключает связи между профилями внутри одного кластера (ADR-019) |
 | Время | Мгновение — `timestamptz`. Намерение пользователя — `*_date date`, `*_time time` и `*_tz text` (имя зоны IANA) отдельными полями |
 | Перечисления | `text` + `CHECK (... IN (...))`; новое значение добавляется миграцией |
 | Удаление | Физическое с каскадом, если ADR не требует истории. История выполнений, записи привычек и журнал аудита не удаляются при правке |
@@ -29,7 +29,8 @@ CREATE TABLE app.profile (
   timezone      text NOT NULL,                          -- текущая зона IANA
   city          text,
   city_source   text CHECK (city_source IN ('manual','auto')),
-  persona       text NOT NULL DEFAULT 'edward' CHECK (persona IN ('edward','volt','nova'))
+  persona       text NOT NULL DEFAULT 'edward' CHECK (persona IN ('edward','volt','nova')),
+  slot          smallint NOT NULL DEFAULT 1 UNIQUE CHECK (slot = 1) -- один профиль в частном кластере
   -- [общие]
 );
 
@@ -346,6 +347,7 @@ CREATE TABLE app.habit_entry (                          -- только доба
   seconds         integer CHECK (seconds > 0),
   source          text NOT NULL CHECK (source IN ('manual','voice','timer')),
   timer_session_id uuid REFERENCES app.timer_session(id) ON DELETE SET NULL,
+  timer_interval_id uuid REFERENCES app.timer_interval(id) ON DELETE SET NULL,
   corrects_id     uuid REFERENCES app.habit_entry(id),  -- эта запись исправляет другую
   superseded_at   timestamptz,                          -- запись заменена исправлением или отменена
   action_id       text NOT NULL,                        -- защита от повтора
@@ -353,20 +355,37 @@ CREATE TABLE app.habit_entry (                          -- только доба
   UNIQUE (habit_id, action_id)
 );
 CREATE INDEX habit_entry_day ON app.habit_entry (habit_id, local_date) WHERE superseded_at IS NULL;
+CREATE UNIQUE INDEX habit_timer_day ON app.habit_entry (timer_interval_id, local_date)
+  WHERE timer_interval_id IS NOT NULL AND superseded_at IS NULL;
 
 CREATE TABLE app.timer_session (
   id              uuid PRIMARY KEY DEFAULT uuidv7(),
   habit_id        uuid NOT NULL REFERENCES app.habit(id) ON DELETE CASCADE,
   state           text NOT NULL CHECK (state IN ('running','paused','stopped')),
   started_at      timestamptz NOT NULL,
-  last_resumed_at timestamptz,                          -- начало текущего отрезка
-  accumulated_s   integer NOT NULL DEFAULT 0,           -- сумма закрытых отрезков
   tz              text NOT NULL,
   stopped_at      timestamptz
   -- [общие]
 );
 CREATE UNIQUE INDEX one_live_timer ON app.timer_session (habit_id) WHERE state <> 'stopped';
 -- Не более одного активного таймера на привычку; независимые таймеры разных привычек разрешены.
+
+CREATE TABLE app.timer_interval (                       -- отрезки таймера; начало/конец сохраняются отдельно от сессии
+  id              uuid PRIMARY KEY DEFAULT uuidv7(),
+  timer_session_id uuid NOT NULL REFERENCES app.timer_session(id) ON DELETE CASCADE,
+  started_at      timestamptz NOT NULL,
+  ended_at        timestamptz,                          -- наблюдаемое время; при сбое часов может быть раньше начала
+  start_tz        text NOT NULL,                        -- пояс начала отрезка
+  state           text NOT NULL CHECK (state IN ('open','pending_review','credited')),
+  review_reason   text CHECK (review_reason IN ('clock_rollback','timezone_change')),
+  proposed_days   jsonb,                                -- показанный расчёт по дням, ещё не статистика
+  resolved_at     timestamptz,
+  CHECK ((state = 'open' AND ended_at IS NULL AND review_reason IS NULL AND resolved_at IS NULL)
+      OR (state = 'pending_review' AND ended_at IS NOT NULL AND review_reason IS NOT NULL AND resolved_at IS NULL)
+      OR (state = 'credited' AND ended_at IS NOT NULL AND review_reason IS NULL))
+  -- [общие]
+);
+CREATE UNIQUE INDEX one_open_timer_interval ON app.timer_interval (timer_session_id) WHERE state = 'open';
 
 CREATE TABLE app.habit_goal_proposal (                  -- предложения ассистента; применяются только после согласия
   id            uuid PRIMARY KEY DEFAULT uuidv7(),
@@ -383,7 +402,7 @@ CREATE TABLE app.habit_goal_proposal (                  -- предложени�
 - Текущее значение дня — сумма действующих записей (`superseded_at IS NULL`). Исправление задним числом: старая запись получает `superseded_at`, новая — `corrects_id`. История сохраняется; статистика берёт цель из версии `habit_schedule`, действовавшей в тот день (ADR-009).
 - `daily_total` заменяет сумму порций дня, а не добавляется к ней. Смена режима количества пересчитывает только текущий день.
 - Воздержание: успех только при записи `complied`; отсутствие записи — не успех.
-- Таймер: каждый отрезок — пара «начало, пауза», значение хранится в `accumulated_s` и `last_resumed_at`, поэтому таймер переживает сон, выход и выключение без фонового тиканья. При остановке ядро делит итог по локальным полуночам и пишет по одной записи `duration` на день в одной транзакции. Если при запуске `now()` раньше `last_resumed_at` (часы переведены назад), таймер получает статус «нужна проверка», и пользователю показывается вопрос, а не отрицательное время.
+- Таймер: каждый период работы между запуском/возобновлением и паузой/остановкой хранится отдельным `timer_interval` с исходным поясом. `timer_session.state` описывает только работу таймера; ожидание проверки относится к отдельному отрезку. При закрытии обычного отрезка ядро делит время по местным полуночам в поясе начала, создаёт `habit_entry` по дням и переводит отрезок в `credited` одной транзакцией. Сон, выход и выключение ПК учитываются по сохранённым временным границам; приложение не обязано тикать в фоне. Если часы переведены назад или обнаружена смена пояса, расчёт по дням сохраняется в `proposed_days` и показывается пользователю; `pending_review` не попадает в статистику. Подтверждение либо исправление распределения через `ResolveTimerClock` создаёт записи и закрывает проверку одной идемпотентной транзакцией. Таймер тем временем может продолжаться новым отрезком до явной паузы или остановки. Невозможность обнаружить некоторые изменения системных часов во время выключения ПК остаётся техническим ограничением для проверки при реализации.
 - Статистика (серии, проценты, пропуски) считается запросами по `habit_entry`, `habit_schedule` и `habit_pause`; отдельной таблицы кэша в v1 нет. Если замеры покажут медленную работу, добавляется материализованное представление.
 
 ## 7. Календарь и внешние провайдеры

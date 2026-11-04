@@ -92,8 +92,8 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The com
 | `ArchiveHabit` / `DeleteHabit` | commands | archive | archiving keeps the statistics; deletion 🔒 |
 | `RecordHabitEntry` | command | yes | a mark: done, portion, daily total, duration, "complied", "violated"; may be backdated within the habit's lifetime |
 | `CorrectHabitEntry` | command | yes | correct or cancel an entry; history is preserved |
-| `StartTimer` / `PauseTimer` / `ResumeTimer` / `StopTimer` | commands | yes | duration timer; on stop — entries per day |
-| `ResolveTimerClock` | command | — | the user's answer if the clock was set back during a timer |
+| `StartTimer` / `PauseTimer` / `ResumeTimer` / `StopTimer` | commands | yes | duration timer; closed intervals are credited per day, disputed ones await review |
+| `ResolveTimerClock` | command | — | confirm or correct the shown day allocation after a backward clock change or timezone change |
 | `ProposeHabitGoalChange` | command | yes | an assistant proposal (not applied by itself) |
 | `DecideHabitGoalProposal` | command | — 🔒 | accept or reject a proposal; only the user accepts |
 | `ListHabits` / `GetHabit` | queries | yes | habits with day and week progress |

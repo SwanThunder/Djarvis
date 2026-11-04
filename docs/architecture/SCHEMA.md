@@ -2,7 +2,7 @@
 
 [Русская версия](SCHEMA.ru.md) · [Technical design](TECHNICAL_DESIGN.md) · [API](API.md) · [Modules](MODULES.md) · [Planner core](PLANNER_CORE.md) · [Decisions](DECISIONS.md)
 
-Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. This is the complete structure of the first migration `0001_initial`: all tables, columns, keys and constraints. No code or SQL migration files are written until approval. The owner's answers to questions Q1–Q5 (PLAN-024) are incorporated into the schema and collected in §12.
+Status: proposal by agent-02 (PLAN-024), revised in PLAN-029, 2026-11-04. Under owner review. This is the draft structure of the first migration `0001_initial`: all tables, columns, keys and constraints. No code or SQL migration files are written until approval. The owner's answers to questions Q1–Q5 (PLAN-024) are incorporated into the schema and collected in §12.
 
 ## 1. General rules
 
@@ -11,7 +11,7 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. This is
 | Schema | All tables are in the `app` schema; service tables are in `meta` |
 | Keys | `uuid DEFAULT uuidv7()` — time-ordered, suitable for future synchronization |
 | Revisions | Every mutable record has `revision bigint NOT NULL DEFAULT 1`, `created_at`, `updated_at` (`timestamptz`). The shared trigger `meta.touch()` before `UPDATE` increments `revision` and sets `updated_at = now()`. The core updates with the condition `WHERE id = $1 AND revision = $expected`; zero rows is a `Conflict` |
-| Profile | `profile_id` is present on root entities (task, habit, project, note, event, etc.). Child records get the profile through their parent |
+| Profile | The private cluster and files belong to one Windows account. At most one `app.profile` row exists in that cluster; root entities carry `profile_id` and children inherit it through the parent. This prevents cross-profile links within a cluster (ADR-019) |
 | Time | An instant is `timestamptz`. The user's intent is stored as separate fields `*_date date`, `*_time time` and `*_tz text` (IANA zone name) |
 | Enumerations | `text` + `CHECK (... IN (...))`; a new value is added by a migration |
 | Deletion | Physical, with cascade, unless an ADR requires history. Completion history, habit entries and the audit log are not deleted on edit |
@@ -29,7 +29,8 @@ CREATE TABLE app.profile (
   timezone      text NOT NULL,                          -- current IANA zone
   city          text,
   city_source   text CHECK (city_source IN ('manual','auto')),
-  persona       text NOT NULL DEFAULT 'edward' CHECK (persona IN ('edward','volt','nova'))
+  persona       text NOT NULL DEFAULT 'edward' CHECK (persona IN ('edward','volt','nova')),
+  slot          smallint NOT NULL DEFAULT 1 UNIQUE CHECK (slot = 1) -- one profile in the private cluster
   -- [common]
 );
 
@@ -346,6 +347,7 @@ CREATE TABLE app.habit_entry (                          -- append-only; correcti
   seconds         integer CHECK (seconds > 0),
   source          text NOT NULL CHECK (source IN ('manual','voice','timer')),
   timer_session_id uuid REFERENCES app.timer_session(id) ON DELETE SET NULL,
+  timer_interval_id uuid REFERENCES app.timer_interval(id) ON DELETE SET NULL,
   corrects_id     uuid REFERENCES app.habit_entry(id),  -- this entry corrects another one
   superseded_at   timestamptz,                          -- entry replaced by a correction or cancelled
   action_id       text NOT NULL,                        -- replay protection
@@ -353,20 +355,37 @@ CREATE TABLE app.habit_entry (                          -- append-only; correcti
   UNIQUE (habit_id, action_id)
 );
 CREATE INDEX habit_entry_day ON app.habit_entry (habit_id, local_date) WHERE superseded_at IS NULL;
+CREATE UNIQUE INDEX habit_timer_day ON app.habit_entry (timer_interval_id, local_date)
+  WHERE timer_interval_id IS NOT NULL AND superseded_at IS NULL;
 
 CREATE TABLE app.timer_session (
   id              uuid PRIMARY KEY DEFAULT uuidv7(),
   habit_id        uuid NOT NULL REFERENCES app.habit(id) ON DELETE CASCADE,
   state           text NOT NULL CHECK (state IN ('running','paused','stopped')),
   started_at      timestamptz NOT NULL,
-  last_resumed_at timestamptz,                          -- start of the current segment
-  accumulated_s   integer NOT NULL DEFAULT 0,           -- sum of closed segments
   tz              text NOT NULL,
   stopped_at      timestamptz
   -- [common]
 );
 CREATE UNIQUE INDEX one_live_timer ON app.timer_session (habit_id) WHERE state <> 'stopped';
 -- At most one live timer per habit; independent timers for different habits are allowed.
+
+CREATE TABLE app.timer_interval (                       -- persisted timer segments with their own boundaries
+  id              uuid PRIMARY KEY DEFAULT uuidv7(),
+  timer_session_id uuid NOT NULL REFERENCES app.timer_session(id) ON DELETE CASCADE,
+  started_at      timestamptz NOT NULL,
+  ended_at        timestamptz,                          -- observed time; may precede start after a clock change
+  start_tz        text NOT NULL,                        -- timezone when the interval began
+  state           text NOT NULL CHECK (state IN ('open','pending_review','credited')),
+  review_reason   text CHECK (review_reason IN ('clock_rollback','timezone_change')),
+  proposed_days   jsonb,                                -- displayed day allocation, not yet credited
+  resolved_at     timestamptz,
+  CHECK ((state = 'open' AND ended_at IS NULL AND review_reason IS NULL AND resolved_at IS NULL)
+      OR (state = 'pending_review' AND ended_at IS NOT NULL AND review_reason IS NOT NULL AND resolved_at IS NULL)
+      OR (state = 'credited' AND ended_at IS NOT NULL AND review_reason IS NULL))
+  -- [common]
+);
+CREATE UNIQUE INDEX one_open_timer_interval ON app.timer_interval (timer_session_id) WHERE state = 'open';
 
 CREATE TABLE app.habit_goal_proposal (                  -- assistant proposals; applied only after consent
   id            uuid PRIMARY KEY DEFAULT uuidv7(),
@@ -383,7 +402,7 @@ CREATE TABLE app.habit_goal_proposal (                  -- assistant proposals; 
 - The current value of a day is the sum of the active entries (`superseded_at IS NULL`). Backdated correction: the old entry gets `superseded_at`, the new one gets `corrects_id`. History is preserved; statistics take the goal from the `habit_schedule` version in effect on that day (ADR-009).
 - `daily_total` replaces the sum of the day's portions rather than adding to it. Changing the quantity mode recalculates only the current day.
 - Abstinence: success only with a `complied` entry; the absence of an entry is not success.
-- Timer: each segment is a "start, pause" pair; the value is stored in `accumulated_s` and `last_resumed_at`, so the timer survives sleep, exit and shutdown without background ticking. On stop, the core splits the total at local midnights and writes one `duration` entry per day in one transaction. If at startup `now()` is earlier than `last_resumed_at` (the clock was set back), the timer gets the status "needs review", and the user is shown a question instead of a negative time.
+- Timer: each running period between start/resume and pause/stop is a separate durable `timer_interval` with its original timezone. `timer_session.state` describes only whether the timer is running; pending review belongs to the interval. Closing an ordinary interval allocates its duration across local midnights in the starting timezone, creates per-day `habit_entry` rows and marks the interval `credited` in one transaction. Sleep, application exit and shutdown are counted from stored boundaries without a background tick. If the clock moves backward or a timezone change is detected, the proposed day allocation is stored in `proposed_days` and shown to the user; `pending_review` does not enter statistics. Confirmation or correction via `ResolveTimerClock` creates entries and closes review in one idempotent transaction. The timer may continue in a new interval until an explicit pause or stop. Some system clock changes while the computer is off may be impossible to detect; this remains an implementation validation limit.
 - Statistics (streaks, percentages, misses) are computed by queries over `habit_entry`, `habit_schedule` and `habit_pause`; there is no separate cache table in v1. If measurements show slow performance, a materialized view is added.
 
 ## 7. Calendar and external providers
