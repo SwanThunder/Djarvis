@@ -2,7 +2,7 @@
 
 [Русская версия](FOUNDATION_DESIGN.ru.md) · [Product requirements](../PRODUCT.md) · [Planner core](PLANNER_CORE.md) · [Component plan](COMPONENT_PLAN.md)
 
-Date: 2026-11-03. Status: detailed technical proposal for review. The limited choices in ADR-001 through ADR-007 are approved; the complete architecture, protocol, schema, algorithm, and component behavior below are not. No implementation, database schema, package, or performance result is claimed.
+Date: 2026-11-03. Status: detailed technical proposal for review. The limited choices in ADR-001 through ADR-008 are approved; the complete architecture, protocol, schema, algorithm, and component behavior below are not. No implementation, database schema, package, or performance result is claimed.
 
 This document develops CP01–CP07 as a coherent foundation for later design. “Recommendation” means a reviewable proposal. “Owner choice” identifies a product behavior that must stay open until the owner answers. An exact API or column name is illustrative and may change.
 
@@ -16,7 +16,7 @@ Approved foundation used here:
 - An app-managed isolated PostgreSQL instance runs on the user's Windows computer. User data stays local; no remote application backend or cloud user database is selected.
 - A local profile and offline signed-license import are selected. Trial and expired-state behavior follow ADR-005. Protected backup-key handling and full-snapshot restore policy follow ADR-006.
 - Local planner, reminders, voice, and conversation are intended to work offline when access and required local resources are valid. Search, live weather, and external providers need a network connection.
-- Product rules for task priority, explicit deadline-time clarification, start-only markers, recurrence, habits, task completion, permissions, split opt-in, and no automatic breaks are constraints on these proposals.
+- Product rules for task priority, explicit deadline-time clarification, start-only markers, recurrence, habits, task completion, permissions, split opt-in, overdue-task eligibility, explicit abstinence reporting, parent/subtask choices, and no automatic breaks are constraints on these proposals.
 
 ## 2. CP01 — process model and local protocol
 
@@ -224,7 +224,7 @@ Required snapshot: planning date and named timezone; configured user availabilit
 
 If a task lacks duration, return `NeedsInput` for that item before automatic scheduling. It may exist as a task and, if manually entered, as a start-only marker, but the marker reserves no interval. If a meeting/busy event has an unknown end or ambiguous all-day/free-busy meaning, do not treat the interval as known free; return an input/conflict reason or exclude that portion from schedulable time pending normalization.
 
-Hard constraints: manually placed items remain locked unless the user explicitly permits changing them; meetings and unavailable periods are not moved by the planner; no placement extends user availability or changes a deadline; a date-only task uses the 06:00–22:00 placement window with its own duration, not an assumed 16-hour task or global workday.
+Hard constraints: manually placed items remain locked unless the user explicitly permits changing them; meetings and unavailable periods are not moved by the planner; no placement extends user availability or changes a deadline; a date-only task uses the 06:00–22:00 placement window with its own duration, not an assumed 16-hour task or global workday. An overdue task remains eligible for an automatic proposal; keep its original deadline and overdue flag, and apply only through the existing confirmation/grant.
 
 ### 6.2 Proposed algorithm
 
@@ -245,7 +245,7 @@ Accepted product policy: deadline-first, then priority; tasks without a deadline
 
 The plan can still be infeasible. Report a missed/unsatisfied deadline and the reason; never move its date, silently widen working hours, or call an overloaded day solved. A due date and a scheduled placement are separate facts.
 
-Pending product tradeoff (FD14): recommend keeping an overdue task eligible for later placement while visibly preserving its already-missed deadline state; do not rewrite the deadline. The exact interaction between an expired deadline and placement eligibility is not yet owner-approved. Avoid interpreting every past deadline as a permanent scheduling prohibition.
+Accepted product policy (FD14): overdue tasks remain eligible for automatic plan proposals. Preserve the original deadline and overdue flag; the existing confirmation/grant applies when the proposal is accepted. Do not rewrite the deadline.
 
 ### 6.4 Completing split work
 
@@ -285,13 +285,13 @@ Regeneration must be idempotent: a unique occurrence key prevents duplicate mate
 
 ### 7.4 Habit periods and statistics
 
-Represent measurement observations separately from assessed schedule periods. The four accepted types are yes/no, quantity, duration, and abstinence. A log must identify its local date/period, value/unit when applicable, and correction provenance. No observation does not silently mean success for abstinence.
+Represent measurement observations separately from assessed schedule periods. The four accepted types are yes/no, quantity, duration, and abstinence. A log must identify its local date/period, value/unit when applicable, and correction provenance. For abstinence, count success only on an explicit user report of “complied”; no mark is not success.
 
 Week boundaries begin Monday in the selected habit timezone. Flexible frequency counts distinct successful days; multiple same-day quantity/duration logs can contribute to measurement totals but at most one success for weekly quota. If a pause leaves fewer eligible days than the weekly quota, mark that flexible week paused: no miss, no streak break, no automatic goal reduction. Fixed streaks count consecutive successful scheduled days; flexible streaks count consecutive successful weeks; paused time freezes the applicable streak. Habit misses remain statistics, not task debt.
 
 Corrections may target any past date during the habit's lifetime, never before creation or as a future actual success. Preserve correction history and recalculate with the goal effective on the corrected date. Exact storage/audit representation and recomputation mechanics are technical proposals.
 
-Proposed measurement contract: quantity observations carry a typed unit and numeric amount; duration observations carry an elapsed duration in a declared unit. Preserve multiple genuine measurements for a date and compute a period total from compatible units only; do not sum incompatible units. A yes/no success is an explicit report. For abstinence, explicitly report either continued success for a period or a disclosed lapse; silence is unknown, never success. These are concrete technical recommendations consistent with the accepted habit types, not newly approved product details. Owner decisions still needed: unit catalog/conversion, thresholds and period aggregation for quantity/duration, exact abstinence reporting choices and whether a lapse can be corrected, correction reason/authorization, rate calculations across paused periods, and the moment an unfinished flexible week becomes a miss. Do not add automatic make-up tasks or apply a suggested goal change without acceptance.
+Proposed measurement contract: quantity observations carry a typed unit and numeric amount; duration observations carry an elapsed duration in a declared unit. Preserve multiple genuine measurements for a date and compute a period total from compatible units only; do not sum incompatible units. A yes/no success is an explicit report. For abstinence, only an explicit “complied” report counts as success; a lapse or no mark is not success. This accepted rule does not define the storage encoding. Owner decisions still needed: unit catalog/conversion, thresholds and period aggregation for quantity/duration, exact abstinence record representation, correction reason/authorization, rate calculations across paused periods, and the moment an unfinished flexible week becomes a miss. Existing any-past-date correction policy still applies; its audit representation remains open. Do not add automatic make-up tasks or apply a suggested goal change without acceptance.
 
 ## 8. CP07 — projects, notes, tags, attachments, and search
 
@@ -299,7 +299,7 @@ Proposed measurement contract: quantity observations carry a typed unit and nume
 
 Propose profile-owned projects with stable IDs and revisions. Archiving should hide a project from active views while preserving linked tasks, notes, attachments and history; deletion should require an impact review and explicit confirmation, with exact cascade/retention behavior left for owner review. Tasks may optionally reference a project. Notes have stable IDs, title/body, created/updated revisions and optional project association; propose plain text or a constrained safe rich-text format, and never render active HTML/script content. Tags are user-managed labels with normalized display text and a many-to-many association to supported records. Exact fields, nesting, note format and which record types may be tagged are proposals, not new product requirements.
 
-Advanced task fields must keep distinct meanings: a checklist is progress metadata and does not complete the task; subtasks are separate task records with their own status and may be explicitly related to a parent. Completing a parent must not implicitly complete children. Propose bounded nesting (or no nesting beyond one level) and explicit archive/delete behavior; nesting depth, inheritance of project/deadline/priority, and parent completion policy remain owner choices. Hidden advanced fields retain their values under the accepted product rule.
+Advanced task fields must keep distinct meanings: a checklist is progress metadata and does not complete the task; subtasks are separate task records with their own status and may be explicitly related to a parent. When a parent has unfinished subtasks, show “Close task” and “Finish subtasks”. “Finish subtasks” returns to the child-task list and leaves the parent incomplete. “Close task” completes only the parent; child tasks remain active and linked. Propose bounded nesting (or no nesting beyond one level) and explicit archive/delete behavior; nesting depth and inheritance of project/deadline/priority remain owner choices. Hidden advanced fields retain their values under the accepted product rule.
 
 Attachments are metadata records linked to an owner record and an app-managed file object. The database stores a stable attachment ID, relative opaque storage key, original display name, media type if known, byte count, hash, created timestamp, and lifecycle state. Do not use arbitrary user-supplied paths as storage keys or expose an attachment as an unrestricted executable action.
 
@@ -403,6 +403,8 @@ No application code, SQL schema, database, package, runtime measurement, or test
 | FD11 | PostgreSQL runtime | Private app-managed cluster, no adoption of unrelated installations | Lifecycle direction approved; binary/version/auth details open |
 | FD12 | Planning lock | Short per-profile revision/guard for plan-affecting writes | Technical proposal; transaction implementation open |
 | FD13 | Unspecified product details | Keep date-time conflict, segment size/buffer and project/note fields as explicit open items | Owner review where behavior changes; do not infer defaults |
-| FD14 | Overdue task eligibility | Recommend that an overdue task remain placeable after its deadline with an explicit unmet-deadline state, without changing the due date | Product tradeoff open; do not silently enforce or relax deadlines |
+| FD14 | Overdue task eligibility | Keep overdue tasks eligible for automatic proposals; preserve original deadline and overdue flag; use existing confirmation/grant | Product choice accepted; ranking/tie-break mechanics remain as separately specified |
+| FD15 | Parent with unfinished subtasks | Show “Close task” (parent completes; children remain active and linked) or “Finish subtasks” (return to child list; parent remains incomplete) | Product choice accepted; exact interaction details remain proposal |
+| FD16 | Abstinence success | Only an explicit user report of “complied” counts as success; no mark is not success | Product choice accepted; stored record/metrics remain proposal |
 
-FD05–FD07 are narrow accepted product policies. All remaining technical proposals require review; none grants permission to program, install, migrate, download, or benchmark.
+FD05–FD07 are narrow accepted product policies. FD14, explicit abstinence success, and parent/subtask choice behavior are accepted product rules. Remaining technical proposals require review; none grants permission to program, install, migrate, download, or benchmark.

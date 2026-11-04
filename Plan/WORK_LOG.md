@@ -347,3 +347,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: three bilingual design dossiers cover CP01–CP20; accepted policies are synchronized with canonical documents, and recommendations remain distinguishable from approval. Provider candidates and commercial/credential/privacy constraints are recorded; browser handoff alone does not fulfill automatic in-app research.
 - Handoff: before every next question group consult current rules, both shared logs and relevant canonical documents; after compaction reread them to restore context. Plan currently contains bilingual work logs, not a separate full chat export. Next owner choices include overdue placement, habit measurement/abstinence, parent/subtask completion, external-service account/cost constraints and remaining commercial/device policy. Internal runtime/schema/transport/crypto details still require final review and authorized feasibility evidence. No application implementation is approved.
 - Commit: [92d0940 — Specify component contracts and record owner choices](https://github.com/SwanThunder/Djarvis/commit/92d094071fb761a2cd53c6cacfc4bf586fdd986e).
+
+## PLAN-013 — Overdue tasks, abstinence and parent completion
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-01 completes and reviews the partial documentation prepared by architecture-sources after its run ended; no concurrent writer.
+- Authorization: owner's explicit overdue/abstinence choices and both parent-completion clarification answers.
+- Status: documentation completed and checked; publication pending.
+- Files: both logs; PRODUCT, PLANNER_CORE, FOUNDATION_DESIGN, REMAINING_PLAN and DECISIONS in English and Russian.
+- Scope: record the three accepted behaviors as ADR-008 and FD14–FD16; preserve independent active children, historical corrections and existing confirmation rules. No application code, database changes, model downloads or application tests.
+- Checks: six language pairs checked for matching headings/decision IDs, local links and UTF-8; whitespace check passed. Reviewed the accepted behaviors against submitted answers. Application tests were not run because no implementation changed.
+- Remaining: quantity/duration measurement, subtask nesting/inheritance, external-service costs/accounts and license/device details; architecture and implementation still need approval.

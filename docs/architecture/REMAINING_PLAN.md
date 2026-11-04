@@ -187,3 +187,13 @@ Current handoff, PLAN-012: the detailed bilingual CP01–CP20 design dossiers ar
 - [Windows notification state](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/ne-shellapi-query_user_notification_state), [Core Audio session events](https://learn.microsoft.com/en-us/windows/win32/coreaudio/audio-session-events), and [GetLastInputInfo](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getlastinputinfo): candidate heuristic signals only; they do not provide universal call/game detection or prove physical absence.
 
 The license-file direction and F5/F6/F8 behavior are approved by the owner. Remaining technical details, proposed boundaries, UI grouping and unconfirmed defaults are design recommendations; the sources do not approve the full product architecture.
+
+## 12. PLAN-013 — Accepted planner and habit policies
+
+Overdue tasks remain eligible for automatic plan proposals without changing their original deadline or overdue status; applying the proposal follows existing confirmation/grant rules. Abstinence success requires an explicit “complied” mark; no mark is not success. Historical corrections remain allowed for any past date during the habit's lifetime, with audit history and the goal effective on that date.
+
+When completing a parent with unfinished children, show “Close task” and “Finish subtasks”. “Finish subtasks” returns to the child list without completing the parent. “Close task” completes only the selected parent occurrence; children remain active and linked, with their own deadlines and placements unchanged. Release only the completed parent's own future placements, preserving history. Other recurrence occurrences are unaffected. This explicit choice is required even when ordinary task-change confirmations are disabled; it determines the intended action.
+
+Exact schema, API names, child nesting/inheritance and handling of already-started placements remain open. These product choices do not authorize implementation.
+
+Next owner choices: quantity/duration aggregation, child nesting and inheritance, external-service accounts/costs, and remaining device/license policies. Technical proposals still require review.

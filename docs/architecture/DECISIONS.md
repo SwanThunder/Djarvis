@@ -2,7 +2,7 @@
 
 [Русская версия](DECISIONS.ru.md)
 
-Seven narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
+Eight narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
 
 ## ADR-001 — Flutter UI and necessary Dart UI implementation
 
@@ -77,3 +77,19 @@ PLAN-012 clarification: the owner selected monthly and annual subscriptions; pri
 - Approval basis: Owner's submitted explicit planner-choice responses, 2026-11-03.
 
 Record each approved decision with a stable ID, date, status, context, considered options, chosen solution, consequences, and owner approval reference. Keep IDs and statuses aligned with the Russian version. Mark proposals as proposed until approved; preserve superseded decisions and link their replacements.
+
+## ADR-008 — Overdue eligibility, abstinence and parent completion
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only).
+- Context: Resolve the latest planner and habit questions without implicit cascading completion.
+- Considered options: The owner selected continued overdue eligibility, explicit abstinence reporting, and retaining active children when closing the parent rather than cascading completion.
+- Decision:
+
+Overdue tasks remain eligible for automatic plan proposals without changing their original deadline or overdue status; applying the proposal follows existing confirmation/grant rules. Abstinence success requires an explicit “complied” mark; no mark is not success. Historical corrections remain allowed for any past date during the habit's lifetime, with audit history and the goal effective on that date.
+
+When completing a parent with unfinished children, show “Close task” and “Finish subtasks”. “Finish subtasks” returns to the child list without completing the parent. “Close task” completes only the selected parent occurrence; children remain active and linked, with their own deadlines and placements unchanged. Release only the completed parent's own future placements, preserving history. Other recurrence occurrences are unaffected. This explicit choice is required even when ordinary task-change confirmations are disabled; it determines the intended action.
+
+Exact schema, API names, child nesting/inheritance and handling of already-started placements remain open. These product choices do not authorize implementation.
+
+- Approval basis: Owner’s submitted choices and both parent-completion clarification answers, recorded in PLAN-013.
