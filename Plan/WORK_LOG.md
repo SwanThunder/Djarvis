@@ -619,3 +619,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-021 records both owner choices. PRODUCT, CORE_FLOWS, PLANNER_CORE, API and STATUS were aligned: an unfinished task miss offers a remaining-day plan; dragging into occupied draft time previews shifts of unpinned blocks before whole-plan acceptance. Shift algorithm and exact API response remain technical proposals; schema/API/modules are unapproved and P0 is withheld.
 - Checks: bilingual headings and links, 21 ADRs, exact edits and git diff --check reviewed. No code or SQL was run.
 - Remaining: review the main-flow technical contracts with schema/API/modules, then separately decide on P0.
+- Commit: [abd19ca](https://github.com/SwanThunder/Djarvis/commit/abd19ca).
