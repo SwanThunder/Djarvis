@@ -558,3 +558,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Updated files: bilingual IMPLEMENTATION_PLAN, DECISIONS, PRODUCT, STATUS and READINESS plus both shared logs. The plan, schema, API and modules still await owner approval; programming still needs separate P0 authorization.
 - Final verification: six bilingual pairs matched on headings and decision IDs, 17 ADR sections existed in both registers, local links and whitespace passed. Prior model timings were used as documented evidence, not rerun; no app tests were run.
 - Commits: [ba5a59b — plan gate cleanup](https://github.com/SwanThunder/Djarvis/commit/ba5a59b22f6a028c4438b6e01614eae4b86cfa72); [91e1300 — owner answers](https://github.com/SwanThunder/Djarvis/commit/91e13005b761e2f3abf953920b1539db1692c2c6).
+
+## PLAN-028 — Approve phase sequence, begin schema review
+
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01 records the narrow approval and coordinates schema review; schema-review reads architecture files without edits.
+- Authorization: owner explicitly approved implementation phases P0–P7 and their acceptance criteria and explicitly withheld permission to start P0. The earlier chosen review order proceeds to the schema.
+- Status: narrow phase approval recorded and checked; schema review continues separately. No programming.
+- Files reserved by agent-01: both logs and bilingual DECISIONS, IMPLEMENTATION_PLAN, STATUS and READINESS. Schema, API and module proposals remain unchanged during this approval record.
+- Scope: record only the phase/criteria approval, keep architecture/repository structure and P0 authorization open, then identify schema review questions without assuming schema approval.
+- Result: ADR-018 records approval of phases P0–P7, their dependencies and acceptance criteria only. Plan, status and readiness distinguish this approval from the still-open architecture/repository structure, schema/API/modules and separate P0 permission.
+- Schema review findings (read-only): proposed foreign keys may connect different profiles without a database constraint; the described timer state for clock rollback is absent from its allowed SQL states; interval reconciliation after crashes/timezone changes still needs a concrete contract. Backup/license exclusions and anchored recurrence had no clear contradiction in this pass. Schema remains a proposal.
+- Verification: five bilingual pairs matched on headings, ADR IDs and local links; both registers have 18 ADRs; whitespace check passed. No application, database, or runtime test was run.

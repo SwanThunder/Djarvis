@@ -2,7 +2,7 @@
 
 [Русская версия](IMPLEMENTATION_PLAN.ru.md) · [Technical details](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Component plan](COMPONENT_PLAN.md) · [Feasibility](FEASIBILITY.md) · [Status](../STATUS.md)
 
-Status: proposal by agent-02 (PLAN-022), 2026-11-04. **Under owner review, not approved** (PLAN-023). Technical decisions T1–T6 are approved (ADR-015). Owner's condition: programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later. No application code is written until approval. Approval of this plan and separate authorization of P0 permit work by its phases; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
+Status: proposal by agent-02 (PLAN-022), 2026-11-04. **P0–P7 phases and acceptance criteria approved (ADR-018); architecture and repository structure remain under owner review. P0 is not authorized** (PLAN-028). Technical decisions T1–T6 are approved (ADR-015). Owner's condition: programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later. No application code is written until approval. Approval of this plan and separate authorization of P0 permit work by its phases; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
 
 ## 1. Architecture at a glance
 
@@ -101,7 +101,7 @@ P2 and P3 can run in parallel after P1 (the contract is already fixed), with sep
 
 1. The architecture from §1 and the repository structure from §2.
 2. T1–T6 are already approved in ADR-015; they are context for this review, not a new approval request.
-3. The composition and order of phases P0–P7 and their acceptance criteria.
+3. The composition and order of phases P0–P7 and their acceptance criteria are approved (ADR-018).
 4. Separate permission to begin programming with P0; each later phase starts after acceptance of its prerequisites, including parallel P2/P3.
 
 The live microphone test and other real checks happen after programming (owner's condition). The code-signing certificate comes before public release (ADR-015); payment activation follows implementation and manual tests; commercial launch details remain open (ADR-017).

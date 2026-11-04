@@ -7,13 +7,13 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
-- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), seventeen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), eighteen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
-- Technical decisions T1–T6 approved (ADR-015); the implementation plan is under owner review.
+- Technical decisions T1–T6 approved (ADR-015); its phases and acceptance criteria are approved (ADR-018); architecture and repository structure remain under review.
 - Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (45 tables), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
-- Next gate: the owner reviews and approves the plan, schema, API and modules → permission to start P0. Real checks come after programming (owner's condition).
+- Next gate: the owner reviews plan architecture/repository structure and approves the schema, API and modules → permission to start P0. Real checks come after programming (owner's condition).
 
 ## 2. Accepted decisions
 
@@ -57,7 +57,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 ## 5. Remaining work
 
-1. Read the [readiness report](architecture/READINESS.md) and approve the [implementation plan](architecture/IMPLEMENTATION_PLAN.md), schema, API and modules; then separately authorize P0.
+1. Read the [readiness report](architecture/READINESS.md) and review the plan architecture/repository structure and approve the schema, API and modules; then separately authorize P0.
 2. The decision register, subtask button, tray diagram and concurrent-timer rule were aligned in PLAN-026. The implementation package still awaits owner review.
 3. After programming: live checks of assistant, microphone and wake phrase, task tracking and reminders; Vosk 0.9 listening for the 16 GB+ profile.
 4. Resolve section 4; verify the target profile on a real 8 GiB machine in P7.

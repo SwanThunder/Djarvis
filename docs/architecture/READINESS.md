@@ -16,11 +16,11 @@ One action remains for the owner: read and approve the four structure documents 
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…017 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…018 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
-| Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | being read by the owner |
+| Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | P0–P7 and criteria approved (ADR-018); architecture/repository structure pending; P0 not authorized |
 | Database schema v1: 45 tables | [SCHEMA](SCHEMA.md) | proposed; pending owner approval; SQL runs in PostgreSQL 18 |
 | API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | proposed; pending owner approval |
 | Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | proposed; pending owner approval |
@@ -37,7 +37,7 @@ One action remains for the owner: read and approve the four structure documents 
 
 | № | Action | Impact |
 | --- | --- | --- |
-| 1 | Read and approve the [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | order of phases and acceptance criteria |
+| 1 | Review plan architecture and repository structure in [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | phases and criteria already approved (ADR-018) |
 | 2 | Approve [SCHEMA](SCHEMA.md), [API](API.md), [MODULES](MODULES.md) | become the basis of the P0–P1 code |
 | 3 | Allow P0 to start | start of programming |
 
