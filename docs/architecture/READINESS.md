@@ -16,7 +16,7 @@ One action remains for the owner: read and approve the four structure documents 
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…016 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…017 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
@@ -89,5 +89,5 @@ Minor structural proposals from CP05–CP07 for the owner's review; this report 
 
 - Origin and licenses of the chosen voices; terms of Tavily and MET Norway (ADR-014).
 - Code-signing certificate (ADR-015).
-- Price, license issuance, payment — deferred by the owner.
+- Price and license issuance remain open; payment activation follows software implementation and manual tests (ADR-017).
 - Android direction (DD10) — after the first Windows release; the API contract is already designed for a second client.

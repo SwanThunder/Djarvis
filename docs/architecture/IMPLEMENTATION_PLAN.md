@@ -62,7 +62,7 @@ Module ownership: one agent per module at a time; files in use are recorded in t
 
 ## 3. Phases
 
-The order is set by dependencies, not by cutting capabilities. The first release contains everything mandatory from PRODUCT; only payment and license issuing are deferred (owner's decision).
+The order is set by dependencies, not by cutting capabilities. The first testable software build covers everything mandatory from PRODUCT. Payment activation follows software implementation and manual tests (ADR-017); license issuance and the date of public paid distribution remain open.
 
 | Phase | Contents | Done when (acceptance) |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ The order is set by dependencies, not by cutting capabilities. The first release
 | **P2. Scheduler** | Tasks and multi-level subtasks, recurrences and exceptions, deadlines and overdue handling, habits in all measurement modes, timers across sleep and midnight, day plan construction (CP05–CP07, ADR-007–009) | Property tests for plan determinism and DST; all ADR-007–009 scenarios covered by tests; performance: day plan on 500 tasks < 200 ms |
 | **P3. Interface** | Midnight Electric + Glass design system; screens Today, Tasks, Calendar, Habits, Projects, Notes, Settings; top bar; assistant circle and floating microphone button (DESIGN, CP17) | Golden tests of screens; keyboard-only operation; the owner accepts the look against briefs v2.1 and layout v1.0; interface memory measurement |
 | **P4. Data protection and access** | DJB1 backups on schedule and before migrations, restore with preview, 30-day history (CP15, ADR-006); signed license and 7-day trial, device and clock rules (CP16, ADR-005, ADR-010) | Encryption reference vectors; rejection of a truncated, reordered and substituted archive; a full "backup → restore" cycle on real data; trial and expiry on all ADR-005 branches |
-| **P5. Voice and assistant** | AudioSession and state machine (CP09); Vosk small: wake phrase with decoys and utterance; llama.cpp on demand; typed tool registry (CP08); Vosk TTS 0.7 and Kokoro synthesis via misaki without espeak-ng with text normalization (CP10); personas; reminders and proactivity (CP11) | CP09 acceptance scenarios from COMPONENT_PLAN; live microphone test by the owner; false wake-ups in an hour of ordinary speech ≤ 1; from end of utterance to start of reply ≤ 3 s on the test machine; a synthesis error does not stop the dialogue |
+| **P5. Voice and assistant** | AudioSession and state machine (CP09); Vosk small: wake phrase with decoys and utterance; llama.cpp on demand; typed tool registry (CP08); Vosk TTS 0.7 and Kokoro synthesis via misaki without espeak-ng with text normalization (CP10); personas; reminders and proactivity (CP11) | CP09 acceptance scenarios from COMPONENT_PLAN; live microphone test by the owner; false wake-ups in an hour of ordinary speech ≤ 1; from end of utterance to start of reply ≤ 3 s on the test machine after the required models are loaded; cold startup measured separately on a target PC, with its threshold set after measurement (ADR-017); a synthesis error does not stop the dialogue |
 | **P6. Integrations** | MET Norway weather; Tavily search with the user's key; Google Calendar, Outlook, Gmail via OAuth and a local queue (CP12–CP13); Windows actions with confirmations (CP14, ADR-013) | Adapter tests on recorded responses; the offline queue survives a restart; an email is sent only after confirmation; a sync conflict is shown, not overwritten |
 | **P7. Delivery** | Inno Setup installer; first-run model download by a signed manifest; update notifications; local diagnostics without telemetry; signing (CP18, CP20) | Clean Windows with no terminal and no administrator rights; Cyrillic in the path; busy port; network drop during download; reboot in the middle of a migration; **acceptance on a real 8 GiB CPU-only machine** |
 
@@ -104,4 +104,4 @@ P2 and P3 can run in parallel after P1 (the contract is already fixed), with sep
 3. The composition and order of phases P0–P7 and their acceptance criteria.
 4. Separate permission to begin programming with P0; each later phase starts after acceptance of its prerequisites, including parallel P2/P3.
 
-The live microphone test and other real checks happen after programming (owner's condition). The code-signing certificate comes before public release (ADR-015); commerce is deferred.
+The live microphone test and other real checks happen after programming (owner's condition). The code-signing certificate comes before public release (ADR-015); payment activation follows implementation and manual tests; commercial launch details remain open (ADR-017).

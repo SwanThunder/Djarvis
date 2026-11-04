@@ -7,7 +7,7 @@ Snapshot: 2026-11-04, Europe/Istanbul, after PLAN-025. This is a navigation summ
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
-- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), sixteen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), seventeen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
@@ -47,12 +47,12 @@ All directions below are unapproved technical proposals unless listed in section
 | Domain CP05–CP07 | Deterministic planner; local intent stored separately from resolved instants; immutable attachments | Review proposed structure, segment size/buffers, project/note fields, timer timezone/clock handling; branch move/deletion behavior is accepted in ADR-016 |
 | Assistant CP08–CP11 | Model proposes, typed tool registry executes; one audio state machine; durable reminders; llama.cpp on demand; Vosk small; misaki → Kokoro without GPL | Live microphone test, **voice licenses**, real 8 GiB machine, proactive cooldowns |
 | External CP12–CP14 | Provider adapters with local outbox; scoped Windows grants; Tavily with user key and MET Norway selected | Provider terms, OAuth details, app identity and argument validation |
-| Trust CP15–CP16 | DJB1 format: tar → AES-256-GCM-STREAM, DPAPI-wrapped key; Ed25519 signed license | T3 accepted (ADR-015); **price, issuer, payment (deferred)** |
+| Trust CP15–CP16 | DJB1 format: tar → AES-256-GCM-STREAM, DPAPI-wrapped key; Ed25519 signed license | T3 accepted (ADR-015); **price and issuer open; payment after implementation and manual tests (ADR-017)** |
 | Delivery CP17–CP20 | Per-user Inno Setup without admin rights; models on first run; 8 GB / 16 GB+ profiles; diagnostics without telemetry | T4–T5 accepted (ADR-015); code-signing certificate, Android direction (DD10) |
 
 ## 4. Open owner questions
 
-1. Commercial: price, license issuer and payment deferred by the owner; future BYOK 50% plan.
+1. Commercial: price and license issuer remain open; payment activation follows implementation and manual tests (ADR-017); future BYOK 50% plan.
 2. Release checks: voice provenance/licenses, Tavily and MET Norway terms (ADR-014).
 
 ## 5. Remaining work

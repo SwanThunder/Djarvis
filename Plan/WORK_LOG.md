@@ -548,9 +548,12 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Date: 2026-11-04, Europe/Istanbul.
 - Agent: agent-01.
 - Authorization: owner chose to review implementation plan, schema, API and modules in that order.
-- Status: preliminary plan review completed; owner choices and plan approval remain open.
-- Files: both shared logs and bilingual IMPLEMENTATION_PLAN only.
+- Status: plan review and narrow owner choices recorded; overall plan approval remains open.
+- Files: both shared logs and bilingual IMPLEMENTATION_PLAN, DECISIONS, PRODUCT, STATUS and READINESS. The last four pairs record the new narrow owner answers consistently.
 - Scope: review phase order, dependencies, acceptance gates and risks; correct stale references to already approved decisions. Record unresolved product or acceptance choices for the owner. No application code or approval inference.
 - Review finding: the tray icon belongs to the UI per ADR-015; the repository tree still assigned an icon to the core host. T1–T6 were already approved and must not be requested again. The plan both allowed parallel P2/P3 and said every next phase follows the previous one's acceptance; clarify prerequisite-specific acceptance and separate P0 authorization.
-- Changes proposed in the bilingual plan: align the tray owner, approved T1–T6, separate P0 gate and prerequisite-based parallel phases. Owner choices pending: what the first release means while payment/license issuance is deferred, and how to judge the three-second voice-response target against cold model startup. The remaining schema/API/modules reviews follow this plan review.
+- Changes proposed in the bilingual plan: align the tray owner, approved T1–T6, separate P0 gate and prerequisite-based parallel phases. The owner then specified payment after implementation and manual tests; voice response may be judged within three seconds after models are loaded, with cold startup assessed separately on a target PC. Public-sale timing and license issuance remain open. Schema/API/modules reviews follow this plan review.
 - Checks: both plan languages checked for heading structure, local links, exact P0 gate and tray ownership; whitespace check passed. No application code or runtime tests changed.
+- Owner choices: payment activation follows software implementation and manual tests; the three-second spoken-response criterion applies after required models are loaded, while cold startup is measured separately on the target PC without a selected numeric limit. ADR-017 records only these narrow points. Public-sale timing, payment provider/price and license issuance remain open.
+- Updated files: bilingual IMPLEMENTATION_PLAN, DECISIONS, PRODUCT, STATUS and READINESS plus both shared logs. The plan, schema, API and modules still await owner approval; programming still needs separate P0 authorization.
+- Final verification: six bilingual pairs matched on headings and decision IDs, 17 ADR sections existed in both registers, local links and whitespace passed. Prior model timings were used as documented evidence, not rerun; no app tests were run.
