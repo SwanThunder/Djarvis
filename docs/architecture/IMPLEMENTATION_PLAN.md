@@ -2,7 +2,7 @@
 
 [Русская версия](IMPLEMENTATION_PLAN.ru.md) · [Technical details](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Component plan](COMPONENT_PLAN.md) · [Feasibility](FEASIBILITY.md) · [Status](../STATUS.md)
 
-Status: proposal by agent-02 (PLAN-022), 2026-11-04. **Under owner review, not approved** (PLAN-023). Technical decisions T1–T6 are approved (ADR-015). Owner's condition: programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later. No application code is written until approval. Approval permits work by the phases of this plan; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
+Status: proposal by agent-02 (PLAN-022), 2026-11-04. **Under owner review, not approved** (PLAN-023). Technical decisions T1–T6 are approved (ADR-015). Owner's condition: programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later. No application code is written until approval. Approval of this plan and separate authorization of P0 permit work by its phases; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
 
 ## 1. Architecture at a glance
 
@@ -47,10 +47,10 @@ core/                    Python core (package djarvis_core)
     reminders/           reliable reminders and proactive speech
     integrations/        google, microsoft, tavily, met_norway, windows
     safety/              DJB1 backups, DPAPI, Ed25519 license, trial
-    host/                startup, mutex, icon, resources, memory profiles, diagnostics
+    host/                startup, mutex, resources, memory profiles, diagnostics
   migrations/            NNNN_*.sql and *.py
   tests/                 unit, property, integration (real PostgreSQL), contract
-ui/                      Flutter application
+ui/                      Flutter application, including the tray icon (ADR-015)
   lib/{app,design,features/<screen>,data,generated}
   test/                  widget and golden tests
 packaging/               Inno Setup, embedded Python build, trimmed PostgreSQL, resource manifest
@@ -75,7 +75,7 @@ The order is set by dependencies, not by cutting capabilities. The first release
 | **P6. Integrations** | MET Norway weather; Tavily search with the user's key; Google Calendar, Outlook, Gmail via OAuth and a local queue (CP12–CP13); Windows actions with confirmations (CP14, ADR-013) | Adapter tests on recorded responses; the offline queue survives a restart; an email is sent only after confirmation; a sync conflict is shown, not overwritten |
 | **P7. Delivery** | Inno Setup installer; first-run model download by a signed manifest; update notifications; local diagnostics without telemetry; signing (CP18, CP20) | Clean Windows with no terminal and no administrator rights; Cyrillic in the path; busy port; network drop during download; reboot in the middle of a migration; **acceptance on a real 8 GiB CPU-only machine** |
 
-P2 and P3 can run in parallel after P1 (the contract is already fixed). P4 relies on P1; P5 relies on P1 and P2; P6 relies on P5 for voice commands.
+P2 and P3 can run in parallel after P1 (the contract is already fixed), with separate owner acceptance of each phase. A dependent phase starts after its prerequisites are accepted. P4 relies on P1; P5 relies on P1 and P2; P6 relies on P5 for voice commands.
 
 ## 4. Quality and checks throughout
 
@@ -100,8 +100,8 @@ P2 and P3 can run in parallel after P1 (the contract is already fixed). P4 relie
 ## 6. What the owner approves
 
 1. The architecture from §1 and the repository structure from §2.
-2. The technical decisions T1–T6 from [technical details §6](TECHNICAL_DESIGN.md#6-decisions-needed-from-the-owner).
+2. T1–T6 are already approved in ADR-015; they are context for this review, not a new approval request.
 3. The composition and order of phases P0–P7 and their acceptance criteria.
-4. Permission to begin programming with P0; the next phase begins after acceptance of the previous one.
+4. Separate permission to begin programming with P0; each later phase starts after acceptance of its prerequisites, including parallel P2/P3.
 
 The live microphone test and other real checks happen after programming (owner's condition). The code-signing certificate comes before public release (ADR-015); commerce is deferred.

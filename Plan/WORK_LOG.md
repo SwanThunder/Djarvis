@@ -542,3 +542,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Verification: 10 bilingual pairs checked for headings, ADR IDs and local links; targeted tray/timer consistency checks and whitespace check passed. Prior feasibility/SQL experiments were not rerun, and no application code or app tests were changed.
 - Remaining: owner reviews and approves the implementation plan, schema, API and modules, then separately authorizes P0. Live feature checks follow programming; voice/service license terms, signing, payment and Android remain later gates.
 - Commit: [8c133e1](https://github.com/SwanThunder/Djarvis/commit/8c133e1ce521fa476ff3dccb4d25e4b427ceb25c).
+
+## PLAN-027 — Implementation-plan owner review
+
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: owner chose to review implementation plan, schema, API and modules in that order.
+- Status: preliminary plan review completed; owner choices and plan approval remain open.
+- Files: both shared logs and bilingual IMPLEMENTATION_PLAN only.
+- Scope: review phase order, dependencies, acceptance gates and risks; correct stale references to already approved decisions. Record unresolved product or acceptance choices for the owner. No application code or approval inference.
+- Review finding: the tray icon belongs to the UI per ADR-015; the repository tree still assigned an icon to the core host. T1–T6 were already approved and must not be requested again. The plan both allowed parallel P2/P3 and said every next phase follows the previous one's acceptance; clarify prerequisite-specific acceptance and separate P0 authorization.
+- Changes proposed in the bilingual plan: align the tray owner, approved T1–T6, separate P0 gate and prerequisite-based parallel phases. Owner choices pending: what the first release means while payment/license issuance is deferred, and how to judge the three-second voice-response target against cold model startup. The remaining schema/API/modules reviews follow this plan review.
+- Checks: both plan languages checked for heading structure, local links, exact P0 gate and tray ownership; whitespace check passed. No application code or runtime tests changed.
