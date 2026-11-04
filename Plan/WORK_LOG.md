@@ -595,3 +595,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: prepared bilingual CORE_FLOWS with five critical groups and end-to-end capture, planning, assistant actions, reminders, durability and connection flows. Editable plan drafts and the response to a new meeting are explicitly unapproved proposals; selectable choices were sent to the owner.
 - Checks: language versions have the same six sections and five groups, source links checked, git diff --check; no application or SQL checks were run because code did not change.
 - Remaining: receive owner choices on the two UX questions, then review the main task and day-plan path in detail. P0 is withheld.
+- Commit: [4aa177b](https://github.com/SwanThunder/Djarvis/commit/4aa177b).
