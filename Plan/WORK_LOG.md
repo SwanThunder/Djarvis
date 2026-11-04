@@ -655,4 +655,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-023 records restoration of user data/history without old grants, external connections, pending actions or queued emails. The backup proposal uses an explicit 32-table allowlist, excludes 11 operational tables and rebuilds three service tables through migrations; restore resets initiative/wake settings and preserves the later deletion watermark. The schema review and status now present this for separate owner approval.
 - Checks: 46 table definitions and 23 ADRs in both languages; all 46 tables classified for archive handling; bilingual heading counts and `git diff --check` passed. Revised SQL, backup export and restore were not executed, following the owner's validation sequence.
 - Remaining: owner approval of schema/archive proposal; then API and modules, then separate P0 authorization. Export implementation and real PostgreSQL validation belong to the programming phase.
-- Commit: pending.
+- Commit: [6bb7fc4](https://github.com/SwanThunder/Djarvis/commit/6bb7fc4).
