@@ -584,3 +584,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 46 CREATE TABLE declarations in both language versions, key terminology parity and git diff --check. Revised SQL and tests were not run because the owner deferred further checks until programming; the former 13 checks cover only the 45-table draft. Unrelated local file preserved.
 - Remaining: review main components per owner request; separate schema, then API and module review before P0.
 - Commit: [865522f](https://github.com/SwanThunder/Djarvis/commit/865522f).
+
+## PLAN-030 — Critical component user flows
+- Date: 2026-11-04, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner asked to stop dwelling on timer edge cases and design the important product components. P0–P7 phases are approved, but P0 is not authorized.
+- Status: complete as a review proposal; design documentation only.
+- Files: both shared logs and a new bilingual critical-flow specification in docs/architecture. Schema, API, modules and application code are not changed.
+- Scope: connect task/habit capture, day planning, assistant, reminders, data and external integrations into a single user flow; distinguish accepted policies from proposals needing review.
+- Result: prepared bilingual CORE_FLOWS with five critical groups and end-to-end capture, planning, assistant actions, reminders, durability and connection flows. Editable plan drafts and the response to a new meeting are explicitly unapproved proposals; selectable choices were sent to the owner.
+- Checks: language versions have the same six sections and five groups, source links checked, git diff --check; no application or SQL checks were run because code did not change.
+- Remaining: receive owner choices on the two UX questions, then review the main task and day-plan path in detail. P0 is withheld.
