@@ -21,6 +21,8 @@ A verifiable Windows application skeleton: the Flutter UI starts a separate Pyth
 
 Step 1 CI choice: checks run in pull requests before main (ADR-027). In P0 the check set includes ruff, strict mypy, pytest for code that exists, dart analyze, contract-generation consistency and available Windows smoke checks; checks are added as the relevant modules appear rather than faked with empty tests. Blocking failed merges requires branch rules, which are configured only after P0 authorization.
 
+Step 2 is accepted by the owner (ADR-028): embedded Python/PostgreSQL are in the build, source archives have pinned checksum verification, AI models download separately on first launch, and program files are separate from user data.
+
 The full layout remains in IMPLEMENTATION_PLAN §2. P0's contract is limited to real system status and lifecycle; the full command catalog and `0001_initial` migration follow in P1. P0 scripts assemble a minimal working folder; the full installer and signing belong to P7.
 
 ## 3. Startup and shutdown

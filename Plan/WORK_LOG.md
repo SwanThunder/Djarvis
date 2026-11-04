@@ -704,3 +704,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 27 ADRs in both languages; paired heading counts and local links for changed documents; `git diff --check` passed. No runtime, database, CI or branch-setting change was made.
 - Remaining: discuss P0 step 2 with the owner, then steps 3–6. P0 is still unauthorized and the instruction not to write code remains active.
 - Commit: [c5b686b](https://github.com/SwanThunder/Djarvis/commit/c5b686b).
+
+## PLAN-040 — P0 embedded-runtime choice and step 3 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner accepted P0 step 2 (embedded Python/PostgreSQL in the app build, checksum verification, AI models downloaded separately at first use) and asked to move to step 3. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the accepted P0 packaging detail and explain private database ownership/lifecycle in step 3. Do not create code, download binaries, initialize a cluster or change branch/CI settings.
+- Result: ADR-028 records acceptance of embedded Python/PostgreSQL in the build, pinned checksum verification, separate first-run AI model downloads and separation of program/user data. P0_PLAN identifies step 2 as accepted; readiness/status updated. Step 3 remains under discussion.
+- Checks: 28 ADRs and matching headings/links in both languages; `git diff --check` passed. No code, runtime download, cluster, test or CI configuration was created or run.
+- Remaining: owner review of P0 step 3, then steps 4–6; P0 still requires separate explicit authorization and no code is to be written now.
+- Commit: pending.
