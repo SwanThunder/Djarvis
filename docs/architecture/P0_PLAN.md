@@ -23,12 +23,14 @@ Step 1 CI choice: checks run in pull requests before main (ADR-027). In P0 the c
 
 Step 2 is accepted by the owner (ADR-028): embedded Python/PostgreSQL are in the build, source archives have pinned checksum verification, AI models download separately on first launch, and program files are separate from user data.
 
+Step 3 is accepted by the owner with a condition (ADR-029): the app manages its private database in the background without a console window or manual action. The UI shows normal loading or a clear recovery error; data remains after exit.
+
 The full layout remains in IMPLEMENTATION_PLAN §2. P0's contract is limited to real system status and lifecycle; the full command catalog and `0001_initial` migration follow in P1. P0 scripts assemble a minimal working folder; the full installer and signing belong to P7.
 
 ## 3. Startup and shutdown
 
 1. The UI finds a live core for the current Windows account through a mutex and verifiable endpoint file; if absent, it launches the embedded Python host.
-2. The host checks private folders and rights, verifies ownership of an existing cluster, initializes only a new cluster and starts only its own PostgreSQL. It then opens an API on `127.0.0.1` with a random port and fresh token.
+2. Without a console window, the host checks private folders and rights, verifies ownership of an existing cluster, initializes only a new cluster and starts only its own PostgreSQL. It then opens an API on `127.0.0.1` with a random port and fresh token.
 3. The UI connects by token, checks the protocol version and shows `GetSystemStatus`. After connection failure, it shows a recoverable state with Retry; a second window does not create another core/cluster.
 4. Closing the window hides it in the tray. Full Exit calls `RequestExit`: the core stops the API, closes connections and cleanly stops only its PostgreSQL; the UI exits.
 
