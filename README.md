@@ -4,7 +4,7 @@
 
 Djarvis is a personal intelligent assistant intended to manage tasks and habits, hold conversations, and find information on the internet.
 
-Phase P0 — the application skeleton — is under way (authorized by the owner on 2026-11-05, ADR-028). Flutter UI, a Python core/background host and app-managed private PostgreSQL are selected; technical directions T1–T6, phases P0–P7 with their acceptance criteria, process architecture and the core/ + ui/ layout (ADR-022), schema, API and modules (ADR-024–026) are approved. Step 1 of the [P0 plan](docs/architecture/P0_PLAN.md) is done: core and UI skeleton, pinned check tooling and CI. There is no runnable application yet — only the skeleton.
+Phase P0 — the application skeleton — is under way (authorized by the owner on 2026-11-05, ADR-033). Flutter UI, a Python core/background host and app-managed private PostgreSQL are selected; technical directions T1–T6, phases P0–P7 with their acceptance criteria, process architecture and the core/ + ui/ layout (ADR-022), schema, API and modules (ADR-024–026) are approved. Step 1 of the [P0 plan](docs/architecture/P0_PLAN.md) is done: core and UI skeleton, pinned check tooling and CI. There is no runnable application yet — only the skeleton.
 
 ## Structure
 

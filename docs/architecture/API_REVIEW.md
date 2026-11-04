@@ -2,7 +2,7 @@
 
 [Русская версия](API_REVIEW.ru.md) · [full catalog](API.md) · [approved schema](SCHEMA.md) · [decisions](DECISIONS.md) · [modules](MODULES.md)
 
-Status: approved API catalog overview, PLAN-037, 2026-11-05. Schema and archive are approved (ADR-024), API under ADR-025. **P0 remains unauthorized.**
+Status: approved API catalog overview, PLAN-037, 2026-11-05. Schema and archive are approved (ADR-024), API under ADR-025. **P0 is authorized (ADR-033).**
 
 ## 1. Boundary and shape
 

@@ -705,14 +705,75 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Remaining: discuss P0 step 2 with the owner, then steps 3–6. P0 is still unauthorized and the instruction not to write code remains active.
 - Commit: [c5b686b](https://github.com/SwanThunder/Djarvis/commit/c5b686b).
 
-## PLAN-040 — P0 step 1 — repository skeleton, pinned tooling and CI
+## PLAN-040 — P0 embedded-runtime choice and step 3 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner accepted P0 step 2 (embedded Python/PostgreSQL in the app build, checksum verification, AI models downloaded separately at first use) and asked to move to step 3. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the accepted P0 packaging detail and explain private database ownership/lifecycle in step 3. Do not create code, download binaries, initialize a cluster or change branch/CI settings.
+- Result: ADR-028 records acceptance of embedded Python/PostgreSQL in the build, pinned checksum verification, separate first-run AI model downloads and separation of program/user data. P0_PLAN identifies step 2 as accepted; readiness/status updated. Step 3 remains under discussion.
+- Checks: 28 ADRs and matching headings/links in both languages; `git diff --check` passed. No code, runtime download, cluster, test or CI configuration was created or run.
+- Remaining: owner review of P0 step 3, then steps 4–6; P0 still requires separate explicit authorization and no code is to be written now.
+- Commit: [71c8519](https://github.com/SwanThunder/Djarvis/commit/71c8519).
+
+## PLAN-041 — Hidden private database lifecycle and step 4 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner accepted P0 step 3 provided PostgreSQL lifecycle is handled internally, without a visible console or manual user setup; the instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, TECHNICAL_DESIGN, READINESS and STATUS.
+- Scope: record the user-facing visibility condition and move to discussion of P0 step 4 local contract. No code, database, download or CI configuration.
+- Result: ADR-029 records app-managed private PostgreSQL without a visible console/manual setup, normal loading/recovery UI and persistence of data after exit. P0_PLAN step 3 and TECHNICAL_DESIGN startup were aligned; readiness/status moved to step 4.
+- Checks: 29 ADRs in both languages; paired headings and local links in touched architecture documents; `git diff --check` passed. No code, cluster, download, process or CI run occurred.
+- Remaining: owner review of P0 step 4, then steps 5–6. Separate P0 authorization is still absent and the no-code instruction remains active.
+- Commit: [b0d71e5](https://github.com/SwanThunder/Djarvis/commit/b0d71e5).
+
+## PLAN-042 — P0 local contract choice and step 5 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner accepted P0 step 4 (protected local UI/core connection, real system status and full exit, one Python-to-Flutter contract) and requested step 5. The no-code instruction remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the accepted P0 local-contract boundary and discuss the first Flutter UI/tray behavior. No code, database, download, CI or branch changes.
+- Result: ADR-030 records the approved P0 local-contract boundary: protected loopback UI/core communication, real `GetSystemStatus` and `RequestExit`, generated Flutter types from Python models, version/error handling. P0_PLAN marks step 4 accepted; readiness/status now point to step 5.
+- Checks: 30 ADRs in both languages; paired headings and local links for touched documents; `git diff --check` passed. No code, database, download, process or CI ran.
+- Remaining: owner review of P0 step 5, then step 6. P0 remains unauthorized and no-code instruction active.
+- Commit: [0af979b](https://github.com/SwanThunder/Djarvis/commit/0af979b).
+
+## PLAN-043 — Main-screen shell for P0 step 5
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner selected option 2, the future main-screen shell instead of the compact status screen. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the P0 interface appearance and boundary of empty sections, then discuss step 6; no code, database, build or CI changes.
+- Result: ADR-031 records the main-screen shell under the approved design: character, day panel, navigation, real core status and version. Future sections remain clearly empty or unavailable until their phases; window and tray lifecycle is preserved. P0 plan, readiness and status are aligned.
+- Checks: 31 ADRs in both versions; checked language pairs, links and `git diff --check`. No code or live checks ran.
+- Remaining: discuss P0 step 6. Programming still requires separate explicit authorization; no code is being written now.
+- Commit: [28d8552](https://github.com/SwanThunder/Djarvis/commit/28d8552).
+
+## PLAN-044 — Acceptance and merge procedure for P0 step 6
 - Date: 2026-11-05, Europe/Istanbul.
 - Agent: agent-02.
-- Basis: the owner explicitly authorized starting P0 within the scope of P0_PLAN (2026-11-05); work proceeds by plan steps, starting with step 1.
+- Basis: the owner continued the P0 discussion with agent-02 (agent-01 stopped before step 6) and answered four multiple-choice questions. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record P0 acceptance, merge procedure, main protection and pull request size. No code, CI, branch rules or database.
+- Result: ADR-032 — one P0 step = one pull request; a branch rule blocks merging on failed checks; agent-02 merges only after the owner's explicit "yes" for each pull request; P0 is accepted from a screen recording. Step 6 in P0_PLAN is marked accepted; all six plan steps are accepted. The DECISIONS introduction now includes the missing ADR-031 and an updated count.
+- Checks: 32 ADRs in both versions; language pairs and `git diff --check` checked. No code, CI or GitHub settings changed.
+- Remaining: the owner's separate explicit authorization to start P0; no code until then.
+- Commit: [afc888c](https://github.com/SwanThunder/Djarvis/commit/afc888c).
+
+## PLAN-045 — P0 step 1 — repository skeleton, pinned tooling and CI
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-02.
+- Basis: all six P0 plan steps were discussed and accepted (ADR-027–032; PLAN-039–044 by agent-01 and agent-02); the owner then explicitly authorized starting P0 within the scope of P0_PLAN ("поехали, начинаем кодить", 2026-11-05); work proceeds by plan steps, starting with step 1.
 - Status: completed.
-- Files: core/ (pyproject.toml, djarvis_core/__init__.py and py.typed, tests/test_version.py, requirements/dev.in and dev.txt), ui/ (Flutter project for Windows), scripts/check.ps1 (replacing scripts/.gitkeep), .github/workflows/ci.yml, .gitattributes, .gitignore; the empty src/ and root tests/ are removed; both logs; bilingual DECISIONS (ADR-028), README, STATUS, READINESS and P0_PLAN (title, status and §6).
+- Files: core/ (pyproject.toml, djarvis_core/__init__.py and py.typed, tests/test_version.py, requirements/dev.in and dev.txt), ui/ (Flutter project for Windows), scripts/check.ps1 (replacing scripts/.gitkeep), .github/workflows/ci.yml, .gitattributes, .gitignore; the empty src/ and root tests/ are removed; both logs; bilingual DECISIONS (ADR-033), README, STATUS, READINESS and P0_PLAN (title, status and §6).
 - Scope: P0_PLAN step 1 — approved core/ and ui/ roots, pinned tool versions and hashes, ruff/mypy strict/pytest, strict Dart analysis, pull-request checks before main on Windows (ADR-027) and a single local check script. No code from steps 2–6; packaging/ appears in step 2; branch protection setup requires a separate owner decision.
-- Result: ADR-028 records the P0 authorization. Created the djarvis-core package (import djarvis_core, Python 3.12): a single version source `__version__ = "0.1.0"` read statically by setuptools; a py.typed marker; two version tests (match with installed package metadata and PEP 440 normalized form); development tools pinned by version and sha256 in requirements/dev.txt and installed with `--require-hashes`; no runtime dependencies. Created a Windows-only Flutter UI (Flutter 3.47.7 / Dart 3.13.5): package djarvis_ui, organization app.djarvis, executable Djarvis.exe, root widget DjarvisApp without logic, two widget tests, strict analysis_options, pubspec.lock with sha256, version 0.1.0+1. scripts/check.ps1 runs in order ruff check, ruff format --check, strict mypy, pytest, flutter pub get --enforce-lockfile, dart format, flutter analyze --fatal-infos --fatal-warnings and flutter test; `-Build` adds flutter build windows --release. CI runs on pull requests to main on windows-2025 with Python 3.12.10 and Flutter 3.47.7, contents: read permissions and SHA-pinned actions, and calls check.ps1 -Build. .gitattributes sets LF, CRLF for Windows scripts and projects, and binary types; .gitignore adds *.egg-info/ and key and certificate patterns. The empty src/ and root tests/ are removed (ADR-022 consequence); config/, assets/, data/, cache/, logs/ and tmp/ are untouched. README, STATUS, READINESS and P0_PLAN reflect the start of P0 and the new layout.
-- Checks: check.ps1 green locally (Windows PowerShell 5.1) and in a clean virtual environment installed from hashes; pip check reports no conflicts; pip-audit found no vulnerabilities; CI action SHAs verified with git ls-remote; development tool licenses contain no GPL; pubspec.lock points only to pub.dev with sha256; the search for prohibited mentions is clean; 28 ADRs in both languages, paired heading counts and local links of changed documents verified, `git diff --check` passed. NOT verified: `flutter build windows` locally (no Visual Studio with the C++ workload) — the first build check happens in CI; CI has not run yet.
-- Remaining: first CI run and the Djarvis.exe build in CI; owner confirmation of the app.djarvis organization (before Android); owner decision on main branch protection with a required check and on approving CI runs for outside contributors; then P0 step 2 — embedded runtimes.
+- Result: ADR-033 records the P0 authorization. Created the djarvis-core package (import djarvis_core, Python 3.12): a single version source `__version__ = "0.1.0"` read statically by setuptools; a py.typed marker; two version tests (match with installed package metadata and PEP 440 normalized form); development tools pinned by version and sha256 in requirements/dev.txt and installed with `--require-hashes`; no runtime dependencies. Created a Windows-only Flutter UI (Flutter 3.47.7 / Dart 3.13.5): package djarvis_ui, organization app.djarvis, executable Djarvis.exe, root widget DjarvisApp without logic, two widget tests, strict analysis_options, pubspec.lock with sha256, version 0.1.0+1. scripts/check.ps1 runs in order ruff check, ruff format --check, strict mypy, pytest, flutter pub get --enforce-lockfile, dart format, flutter analyze --fatal-infos --fatal-warnings and flutter test; `-Build` adds flutter build windows --release. CI runs on pull requests to main on windows-2025 with Python 3.12.10 and Flutter 3.47.7, contents: read permissions and SHA-pinned actions, and calls check.ps1 -Build. .gitattributes sets LF, CRLF for Windows scripts and projects, and binary types; .gitignore adds *.egg-info/ and key and certificate patterns. The empty src/ and root tests/ are removed (ADR-022 consequence); config/, assets/, data/, cache/, logs/ and tmp/ are untouched. README, STATUS, READINESS and P0_PLAN reflect the start of P0 and the new layout.
+- Checks: check.ps1 green locally (Windows PowerShell 5.1) and in a clean virtual environment installed from hashes; pip check reports no conflicts; pip-audit found no vulnerabilities; CI action SHAs verified with git ls-remote; development tool licenses contain no GPL; pubspec.lock points only to pub.dev with sha256; the search for prohibited mentions is clean; 28 ADRs in both languages at commit time, paired heading counts and local links of changed documents verified, `git diff --check` passed. NOT verified: `flutter build windows` locally (no Visual Studio with the C++ workload) — the first build check happens in CI; CI has not run yet.
+- Merge with main: main already contained ADR-028–032 and PLAN-040–044 recorded by agent-01 and agent-02 during the discussion of steps 2–6; the numbers collided with this task. Those records remain unchanged; this task's authorization was renumbered from ADR-028 to ADR-033 and this entry from PLAN-040 to PLAN-045, and its text now reflects that all six steps were accepted. After the merge: 33 ADRs in both languages, unique ADR and PLAN numbers, paired heading counts verified.
+- Remaining: under ADR-032 — open the step 1 pull request, get a green CI run (including the Djarvis.exe build), then the owner's explicit "yes" to merge it; the owner enables the main branch rule with a required check; owner confirmation of the app.djarvis organization (before Android); owner decision on approving CI runs for outside contributors; then P0 step 2 — embedded runtimes under ADR-028.
 - Commit: [73d6305](https://github.com/SwanThunder/Djarvis/commit/73d6305).

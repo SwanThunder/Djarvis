@@ -2,7 +2,7 @@
 
 [Русская версия](DECISIONS.ru.md)
 
-Twenty-eight narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. ADR-009 records habit measurement modes and multi-level subtasks. ADR-010 records license device limit, transfer and clock-rollback behavior. ADR-011 replaces third-party characters with original personas. ADR-012 selects user-owned search keys and MET Norway weather. ADR-013 names the personas and sets navigation, device-action confirmations and the default backup folder. ADR-014 selects the speech engines, the search provider and live-data protection. ADR-015 approves the selected technical directions T1–T6; ADR-016 approves five task and planner behavior choices. ADR-017 records payment timing and the loaded-model response criterion. ADR-018 approves implementation phases and their acceptance criteria only. ADR-019 selects one local profile per Windows account and user review of uncertain timer intervals. ADR-020 approves an editable day-plan draft and replanning proposal for a new meeting. ADR-021 approves help after a missed block and a preview of shifts to unpinned draft blocks. ADR-022 approves process architecture and repository layout from implementation plan §§1–2. ADR-023 defines user-data restore without old grants, connections or incomplete actions. ADR-024 approves the v1 logical database schema and archive contents. ADR-025 approves the v1 API catalog with four review clarifications. ADR-026 approves module responsibilities, dependencies and phase allocation. ADR-027 selects pull-request CI before main. ADR-028 authorizes starting P0 within the P0 plan; P1 follows only after P0 acceptance.
+Thirty-three narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. ADR-009 records habit measurement modes and multi-level subtasks. ADR-010 records license device limit, transfer and clock-rollback behavior. ADR-011 replaces third-party characters with original personas. ADR-012 selects user-owned search keys and MET Norway weather. ADR-013 names the personas and sets navigation, device-action confirmations and the default backup folder. ADR-014 selects the speech engines, the search provider and live-data protection. ADR-015 approves the selected technical directions T1–T6; ADR-016 approves five task and planner behavior choices. ADR-017 records payment timing and the loaded-model response criterion. ADR-018 approves implementation phases and their acceptance criteria only. ADR-019 selects one local profile per Windows account and user review of uncertain timer intervals. ADR-020 approves an editable day-plan draft and replanning proposal for a new meeting. ADR-021 approves help after a missed block and a preview of shifts to unpinned draft blocks. ADR-022 approves process architecture and repository layout from implementation plan §§1–2. ADR-023 defines user-data restore without old grants, connections or incomplete actions. ADR-024 approves the v1 logical database schema and archive contents. ADR-025 approves the v1 API catalog with four review clarifications. ADR-026 approves module responsibilities, dependencies and phase allocation. ADR-027 selects pull-request CI before main. ADR-028 clarifies P0 embedded-runtime assembly. ADR-029 selects background management of the private database without a visible console. ADR-030 approves the P0 skeleton local contract. ADR-031 selects the P0 main-screen shell. ADR-032 sets P0 acceptance from a screen recording and per-step merging. ADR-033 authorizes starting P0 within the P0 plan; P1 follows only after P0 acceptance.
 
 ## ADR-001 — Flutter UI and necessary Dart UI implementation
 
@@ -301,12 +301,62 @@ Exact schema, API names, child nesting/inheritance and handling of already-start
 - Consequences: CI configuration and, if needed, required branch checks are set up only after separate programming authorization during P0; CI alone does not prevent a failed merge without branch protection. This choice does not authorize code now or change project rules.
 - Approval basis: the owner's explicit choice while discussing P0 step 1 after PLAN-038, 2026-11-05.
 
-## ADR-028 — P0 authorization
+## ADR-028 — Embedded runtimes in the P0 build
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (runtime contents and verification; code separately).
+- Context: technical choice T4 already selected embedded Python and PostgreSQL; P0 step 2 clarified when they are fetched and how AI models differ.
+- Considered options: accept embedded runtimes with checksum checks and separate first-run model downloads, change the build contents, or review safety/update details. The owner selected the first.
+- Decision: Python and PostgreSQL are included in the application build; source archives are checked against pinned checksums. Binary archives and the working build are not published as source files. AI models download separately on first launch under the earlier product decision. Program files and user data have separate locations.
+- Consequences: P0 verifies the embedded binaries run without system installation; core/private database startup is checked after step 3. The installer belongs to P7. Code, downloads and build work are not authorized now.
+- Approval basis: the owner's explicit choice on P0 step 2 after PLAN-039, 2026-11-05.
+
+## ADR-029 — Private database management without a visible console
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (startup/exit behavior; code separately).
+- Context: P0 step 3 describes a private PostgreSQL per Windows account and cluster-ownership checks. The owner clarified that ordinary users should not see technical startup or manage the database manually.
+- Considered options: accept app-managed background operation or change the visible startup/exit flow. The owner accepted the first with the stated condition.
+- Decision: the core initializes, verifies, starts and stops only its private PostgreSQL inside the app, without a console window, manual installation or user commands. The UI shows normal loading status and, for a recoverable failure, a clear message and action. Data remains after Full Exit.
+- Consequences: users do not interact with PostgreSQL directly; its process remains visible in standard Windows process tools like other processes. Ambiguous ownership or damage does not trigger automatic deletion/overwrite. Implementation and checks follow separate P0 authorization only.
+- Approval basis: the owner's conditional selection on P0 step 3 after PLAN-040, 2026-11-05.
+
+## ADR-030 — P0 skeleton local contract
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (P0 contract boundary; code separately).
+- Context: the overall v1 API is approved (ADR-025), but P0 builds only a working UI/core connection skeleton. It needs a verifiable boundary without fake domain-command implementations.
+- Considered options: accept protected local communication with status/full exit and one contract, or review the connection/security in more detail. The owner selected the first.
+- Decision: in P0 the UI connects to the core over local HTTP/WebSocket with a token and address/origin checks. `GetSystemStatus` and `RequestExit` work for real; Python models are the source for generated Flutter types. Connection failures and version mismatch yield understandable outcomes and reconnect behavior.
+- Consequences: remaining approved API commands are implemented in P1 and later phases without temporary handlers presented as complete. Contract and negative checks follow separate P0 authorization. No code is written now.
+- Approval basis: the owner's explicit choice on P0 step 4 after PLAN-041, 2026-11-05.
+
+## ADR-031 — Main-screen shell in P0
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (P0 interface appearance; programming separately).
+- Context: P0 step 5 required a choice between a compact status screen and an early main-screen shell. The owner reviewed two text sketches and selected the second.
+- Considered options: a compact status-only screen; a main-screen shell with character, day panel and navigation.
+- Decision: P0 uses the main-screen shell under the approved design from the outset. It displays the real core status and version; task, habit and other domain sections are populated only in their later phases.
+- Consequences: incomplete sections appear empty or unavailable, with no invented data or controls implying a working feature. Closing to tray, reopening and full exit belong to step 5. This does not authorize code; P0 remains under discussion.
+- Approval basis: the owner's explicit reply "2" to the two P0 step 5 options after PLAN-042, 2026-11-05.
+
+## ADR-032 — P0 acceptance and merge procedure
+
+- Date: 2026-11-05, Europe/Istanbul.
+- Status: APPROVED (check, merge and acceptance procedure; P0 code separately).
+- Context: step 6 of the P0 plan described checks and the demonstration in one line. The acceptance method, who merges into main, whether checks are mandatory and pull request size were not chosen.
+- Considered options: acceptance — the owner runs a checklist, a screen recording, or both; merge — the owner, the developer after the owner's "yes", the developer when checks pass; main protection — block merging on failed checks or only display them; size — one pull request per step or one for all of P0.
+- Decision: each of the six P0 steps is a separate pull request. A branch rule blocks merging into main when checks fail. The developer merges a pull request only after the owner's explicit "yes" for that pull request. P0 is accepted from a screen recording: the developer shows startup without system Python/PostgreSQL, the main-screen shell with core status and version, hiding to the tray, reopening, no second core on a repeated launch, and full exit.
+- Consequences: the branch rule is enabled only after P0 is authorized. The recording is made on the development machine and contains no tokens, passwords or personal data. Moving to P1 follows the owner's acceptance of the recording. This decision does not authorize writing code.
+- Approval basis: the owner's answers to four questions on P0 step 6 after PLAN-043, 2026-11-05.
+
+## ADR-033 — P0 authorization
 
 - Date: 2026-11-05, Europe/Istanbul.
 - Status: APPROVED (start of P0 programming within P0_PLAN; P1 separately).
-- Context: after approval of phases, architecture, schema, API and modules (ADR-018, ADR-022, ADR-024–026) and the CI choice (ADR-027), the [P0 plan](P0_PLAN.md) was discussed through step 1; the remaining steps are accepted as written in the plan. The owner had earlier asked not to write code yet.
-- Considered options: continue discussing the remaining steps before starting, or start P0 under the plan. The owner chose to start P0.
-- Decision: P0 has started within the scope of P0_PLAN. Steps 1–6 run in order, each verified before the next begins. P1 begins only after P0 acceptance under P0_PLAN §5.
-- Consequences: the instruction not to write code yet is lifted for the P0 scope. The repository moves to the approved core/ + ui/ layout (ADR-022); the ADR-022 consequence about the organizational scaffold is fulfilled: the empty src/ and root tests/ are removed, while the data folders, config/ and assets/ remain. Changes beyond P0_PLAN, main branch protection and approval of CI runs for outside contributors require separate owner decisions.
+- Context: after approval of phases, architecture, schema, API and modules (ADR-018, ADR-022, ADR-024–026), all six steps of the [P0 plan](P0_PLAN.md) were discussed and accepted (ADR-027–032). The owner had earlier asked not to write code yet; after the step discussion the owner said "поехали, начинаем кодить" ("let's go, start coding").
+- Considered options: keep P0 under discussion or start P0 under the accepted plan. The owner chose to start P0.
+- Decision: P0 has started within the scope of P0_PLAN. Steps 1–6 run in order; each step is a separate pull request, merged only after the owner's explicit "yes" for that pull request (ADR-032). P1 begins only after the owner accepts P0 from the screen recording (ADR-032, P0_PLAN §5).
+- Consequences: the reservations "code is not authorized / not written now" in ADR-028–032 are lifted for the P0 scope. The repository has moved to the approved core/ + ui/ layout (ADR-022); the ADR-022 consequence about the organizational scaffold is fulfilled: the empty src/ and root tests/ are removed, while the data folders, config/ and assets/ remain. The main branch rule under ADR-032 may now be enabled by the owner. Changes beyond P0_PLAN and approval of CI runs for outside contributors require separate owner decisions.
 - Approval basis: the owner's explicit authorization ("поехали, начинаем кодить" — "let's go, start coding"), 2026-11-05.

@@ -2,11 +2,11 @@
 
 [Русская версия](READINESS.ru.md) · [Implementation plan](IMPLEMENTATION_PLAN.md) · [Database schema](SCHEMA.md) · [API](API.md) · [Modules](MODULES.md) · [Technical design](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Status](../STATUS.md)
 
-Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-040; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026); P0 is authorized by the owner (ADR-028) and step 1 is done (PLAN-040). Real-world component checks occur as components are implemented per the owner decision.
+Snapshot updated 2026-11-05, Europe/Istanbul, PLAN-045; the original report was prepared by agent-02 in PLAN-024. Phases P0–P7 and criteria are approved (ADR-018); architecture/repository layout is approved (ADR-022), schema and archive contents are approved (ADR-024), API and modules are approved (ADR-025–026), all six P0 steps are accepted (ADR-027–032), including the UI shell (ADR-031) and acceptance and merging (ADR-032); P0 is authorized by the owner (ADR-033) and step 1 is done (PLAN-045). Real-world component checks occur as components are implemented per the owner decision.
 
 ## 1. Summary
 
-Component, data, interaction, error and verification designs are documented. On this basis the owner authorized P0 within the [P0 plan](P0_PLAN.md) (ADR-028): step 1 is done (PLAN-040), next is step 2. Steps run in order, each verified; P1 begins only after P0 acceptance. Changes after ADR-019–021 and the revised schema are taken into account during implementation.
+Component, data, interaction, error and verification designs are documented. On this basis the owner authorized P0 within the [P0 plan](P0_PLAN.md) (ADR-033): step 1 is done (PLAN-045) and goes through its own pull request, next is step 2. Steps run in order, each as a separate pull request merged after the owner's "yes" (ADR-032); P1 begins only after P0 acceptance from the screen recording. Changes after ADR-019–021 and the revised schema are taken into account during implementation.
 
 ## 2. What is ready
 
@@ -14,11 +14,11 @@ Component, data, interaction, error and verification designs are documented. On 
 | --- | --- | --- |
 | Product: all required features | [PRODUCT](../PRODUCT.md) | agreed by the owner |
 | Visual design | [DESIGN](../DESIGN.md), local briefs v2.1 and v1.0 | agreed |
-| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…028 | approved |
+| Product and technology decisions | [DECISIONS](DECISIONS.md), ADR-001…033 | approved |
 | Components CP01–CP20 | [COMPONENT_PLAN](COMPONENT_PLAN.md), FOUNDATION, PLANNER_CORE, ASSISTANT, DELIVERY | detailed designs |
 | Feasibility on CPU | [FEASIBILITY](FEASIBILITY.md) | model, speech, recognition, PostgreSQL, Python verified on the owner's machine |
 | Technical decisions | [TECHNICAL_DESIGN](TECHNICAL_DESIGN.md), T1–T6 | approved (ADR-015) |
-| Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | P0–P7 and criteria approved (ADR-018); architecture/repository structure approved (ADR-022); P0 authorized (ADR-028), step 1 done |
+| Architecture and phases | [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | P0–P7 and criteria approved (ADR-018); architecture/repository structure approved (ADR-022); P0 authorized (ADR-033), step 1 done |
 | Database schema v1: 46 tables | [SCHEMA](SCHEMA.md), [summary](SCHEMA_REVIEW.md) | schema and archive contents approved (ADR-024); revised SQL has not been executed |
 | API catalog: commands, queries, events, errors, assistant tools | [API](API.md) | approved (ADR-025) |
 | Modules: responsibilities, dependencies, background jobs, interface | [MODULES](MODULES.md) | approved (ADR-026) |
@@ -36,10 +36,11 @@ Component, data, interaction, error and verification designs are documented. On 
 | № | Action | Impact |
 | --- | --- | --- |
 | 1 | Architecture and layout in [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) §§1–2 | approved (ADR-022) |
-| 2 | Discuss the [P0 plan](P0_PLAN.md) | discussed; the plan is in progress |
-| 3 | Allow P0 to start | authorized (ADR-028); step 1 done (PLAN-040), next is step 2 |
+| 2 | Discuss the [P0 plan](P0_PLAN.md) | all six steps accepted (ADR-027–032); the plan is in progress |
+| 3 | Allow P0 to start | authorized (ADR-033); step 1 done (PLAN-045), next is step 2 |
 | 4 | Confirm the `app.djarvis` application identifier | before Android work starts |
-| 5 | Main branch protection with a required check and approval of CI runs for outside contributors | separate decision; without protection CI does not block a failed merge (ADR-027) |
+| 5 | Enable the main branch rule with a required check | under ADR-032; can now be enabled by the owner |
+| 6 | Approval of CI runs for outside contributors | separate decision |
 
 ## 5. Mapping of requirements to structure
 

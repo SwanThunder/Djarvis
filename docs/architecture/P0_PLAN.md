@@ -2,7 +2,7 @@
 
 [Русская версия](P0_PLAN.ru.md) · [phases and criteria](IMPLEMENTATION_PLAN.md) · [modules](MODULES.md) · [API](API.md) · [technical choices](TECHNICAL_DESIGN.md) · [readiness](READINESS.md)
 
-Status: **plan in progress**, prepared in PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026); the owner authorized P0 within this plan on 2026-11-05 (ADR-028).
+Status: **plan in progress** (ADR-033), prepared in PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026); all six steps are accepted (ADR-027–032); the owner authorized P0 within this plan on 2026-11-05 (ADR-033).
 
 ## 1. P0 outcome
 
@@ -16,17 +16,27 @@ A verifiable Windows application skeleton: the Flutter UI starts a separate Pyth
 | 2. Embedded runtimes | Build scripts download verified embedded Python and PostgreSQL archives into a local build cache and assemble a working app folder without committing binaries or user data | Embedded Python and PostgreSQL binaries run from the working folder without system installations; core startup is checked after step 3 |
 | 3. Private database | `core/djarvis_core/db/` and `host/`: one instance per Windows account, private folders/ACLs, identify the app-owned cluster, `initdb` only when absent, start, readiness check and clean stop | Relaunch joins the same core; a foreign database process is not stopped |
 | 4. Local contract | `core/djarvis_core/contract/`, `api/`, `host/`: minimal real `GetSystemStatus`/`RequestExit`, local HTTP and WebSocket, versioning, token, `Host`/HTTP `Origin` checks, protected endpoint file; matching Dart type generation | UI receives status/version; bad token and origin are denied; protocol comes from one source |
-| 5. Empty UI | `ui/lib/app`, `ui/lib/data`, `ui/lib/generated`: launch/reconnect, status screen with core version, tray icon, reopen and full-exit action | Window hides to tray; core keeps running; full exit stops it and its database |
-| 6. Verify and record | `core/tests`, `ui/test`, Windows CI, bilingual README/docs and shared log | Linters, analysis, contract and startup checks pass; owner sees a P0 demonstration |
+| 5. Main-screen shell | `ui/lib/app`, `ui/lib/data`, `ui/lib/generated`: launch/reconnect, approved main-screen shell with character, day panel, navigation and core status/version; tray icon, reopen and full exit (ADR-031) | Window shows the shell without unimplemented domain features; it hides to tray, core keeps running, and full exit stops it and its database |
+| 6. Verify and record | `core/tests`, `ui/test`, Windows CI, bilingual README/docs and shared log | Linters, analysis, contract and startup checks pass; the owner accepts P0 from a screen recording (ADR-032) |
 
 Step 1 CI choice: checks run in pull requests before main (ADR-027). In P0 the check set includes ruff, strict mypy, pytest for code that exists, dart analyze, contract-generation consistency and available Windows smoke checks; checks are added as the relevant modules appear rather than faked with empty tests. Blocking failed merges requires branch rules, which are configured only after P0 authorization.
+
+Step 2 is accepted by the owner (ADR-028): embedded Python/PostgreSQL are in the build, source archives have pinned checksum verification, AI models download separately on first launch, and program files are separate from user data.
+
+Step 3 is accepted by the owner with a condition (ADR-029): the app manages its private database in the background without a console window or manual action. The UI shows normal loading or a clear recovery error; data remains after exit.
+
+Step 4 is accepted by the owner (ADR-030): the skeleton has a real protected local connection, `GetSystemStatus`, `RequestExit`, error/version handling and Flutter types generated from the Python contract. Remaining API commands arrive in later phases.
+
+Step 5 is accepted by the owner (ADR-031): P0 shows the future main-screen shell using the approved design, rather than a separate compact status screen. The character, day panel and navigation establish the layout; until domain data and actions are implemented, their sections are clearly unavailable or empty, without fabricated tasks, habits or working buttons. The real core status and version remain visible within the shell. Window close, tray reopen and full exit follow the described lifecycle.
+
+Step 6 is accepted by the owner (ADR-032): each P0 step is a separate pull request; a branch rule blocks merging into main when checks fail; the developer merges a pull request only after the owner's explicit "yes". P0 is accepted from a screen recording: startup without system Python/PostgreSQL, the shell with core status and version, tray and reopen, no second core, full exit. The recording contains no tokens, passwords or personal data.
 
 The full layout remains in IMPLEMENTATION_PLAN §2. P0's contract is limited to real system status and lifecycle; the full command catalog and `0001_initial` migration follow in P1. P0 scripts assemble a minimal working folder; the full installer and signing belong to P7.
 
 ## 3. Startup and shutdown
 
 1. The UI finds a live core for the current Windows account through a mutex and verifiable endpoint file; if absent, it launches the embedded Python host.
-2. The host checks private folders and rights, verifies ownership of an existing cluster, initializes only a new cluster and starts only its own PostgreSQL. It then opens an API on `127.0.0.1` with a random port and fresh token.
+2. Without a console window, the host checks private folders and rights, verifies ownership of an existing cluster, initializes only a new cluster and starts only its own PostgreSQL. It then opens an API on `127.0.0.1` with a random port and fresh token.
 3. The UI connects by token, checks the protocol version and shows `GetSystemStatus`. After connection failure, it shows a recoverable state with Retry; a second window does not create another core/cluster.
 4. Closing the window hides it in the tray. Full Exit calls `RequestExit`: the core stops the API, closes connections and cleanly stops only its PostgreSQL; the UI exits.
 
@@ -48,4 +58,4 @@ Full domain-command idempotency, revisions, planner, schema migrations, voice an
 
 ## 6. Next decision
 
-The owner authorized P0 within this plan on 2026-11-05 (ADR-028). Step 1 is done (PLAN-040); the first CI run and the Windows UI build have not happened yet, and main branch protection and approval of CI runs for outside contributors need a separate owner decision. Next is step 2, "Embedded runtimes". Steps run in order, each verified; P1 begins only after P0 acceptance (§5).
+All six plan steps have been discussed and accepted by the owner (ADR-027–032). The owner authorized P0 within this plan on 2026-11-05 (ADR-033). Step 1 is done (PLAN-045) and goes through its own pull request under ADR-032; the CI run and the Djarvis.exe build are verified in that pull request, and it is merged only after the owner's explicit "yes". Next is step 2, "Embedded runtimes" (ADR-028). Steps run in order, each as a separate pull request; P1 begins only after the owner accepts P0 from the screen recording (§5, ADR-032).

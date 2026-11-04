@@ -47,7 +47,7 @@ A Windows named pipe does not open a port, but a Flutter client for it would req
 - Network: `listen_addresses = '127.0.0.1'`, random port; `pg_hba.conf` contains only `host … 127.0.0.1/32 scram-sha-256`, no `trust`.
 - Roles: `djarvis_owner` owns the schema and runs migrations; `djarvis_app` receives only DML on the tables of the `app` schema. Passwords are 32 random bytes each, under per-user DPAPI; they never appear in files or logs.
 - Settings for 8 GiB: `shared_buffers = 64MB`, `work_mem = 4MB`, `max_connections = 10`, `jit = off`, `autovacuum = on`.
-- Start: `pg_ctl start` with output to a log file, not to a pipe (finding 6 of PLAN-021). Readiness is checked by connecting with retries for up to 10 seconds.
+- Start: `pg_ctl start` from the core without a visible console window, with output to a log file rather than a pipe (finding 6 of PLAN-021; ADR-029). The user sees normal loading, not database commands. Readiness is checked by connecting with retries for up to 10 seconds.
 
 ### 2.2 Driver
 

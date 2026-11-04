@@ -2,7 +2,7 @@
 
 [Русская версия](MODULE_REVIEW.ru.md) · [full specification](MODULES.md) · [architecture and phases](IMPLEMENTATION_PLAN.md) · [approved API](API.md) · [schema](SCHEMA.md) · [decisions](DECISIONS.md)
 
-Status: approved module-structure overview, PLAN-038, 2026-11-05. Architecture, schema, API and modules are approved (ADR-022, ADR-024–026). **P0 remains unauthorized; no code is being written.**
+Status: approved module-structure overview, PLAN-038, 2026-11-05. Architecture, schema, API and modules are approved (ADR-022, ADR-024–026). **P0 is authorized (ADR-033); step 1 is done (PLAN-045).**
 
 ## 1. Responsibility owners
 
