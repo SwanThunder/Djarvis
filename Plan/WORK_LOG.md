@@ -703,4 +703,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-027 records pull-request Windows CI before main; P0_PLAN step 1 now states the chosen trigger and phased checks. Step 2 acceptance was corrected to verify embedded runtimes first and core startup after step 3. Readiness/status counts and navigation updated. CI configuration, branch rules and code remain untouched.
 - Checks: 27 ADRs in both languages; paired heading counts and local links for changed documents; `git diff --check` passed. No runtime, database, CI or branch-setting change was made.
 - Remaining: discuss P0 step 2 with the owner, then steps 3–6. P0 is still unauthorized and the instruction not to write code remains active.
-- Commit: pending.
+- Commit: [c5b686b](https://github.com/SwanThunder/Djarvis/commit/c5b686b).
