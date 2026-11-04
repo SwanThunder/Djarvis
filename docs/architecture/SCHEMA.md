@@ -670,7 +670,7 @@ Extensions: `pg_trgm` (substring search in titles). There are no other extension
 
 - `djarvis_owner` — owner of the `app` and `meta` schemas; runs migrations.
 - `djarvis_app` — `SELECT, INSERT, UPDATE, DELETE` on the `app` tables; `SELECT, INSERT, UPDATE` on `meta.backup_record` and `meta.operation_marker`; `SELECT` only on `meta.schema_migration`. Changing the structure is forbidden.
-- The connection for `pg_dump` during backup runs as `djarvis_owner`.
+- The allowlisted backup export runs as `djarvis_owner` from one consistent snapshot; a full `app` schema dump is not used (ADR-023).
 
 ## 12. Owner decisions (PLAN-024)
 
@@ -681,3 +681,22 @@ Extensions: `pg_trgm` (substring search in titles). There are no other extension
 | Q3 | Completion in the middle of a scheduled block | The block is trimmed at the moment of completion, the remainder is released |
 | Q4 | Moving a branch of subtasks | Under any task and into any project except its own descendants; the children's project does not change by itself |
 | Q5 | Announcing missed time | A per-task switch "Don't announce the miss aloud"; the highlight in the list always remains |
+
+
+## 13. Archive contents and restore (ADR-023)
+
+The logical `db.data` set includes user data and history from these tables:
+
+| Area | Archived rows |
+| --- | --- |
+| Profile and preferences | `profile`, `setting`, `availability_window` |
+| Local workspaces | `project`, `note`, `note_task`, `tag`, `task_tag`, `note_tag`, `attachment` |
+| Tasks | `task`, `recurrence_rule`, `recurrence_exception`, `task_occurrence`, `checklist_template_item`, `checklist_item` |
+| Accepted schedule and draft history | `schedule_placement`, `day_plan_proposal`, `day_plan_item` |
+| Habits | `habit`, `habit_schedule`, `habit_pause`, `habit_entry`, `timer_session`, `timer_interval`, `habit_goal_proposal` |
+| Local calendar and reminders | `calendar_event`, `reminder_rule` |
+| History | `conversation`, `conversation_message`, `history_watermark`, `audit_event` |
+
+The archive excludes `planning_guard`, `provider_account`, `provider_calendar`, `provider_mapping`, `sync_conflict`, `processed_action`, `approval_request`, `capability_grant`, `launch_target`, `outbox`, `scheduled_job` and all `meta` tables. OAuth tokens, license/trial, secrets, caches, models and raw microphone audio are outside the database/archive. The manifest carries the closed-list version; adding a table requires explicit archive classification.
+
+For restore, a staging database receives the matching schema from migrations, then only the listed rows and attachments. Before the switch, the core applies the current history-retention period and the later of the current and archived history-deletion watermarks, so an older archive cannot revive manually deleted conversations. It marks unaccepted day drafts stale and unaccepted habit-goal proposals expired; running timers do not resume automatically, and uncredited time requires explicit review. Proactive speech and automatic wake listening reset pending a fresh user choice. `planning_guard` and `scheduled_job` are rebuilt from restored data: current reminders can be scheduled, old jobs are not replayed. Google/Microsoft-origin events remain local snapshots without synchronization until new connection and explicit mapping review; old queued emails are not sent. External grants and the program launch list are configured anew. These are proposed export/restore contract rules, not an executed migration.

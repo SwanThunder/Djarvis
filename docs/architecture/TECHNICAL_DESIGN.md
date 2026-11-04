@@ -131,15 +131,13 @@ Accepted in ADR-006: the key is protected by Windows, with no password and no re
 
 ### 3.1 Contents
 
-A `.djbackup` archive before encryption is an uncompressed tar:
+The DJB1 container (T3, ADR-015) is retained; only the proposed logical payload changes. Before encryption, the archive is a tar:
 
-- `manifest.json`: format, schema and program versions; snapshot time; sections; record counts; list of attachments with sha256;
-- `db.dump`: `pg_dump --format=custom --schema=app` (compressed by pg_dump itself);
-- `blobs/<sha256>`: committed attachments.
+- `manifest.json`: format, schema, application and export-set versions, snapshot time, row counts and attachment checksums;
+- `db.data`: an allowlisted set of user rows from `app`, exported from one transactionally consistent snapshot; tables are listed in [SCHEMA §13](SCHEMA.md#13-archive-contents-and-restore-adr-023);
+- `blobs/<sha256>`: attachments referenced by selected rows.
 
-Not included (CP15): license and trial, OAuth tokens, IPC secrets, model weights, caches, permissions and unconfirmed requests.
-
-**Open inconsistency (PLAN-034):** the full `pg_dump --schema=app` above would include grants, pending approvals and the external-action queue despite this exclusion list. Export scope and restore rules need the owner policy choice before schema approval; this command must not be implemented as written.
+The former full `pg_dump --schema=app` **does not satisfy ADR-023**: it would capture grants, external connections, unconfirmed requests and the email queue. Export v1 uses a closed table allowlist; the staging database schema is created from the appropriate migrations before selected rows are imported. The dump omits license/trial, OAuth tokens, IPC secrets, model weights, caches, grants, external connections and queues. The exact streaming-export mechanism is chosen during implementation and checked against real PostgreSQL; the former command is not used.
 
 ### 3.2 Encrypted container "DJB1"
 
@@ -158,7 +156,9 @@ Not included (CP15): license and trial, OAuth tokens, IPC secrets, model weights
 
 ### 3.3 Restore
 
-The sequence from CP15: `Selected → Authenticity → Verified → Preview → Backup of current data → Restore into a staging database → Check → Switch → Done`. The staging database is a separate DB `djarvis_restore` in the same cluster; the switch is a rename of databases under maintenance mode, with an operation marker written to disk.
+Sequence: `Selected → Authenticated → Verified → Preview → Current-data backup → Restore into staging → Validate → Switch → Done`. The `djarvis_restore` staging database is created in the same cluster; switching is a database rename under maintenance mode with an on-disk operation marker. Before switching, the core checks references, applies the current history-retention period and the later of the current and archived history-deletion watermarks (ADR-006).
+
+Under ADR-023, old grants, launch targets, provider accounts/calendar maps, pending approvals, email sends and other external queues are not imported into staging. Inactive plan drafts become `stale`; accepted time blocks and completion history remain. Proactive speech and automatic wake listening are reset pending explicit setup. Reminder rules remain, but the job queue is rebuilt from current data; old jobs and emails are not replayed. Events from disconnected external calendars appear as local snapshots without automatic synchronization until reconnection and explicit mapping review. License/trial and OAuth secrets are not replaced by restore.
 
 ## 4. Installer
 

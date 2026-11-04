@@ -644,3 +644,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 46 CREATE TABLE declarations in both language versions, 22 ADRs, headings/links across nine bilingual pairs and git diff --check; revised SQL was not executed under the owner validation decision. Unrelated local file preserved.
 - Remaining: receive restore-policy answer, align archive contents/schema, then seek separate schema approval; API and modules follow, then separate P0 authorization.
 - Commit: [f3825cd](https://github.com/SwanThunder/Djarvis/commit/f3825cd).
+
+## PLAN-035 — Restore policy and schema review completion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Authorization: the owner chose restoring tasks, habits and history while setting permissions and connections up again, without resuming incomplete actions or emails. Schema is not approved and P0 is withheld.
+- Status: completed; documentation only.
+- Files: both logs and bilingual DECISIONS, TECHNICAL_DESIGN, SCHEMA, SCHEMA_REVIEW, READINESS, STATUS; PRODUCT if needed for consistency. No code, database or local materials.
+- Scope: record restore policy, replace the contradictory full dump with a proposed data selection, describe restore without old grants/queues and prepare the schema for separate review.
+- Result: ADR-023 records restoration of user data/history without old grants, external connections, pending actions or queued emails. The backup proposal uses an explicit 32-table allowlist, excludes 11 operational tables and rebuilds three service tables through migrations; restore resets initiative/wake settings and preserves the later deletion watermark. The schema review and status now present this for separate owner approval.
+- Checks: 46 table definitions and 23 ADRs in both languages; all 46 tables classified for archive handling; bilingual heading counts and `git diff --check` passed. Revised SQL, backup export and restore were not executed, following the owner's validation sequence.
+- Remaining: owner approval of schema/archive proposal; then API and modules, then separate P0 authorization. Export implementation and real PostgreSQL validation belong to the programming phase.
+- Commit: pending.
