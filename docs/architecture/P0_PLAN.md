@@ -12,12 +12,14 @@ A verifiable Windows application skeleton: the Flutter UI starts a separate Pyth
 
 | Step | Changes after separate authorization | Verifiable result |
 | --- | --- | --- |
-| 1. Scaffold and dependencies | Create approved `core/`, `ui/`, `scripts/` roots and needed parts of `packaging/`; pin dependency versions and hashes, ruff/mypy/pytest and Dart analysis settings; set up CI checks | Clean Windows build; tools run from pinned dependencies |
-| 2. Embedded runtimes | Build scripts download verified embedded Python and PostgreSQL archives into a local build cache and assemble a working app folder without committing binaries or user data | Core starts from the assembled runtime without system Python/PostgreSQL |
+| 1. Scaffold and dependencies | Create approved `core/`, `ui/`, `scripts/` roots and needed parts of `packaging/`; pin dependency versions and hashes, ruff/mypy/pytest and Dart analysis settings; set up Windows pull-request CI before main (ADR-027) | Clean Windows build; tools run from pinned dependencies |
+| 2. Embedded runtimes | Build scripts download verified embedded Python and PostgreSQL archives into a local build cache and assemble a working app folder without committing binaries or user data | Embedded Python and PostgreSQL binaries run from the working folder without system installations; core startup is checked after step 3 |
 | 3. Private database | `core/djarvis_core/db/` and `host/`: one instance per Windows account, private folders/ACLs, identify the app-owned cluster, `initdb` only when absent, start, readiness check and clean stop | Relaunch joins the same core; a foreign database process is not stopped |
 | 4. Local contract | `core/djarvis_core/contract/`, `api/`, `host/`: minimal real `GetSystemStatus`/`RequestExit`, local HTTP and WebSocket, versioning, token, `Host`/HTTP `Origin` checks, protected endpoint file; matching Dart type generation | UI receives status/version; bad token and origin are denied; protocol comes from one source |
 | 5. Empty UI | `ui/lib/app`, `ui/lib/data`, `ui/lib/generated`: launch/reconnect, status screen with core version, tray icon, reopen and full-exit action | Window hides to tray; core keeps running; full exit stops it and its database |
 | 6. Verify and record | `core/tests`, `ui/test`, Windows CI, bilingual README/docs and shared log | Linters, analysis, contract and startup checks pass; owner sees a P0 demonstration |
+
+Step 1 CI choice: checks run in pull requests before main (ADR-027). In P0 the check set includes ruff, strict mypy, pytest for code that exists, dart analyze, contract-generation consistency and available Windows smoke checks; checks are added as the relevant modules appear rather than faked with empty tests. Blocking failed merges requires branch rules, which are configured only after P0 authorization.
 
 The full layout remains in IMPLEMENTATION_PLAN §2. P0's contract is limited to real system status and lifecycle; the full command catalog and `0001_initial` migration follow in P1. P0 scripts assemble a minimal working folder; the full installer and signing belong to P7.
 

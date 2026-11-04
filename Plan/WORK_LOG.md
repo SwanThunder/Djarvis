@@ -692,3 +692,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 26 ADRs in both languages; paired heading counts and local links for touched documents; `git diff --check`. No application code, database, process or runtime tests were created or run.
 - Remaining: discuss P0 scope with the owner and refine the proposal if requested. Starting P0 still needs separate explicit authorization; the owner currently asked not to write code.
 - Commit: [d3e8724](https://github.com/SwanThunder/Djarvis/commit/d3e8724).
+
+## PLAN-039 — P0 step 1 CI choice and step 2 discussion
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: while discussing P0 step 1, the owner chose CI on pull requests before main and requested the next step. The instruction not to write code remains active.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, P0_PLAN, READINESS and STATUS.
+- Scope: record the narrow CI workflow choice and make P0 step 1 reviewable; explain step 2 of the proposed P0 plan without creating code, binaries, a database, workflow configuration or repository branch protection yet.
+- Result: ADR-027 records pull-request Windows CI before main; P0_PLAN step 1 now states the chosen trigger and phased checks. Step 2 acceptance was corrected to verify embedded runtimes first and core startup after step 3. Readiness/status counts and navigation updated. CI configuration, branch rules and code remain untouched.
+- Checks: 27 ADRs in both languages; paired heading counts and local links for changed documents; `git diff --check` passed. No runtime, database, CI or branch-setting change was made.
+- Remaining: discuss P0 step 2 with the owner, then steps 3–6. P0 is still unauthorized and the instruction not to write code remains active.
+- Commit: pending.
