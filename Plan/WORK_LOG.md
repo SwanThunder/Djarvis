@@ -488,3 +488,16 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: `Vois/` excluded from Git; findings 9–12 in FEASIBILITY; new `TECHNICAL_DESIGN` (transport, schema and migrations, DJB1 backup format, installer, 8 GiB profile, decisions T1–T6) and `IMPLEMENTATION_PLAN` (architecture, repository layout, phases P0–P7 with acceptance criteria); STATUS updated. No application code written.
 - Remaining: owner approval of the plan and T1–T6; live microphone test (`cache/feasibility/mic_wake_test.py`); Vosk 0.9 listening; code-signing certificate; real 8 GiB machine (P7).
 - Commit: this entry is published together with the PLAN-022 documents.
+
+## PLAN-023 — Owner decisions T1–T6 and the programming start condition
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-02.
+- Authorization: owner's multiple-choice answers on technical decisions T1–T6 and the implementation plan.
+- Status: complete; documentation.
+- Files: both logs; bilingual `docs/architecture/DECISIONS` (ADR-015), `TECHNICAL_DESIGN`, `IMPLEMENTATION_PLAN`, `docs/STATUS`.
+- Scope: T1 — the interface stays in the tray (instead of the proposed core-owned icon), T2–T6 as proposed; the owner will read the implementation plan first; the structure is being worked out now; programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later.
+- Checks: both language versions compared; ADR count 15/15 in both registers; Git checks before commit.
+- Result: ADR-015; technical details updated for T1 (background memory ≈ 0.7 GB); plan marked as under owner review; STATUS updated. No code written.
+- Remaining: finish the structure and the full programming-readiness report; owner approval of the plan.
+- Commit: this entry is published together with ADR-015.

@@ -159,3 +159,19 @@ Exact schema, API names, child nesting/inheritance and handling of already-start
 - Decision: Russian speech uses Vosk TTS synthetic voices (prefer voices not trained on a named real speaker); English speech uses Kokoro. Edward — low male voice (British in English); Professor Volt — second male voice, faster and higher; Nova — synthetic female voice. In-app web search supports Tavily with the user's own key. The live PostgreSQL data folder is restricted to the user's Windows account, and the application recommends enabling Windows BitLocker device encryption; archives remain encrypted per ADR-006.
 - Consequences: Before release, verify each selected voice's provenance and license, the exact model versions and any GPL-licensed phonemizer dependency (for example espeak-ng) and how it is shipped; measure CPU real-time factor and memory on the 8 GiB target. Tavily terms, attribution and request limits are verified before release. No implementation is authorized.
 - Approval basis: Owner's answers in PLAN-020 (2026-11-04).
+
+## ADR-015 — Technical decisions T1–T6: connection, database, backups, installer, memory, voice
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (technical decisions; the implementation plan is under owner review).
+- Context: PLAN-022 closed the open technical questions of CP01–CP04, CP15 and CP18 and put six decisions to the owner ([technical details](TECHNICAL_DESIGN.md) §6), based on the [feasibility checks](FEASIBILITY.md).
+- Considered options: T1 — the core owns the icon and the interface unloads when the window closes; the interface stays in the tray; closing the window = exit. T2 — forward-only migrations with a backup, or with reverse migrations. T3 — Windows-protected key without a password, or with an extra password. T4 — signing later, cloud signing now, or an EV certificate. T5 — unload the model after 1, 5 or 15 minutes. T6 — Vosk TTS 0.7 and 0.9.
+- Decision:
+  - T1: the interface and the core communicate over loopback HTTP + WebSocket with a per-run token and `Host`/`Origin` checks. Closing the window hides the interface to the notification area; the interface owns the icon; the core is a separate process.
+  - T2: private PostgreSQL 18, asyncpg driver, own forward-only migration runner; an automatic backup before every migration, rollback by restoring that backup.
+  - T3: DJB1 backup format — tar, AES-256-GCM in streamed chunks, archive key under DPAPI without a password (within ADR-006).
+  - T4: Inno Setup per-user installer without admin rights; unsigned during development and closed testing; a code-signing certificate before public release.
+  - T5: in the 8 GiB profile the model and synthesis unload after 5 minutes idle; the value is configurable.
+  - T6: Russian synthesis uses Vosk TTS 0.7 in all profiles; 0.9 is a possible later higher-quality option for 16 GB+.
+- Consequences: Background memory in the 8 GiB profile is ≈ 0.7 GB including the tray interface; interface memory must be measured. Without signing, Windows SmartScreen warns during installation on test machines. Programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later (owner's condition, PLAN-023).
+- Approval basis: Owner's answers in PLAN-023 (2026-11-04).

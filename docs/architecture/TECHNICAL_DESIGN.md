@@ -2,7 +2,7 @@
 
 [Русская версия](TECHNICAL_DESIGN.ru.md) · [Decisions](DECISIONS.md) · [Foundation CP01–CP07](FOUNDATION_DESIGN.md) · [Data protection and delivery](DELIVERY_DESIGN.md) · [Feasibility](FEASIBILITY.md) · [Implementation plan](IMPLEMENTATION_PLAN.md)
 
-Status: proposal by agent-02 (PLAN-022), 2026-11-04. Not approved by the owner. This document closes the open technical questions left in CP01–CP04, CP15 and CP18: it selects concrete tools, formats and numbers. The accepted decisions ADR-001…014 do not change. No code is written until approval.
+Status: proposal by agent-02 (PLAN-022), 2026-11-04. Decisions T1–T6 approved by the owner in PLAN-023 (ADR-015); T1 was chosen as "interface stays in the tray" and the text below is updated. The rest of the document is under owner review. This document closes the open technical questions left in CP01–CP04, CP15 and CP18: it selects concrete tools, formats and numbers. The accepted decisions ADR-001…014 do not change. No code is written until approval.
 
 ## 1. Interface-to-core connection
 
@@ -10,13 +10,13 @@ Status: proposal by agent-02 (PLAN-022), 2026-11-04. Not approved by the owner. 
 
 | Process | What it is | Owns |
 | --- | --- | --- |
-| `Djarvis.exe` | Flutter interface | App windows, input, display. No access to the database or secrets |
+| `Djarvis.exe` | Flutter interface | App windows, input, display, notification-area icon. No access to the database or secrets |
 | `djarvis-core.exe` | Embedded Python 3.12 (renamed launcher of the official embeddable package, `-I` mode) | All commands, policy, scheduler, database, reminders, audio, notification-area icon |
 | `postgres.exe` | Private PostgreSQL 18 | Data only; started and stopped by the core |
 | `djarvis-llm.exe` | llama.cpp server (MIT) | Language model; started by the core on demand and unloaded when idle |
 | speech workers | Core threads or subprocesses (Vosk, Kokoro, Vosk TTS) | Computation only; they do not write to the database |
 
-Startup order. `Djarvis.exe` checks the core's named mutex for the current user. If the core is not running, the interface starts it and waits for the connection file for no more than 15 seconds, showing a startup screen. Closing the window ends only the interface process: the core, wake-phrase listening and reminders keep running. The notification-area icon keeps the core alive through Win32 `Shell_NotifyIcon`, using own ctypes code and no third-party libraries. Clicking the icon opens the interface again. This way the interface uses no memory while the window is closed. The "Exit" item stops everything in the order defined in CP01.
+Startup order. `Djarvis.exe` checks the core's named mutex for the current user. If the core is not running, the interface starts it and waits for the connection file for no more than 15 seconds, showing a startup screen. Closing the window only hides it: the interface process stays in the notification area (owner decision T1, ADR-015), and the core, wake-phrase listening and reminders keep running. The interface owns the icon (a permissively licensed Flutter tray plugin); clicking the icon shows the window again. The core is a separate process and does not depend on the interface: if the interface crashes, the core keeps working and the icon returns the next time `Djarvis.exe` starts (autostart at Windows sign-in). The "Exit" item stops everything in the order defined in CP01.
 
 ### 1.2 Transport
 
@@ -175,15 +175,15 @@ Budget from the PLAN-021 and PLAN-022 measurements (working set; the Flutter int
 | Python core | always | ≈ 0.1 GB |
 | PostgreSQL | always | ≈ 0.2 GB |
 | Vosk small for the current language (wake phrase and utterance) | while the microphone is on | ≈ 0.2 GB |
-| Flutter interface | while the window is open | ≈ 0.2 GB (estimate) |
+| Flutter interface (in the tray while the window is closed) | always | ≈ 0.2 GB (estimate; to be measured) |
 | Language model 4B Q4_K_M, context 4096 | on demand, unloaded when idle | ≈ 3.0 GB |
 | Speech synthesis for the current language: Vosk TTS 0.7 (ru) or Kokoro (en) | together with the model | 0.75 GB or ≈ 0.3 GB |
 | **Peak during a dialogue (ru, window open)** | | **≈ 4.45 GB** |
-| Background with the window closed | | ≈ 0.5 GB |
+| Background with the window closed | | ≈ 0.7 GB |
 
 Profile rules:
 
-1. In the background only the permanent components are loaded (≈ 0.5 GB). The language model and synthesis load on demand.
+1. In the background only the permanent components are loaded (≈ 0.7 GB including the tray interface). The language model and synthesis load on demand.
 2. Model loading starts immediately when the wake phrase fires, in parallel with recording the utterance, and hides ≈ 5 seconds of load time. Weights are memory-mapped (mmap), so a reload from the Windows cache is faster.
 3. The model and synthesis are unloaded after 5 minutes of idle (configurable: 1–30 minutes or "never unload"). Unloading means stopping the `djarvis-llm.exe` process.
 4. Only the synthesis for the reply language is loaded; the second language is loaded only when needed.
@@ -198,12 +198,12 @@ Open: a measurement on a real 8 GiB machine (Windows 11 with a browser usually t
 
 | No. | Question | Proposal |
 | --- | --- | --- |
-| T1 | Transport and notification-area icon | Loopback HTTP + WebSocket; the core owns the icon, the interface closes completely |
-| T2 | Driver and migrations | asyncpg; own forward-only migration runner |
-| T3 | Backup format | DJB1: tar → AES-256-GCM-STREAM, archive key under DPAPI |
-| T4 | Installer and signing | Inno Setup, per-user installation; signing certificate — your choice based on cost |
-| T5 | 8 GiB profile | Unload after 5 minutes of idle; Vosk TTS 0.7 for Russian; no Whisper |
-| T6 | Vosk TTS 0.9 | Decide after listening to samples; proposal — do not use on 8 GiB |
+| T1 | Transport and notification-area icon | **Approved:** loopback HTTP + WebSocket; the interface stays in the tray and owns the icon |
+| T2 | Driver and migrations | **Approved:** asyncpg; own forward-only migration runner |
+| T3 | Backup format | **Approved:** DJB1: tar → AES-256-GCM-STREAM, archive key under DPAPI |
+| T4 | Installer and signing | **Approved:** Inno Setup, per-user install without admin rights; unsigned during development and closed testing, a code-signing certificate is bought before public release |
+| T5 | 8 GiB profile | **Approved:** Unload after 5 minutes of idle; Vosk TTS 0.7 for Russian; no Whisper |
+| T6 | Vosk TTS 0.9 | **Approved:** 0.7 for all profiles; 0.9 later as a higher-quality option for 16 GB+, if it sounds better and its load time can be reduced |
 
 ## 7. Sources
 

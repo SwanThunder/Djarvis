@@ -2,7 +2,7 @@
 
 [Русская версия](IMPLEMENTATION_PLAN.ru.md) · [Technical details](TECHNICAL_DESIGN.md) · [Decisions](DECISIONS.md) · [Component plan](COMPONENT_PLAN.md) · [Feasibility](FEASIBILITY.md) · [Status](../STATUS.md)
 
-Status: proposal by agent-02 (PLAN-022), 2026-11-04. **Awaiting explicit approval by the owner.** No application code is written until approval. Approval permits work by the phases of this plan; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
+Status: proposal by agent-02 (PLAN-022), 2026-11-04. **Under owner review, not approved** (PLAN-023). Technical decisions T1–T6 are approved (ADR-015). Owner's condition: programming does not start until the structure is fully worked out and the owner has received a full programming-readiness report. Real checks (voice assistant, microphone, task tracking, etc.) happen after programming; checks that need no code also come later. No application code is written until approval. Approval permits work by the phases of this plan; each phase ends with a demonstration and owner acceptance, and significant deviations are agreed in advance (rules 2 and 3).
 
 ## 1. Architecture at a glance
 
@@ -104,4 +104,4 @@ P2 and P3 can run in parallel after P1 (the contract is already fixed). P4 relie
 3. The composition and order of phases P0–P7 and their acceptance criteria.
 4. Permission to begin programming with P0; the next phase begins after acceptance of the previous one.
 
-Until approval these remain open: the live microphone test, listening to Vosk 0.9, the signing certificate; commercialization is deferred.
+The live microphone test and other real checks happen after programming (owner's condition). The code-signing certificate comes before public release (ADR-015); commerce is deferred.
