@@ -763,4 +763,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-032 — one P0 step = one pull request; a branch rule blocks merging on failed checks; agent-02 merges only after the owner's explicit "yes" for each pull request; P0 is accepted from a screen recording. Step 6 in P0_PLAN is marked accepted; all six plan steps are accepted. The DECISIONS introduction now includes the missing ADR-031 and an updated count.
 - Checks: 32 ADRs in both versions; language pairs and `git diff --check` checked. No code, CI or GitHub settings changed.
 - Remaining: the owner's separate explicit authorization to start P0; no code until then.
-- Commit: this entry is published together with the PLAN-044 documents.
+- Commit: [afc888c](https://github.com/SwanThunder/Djarvis/commit/afc888c).
