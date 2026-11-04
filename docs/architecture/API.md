@@ -2,12 +2,13 @@
 
 [Русская версия](API.ru.md) · [Technical design](TECHNICAL_DESIGN.md) · [Database schema](SCHEMA.md) · [Modules](MODULES.md) · [Foundation CP01–CP02](FOUNDATION_DESIGN.md)
 
-Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The complete list of commands, queries and events between the interface, the voice assistant and the core. Names are final for v1 unless the owner asks otherwise. No code is written until approval.
+Status: API proposal revised for review in PLAN-036, 2026-11-05. The database schema and archive scope are approved (ADR-024); this API is not yet approved. It lists commands, queries and events between the UI, assistant and core. P0 remains unauthorized.
 
 ## 1. Conventions
 
 - Transport and protection — [technical design](TECHNICAL_DESIGN.md) §1 (ADR-015): `127.0.0.1`, launch token, `Host` and `Origin` checks.
 - Command: `POST /v1/commands/<Name>`. Read query: `POST /v1/queries/<Name>` (JSON body; queries change nothing and do not invoke the model). Events: WebSocket `/v1/events`.
+- The core assigns `origin` from the authenticated caller and internal execution path; a client-supplied value cannot claim `assistant`, `proactive` or `sync`. `approval_id` is bound to the original action, caller, exact payload and relevant revisions; a repeated approval cannot execute another action.
 - Command envelope (CP01 §2.3): `protocol_version`, `request_id`, `action_id` (stable on retry), `origin` (`ui`, `voice`, `assistant`, `proactive`, `sync`), `expected_revisions`, `reference` (instant and zone for interpreting "tomorrow"), `payload`, `approval_id`.
 - A command result is one of the states: `AppliedLocal`, `QueuedExternal`, `NeedsClarification`, `NeedsConfirmation`, `NeedsInput`, `Conflict`, `Denied`, `Unavailable`, `Failed`. It comes with `action_id`, the new revisions and, if needed, a read model.
 - `NeedsConfirmation` returns `approval_id` and the exact content to display. Confirmation is the `Approve` command with that `approval_id`; changing any significant field requires a new confirmation.
@@ -113,7 +114,7 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The com
 | `ListSyncConflicts` | query | — | open conflicts with both versions |
 | `ResolveSyncConflict` | command | — | keep your own, keep the other, or delete the local one |
 | `ListOutbox` | query | — | external actions and their states |
-| `ResolveUnknownOutbox` | command | — | decide the fate of an action with an unknown outcome (for example, a message): retry or mark as failed |
+| `ResolveUnknownOutbox` | command | — | decide an action with an unknown outcome: mark failed or request a retry. Retrying email requires a fresh exact-content confirmation, even if the first send was confirmed; the UI warns that it may already have succeeded |
 
 ## 9. Mail, search, weather, Windows
 
@@ -177,7 +178,7 @@ Status: proposal by agent-02 (PLAN-024), 2026-11-04. Under owner review. The com
 | `CreateBackupNow` | command | on-demand backup |
 | `ListBackups` | query | backups with dates, size, state |
 | `PreviewRestore` | command | verify the archive and show what will be restored (ADR-006) |
-| `Restore` | command 🔒 | full restore after the preview and a backup of the current data |
+| `Restore` | command 🔒 | restore the approved user-data archive after preview and a backup of current data; old grants, connections, pending actions and email queues do not return (ADR-023–024) |
 | `DeleteAllData` | command 🔒 | delete the user's data (available even after access has expired) |
 | `ImportLicense` | command | import a signed license file; offline verification |
 | `GetEntitlement` | query | trial, license, term, devices, clock lock (ADR-005, ADR-010) |

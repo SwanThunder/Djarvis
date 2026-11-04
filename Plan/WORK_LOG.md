@@ -656,3 +656,15 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: 46 table definitions and 23 ADRs in both languages; all 46 tables classified for archive handling; bilingual heading counts and `git diff --check` passed. Revised SQL, backup export and restore were not executed, following the owner's validation sequence.
 - Remaining: owner approval of schema/archive proposal; then API and modules, then separate P0 authorization. Export implementation and real PostgreSQL validation belong to the programming phase.
 - Commit: [6bb7fc4](https://github.com/SwanThunder/Djarvis/commit/6bb7fc4).
+
+## PLAN-036 — Schema approval and API review
+- Date: 2026-11-05, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner approved the 46-table v1 schema and archive/restore scope, and chose to proceed to API. P0 remains unauthorized.
+- Status: completed; documentation only.
+- Files: both logs; bilingual DECISIONS, SCHEMA, SCHEMA_REVIEW, API, READINESS, STATUS and a new API_REVIEW; bilingual IMPLEMENTATION_PLAN, COMPONENT_PLAN and CORE_FLOWS for consistency.
+- Scope: record narrow schema approval, compare the proposed API with the approved data/restore contract, correct proposal-level inconsistencies and prepare a concise API review for a separate owner decision. No application code or database mutation.
+- Result: ADR-024 records owner approval of the 46-table logical schema and archive scope. The schema and its review now show approved status; readiness/status/implementation and component-flow references are aligned. The bilingual API review maps six user flows and records proposed clarifications: core-assigned origin, bound approvals, fresh confirmation on uncertain email retries, and restore without old grants or queues. The API is still proposed.
+- Checks: 24 ADRs and 46 table definitions in both languages; paired heading counts and local links checked for the touched architecture documents; `git diff --check` passed. Application code, migration SQL and database behavior were not executed under the owner's validation sequence.
+- Remaining: separate owner decision on API, then modules, then explicit P0 authorization. Detailed JSON contracts and live tests follow authorization.
+- Commit: pending.

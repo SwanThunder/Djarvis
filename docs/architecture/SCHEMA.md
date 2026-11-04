@@ -2,7 +2,7 @@
 
 [Русская версия](SCHEMA.ru.md) · [Technical design](TECHNICAL_DESIGN.md) · [API](API.md) · [Modules](MODULES.md) · [Planner core](PLANNER_CORE.md) · [Decisions](DECISIONS.md)
 
-Status: proposal by agent-02 (PLAN-024), revised in PLAN-029, 2026-11-04. Under owner review. This is the draft structure of the first migration `0001_initial`: all tables, columns, keys and constraints. No code or SQL migration files are written until approval. The owner's answers to questions Q1–Q5 (PLAN-024) are incorporated into the schema and collected in §12.
+Status: the 46-table logical schema and §13 archive contents were approved by the owner (ADR-024), 2026-11-05. This is the basis for the future first migration `0001_initial`: tables, columns, keys and constraints. Code and SQL migration files require separate P0 authorization. The owner's answers to questions Q1–Q5 (PLAN-024) are incorporated into the schema and collected in §12.
 
 ## 1. General rules
 
@@ -292,7 +292,7 @@ CREATE TABLE app.day_plan_item (
 );
 ```
 
-- Every command that changes tasks, occurrences, placements, events, available hours, breaks or habits with placement increments `planning_guard.revision` in the same transaction. Editing a draft item increments only `draft_revision` and does not change accepted placements. Applying the whole plan checks both revisions; changed source data returns `Conflict` and stales the proposal; a concurrent draft edit returns `Conflict` with the current draft. Blocks edited in the draft are pinned when stored. This is a proposed schema/API contract, not yet approved by the owner (CP02 §3.3, ADR-020).
+- Every command that changes tasks, occurrences, placements, events, available hours, breaks or habits with placement increments `planning_guard.revision` in the same transaction. Editing a draft item increments only `draft_revision` and does not change accepted placements. Applying the whole plan checks both revisions; changed source data returns `Conflict` and stales the proposal; a concurrent draft edit returns `Conflict` with the current draft. Blocks edited in the draft are pinned when stored. This part of the schema is approved under ADR-024; exact API responses remain proposed (CP02 §3.3, ADR-020).
 - Completing an occurrence moves its **future** active placements to `released`; past ones remain as history (ADR-007). **Q3:** if an occurrence is completed in the middle of an active block, the block's `end_at` becomes the moment of completion (the past part remains as history) and the remaining time is released.
 - Missed time (the placement has passed, the occurrence is not completed) and an overdue deadline are computed by a query and not stored.
 

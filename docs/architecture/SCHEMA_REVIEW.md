@@ -1,8 +1,8 @@
-# Database schema v1 — domain review for approval
+# Database schema v1 — approved decision overview
 
 [Русская версия](SCHEMA_REVIEW.ru.md) · [full schema](SCHEMA.md) · [technical design](TECHNICAL_DESIGN.md) · [API](API.md) · [modules](MODULES.md) · [decisions](DECISIONS.md)
 
-Status: proposed-schema review, PLAN-035, 2026-11-05. Process architecture and layout are approved (ADR-022); restore policy is approved (ADR-023). **The 46-table schema itself is not approved.** Revised SQL has not run: the owner deferred checks until programming. The former 13 checks covered the 45-table draft.
+Status: approved logical-schema review, PLAN-036, 2026-11-05. Process architecture and layout are approved (ADR-022), restore policy under ADR-023, and the 46-table schema and archive contents under ADR-024. Revised SQL has not run: the owner deferred checks until programming. The former 13 checks covered the 45-table draft.
 
 ## 1. What is stored
 
@@ -32,8 +32,8 @@ One local profile is bounded in its private cluster. Required priority, deadline
 
 **Restore policy (ADR-023):** the archive contains user data and history from the closed table allowlist in [SCHEMA §13](SCHEMA.md#13-archive-contents-and-restore-adr-023). It excludes grants, connections, pending approvals and email queues; a full dump of `app` is not used. The user sets up grants and connections again after restore. Reminder jobs are rebuilt from rules; old jobs and emails are not replayed. Restore uses staging with preview and a backup of current data. This resolves the detected archive-design contradiction; execution remains untested.
 
-**Technical correction in the proposal:** `provider_mapping` now carries an object kind and a constraint preventing simultaneous references to an event and a block. After deletion of the local target both references may be empty while the row remains a reconciliation marker. This revised schema is unapproved and its SQL has not run.
+**Technical correction in the schema:** `provider_mapping` now carries an object kind and a constraint preventing simultaneous references to an event and a block. After deletion of the local target both references may be empty while the row remains a reconciliation marker. This revision is approved under ADR-024, but its SQL has not run.
 
 ## 4. Current decision boundary
 
-The restore policy is settled. The owner now reviews the schema together with the archive allowlist and the narrow mapping correction. Approval would cover logical entities, constraints and v1 storage boundaries; migration SQL and its checks follow in the appropriate phase after programming authorization. API and modules remain separate next decisions. Schema approval does not authorize P0.
+The schema, archive allowlist and narrow mapping correction are approved (ADR-024). Migration SQL and its checks follow in the appropriate phase after programming authorization. API and modules remain separate decisions. Schema approval does not authorize P0.

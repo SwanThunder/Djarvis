@@ -71,7 +71,7 @@ Accepted during review: deadline-first then priority (no-deadline tasks by prior
 
 ### CP03 — PostgreSQL schema, constraints, indexes and read models
 
-**Known baseline:** PostgreSQL is the approved local backend; user data stays on-device. No final DDL/schema or driver is approved. Product distinctions—task occurrence vs placement, deadlines vs scheduled time, habit periods vs logs, local vs provider state—must remain representable.
+**Known baseline:** PostgreSQL is the approved local backend; user data stays on-device. The logical v1 schema is approved (ADR-024), as is the asyncpg direction (ADR-015); migration SQL is not written. Product distinctions—task occurrence vs placement, deadlines vs scheduled time, habit periods vs logs, local vs provider state—must remain representable.
 
 **Open design work:** map product entities and lifecycle to normalized records and stable IDs; specify integrity constraints, indexes, revisions, deletion/tombstone policy and migration compatibility; design read models for day/task/habit/calendar/project/note/history views; identify attachment and provider-reference boundaries.
 
@@ -79,7 +79,7 @@ Accepted during review: deadline-first then priority (no-deadline tasks by prior
 
 **Future acceptance cases (not run):** invalid references and duplicate logical IDs are rejected; recurrence instances preserve identity when placements move; task completion does not complete neighboring occurrences; provider conflict/history/audit states are queryable; migration preserves supported records.
 
-**Owner chooses:** only product semantics that alter stored meaning or retention. **Agent proposal:** schema alternatives, constraints, indexes and migration strategy; exact DDL remains proposed until reviewed.
+**Owner chooses:** only product semantics that alter stored meaning or retention. **Agent proposal:** schema alternatives, constraints, indexes and migration strategy; migration SQL is written and verified after programming authorization.
 
 ### CP04 — Private PostgreSQL packaging, lifecycle and migrations
 

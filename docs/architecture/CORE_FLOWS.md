@@ -2,7 +2,7 @@
 
 [Русская версия](CORE_FLOWS.ru.md) · [Phase plan](IMPLEMENTATION_PLAN.md) · [Planner core](PLANNER_CORE.md) · [API](API.md) · [Modules](MODULES.md)
 
-Status: proposal for joint review, PLAN-030, 2026-11-04. Phases and acceptance criteria are approved (ADR-018); architecture, schema, API and modules are not yet approved, and P0 is withheld. This document connects the main user flows without adding approved product rules.
+Status: proposal for joint review, PLAN-030, 2026-11-04. Phases and acceptance criteria are approved (ADR-018); architecture is approved (ADR-022) and the schema/archive are approved (ADR-024); API and modules remain proposals, and P0 is withheld. This document connects the main user flows without adding approved product rules.
 
 ## 1. Product center
 
