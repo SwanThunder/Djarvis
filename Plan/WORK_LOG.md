@@ -751,4 +751,4 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Result: ADR-031 records the main-screen shell under the approved design: character, day panel, navigation, real core status and version. Future sections remain clearly empty or unavailable until their phases; window and tray lifecycle is preserved. P0 plan, readiness and status are aligned.
 - Checks: 31 ADRs in both versions; checked language pairs, links and `git diff --check`. No code or live checks ran.
 - Remaining: discuss P0 step 6. Programming still requires separate explicit authorization; no code is being written now.
-- Commit: to be added after recording the changes.
+- Commit: [28d8552](https://github.com/SwanThunder/Djarvis/commit/28d8552).
