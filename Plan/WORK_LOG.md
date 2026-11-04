@@ -353,8 +353,9 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Date: 2026-11-04, Europe/Moscow.
 - Agent: agent-01 completes and reviews the partial documentation prepared by architecture-sources after its run ended; no concurrent writer.
 - Authorization: owner's explicit overdue/abstinence choices and both parent-completion clarification answers.
-- Status: documentation completed and checked; publication pending.
+- Status: documentation completed, checked and published.
 - Files: both logs; PRODUCT, PLANNER_CORE, FOUNDATION_DESIGN, REMAINING_PLAN and DECISIONS in English and Russian.
 - Scope: record the three accepted behaviors as ADR-008 and FD14–FD16; preserve independent active children, historical corrections and existing confirmation rules. No application code, database changes, model downloads or application tests.
 - Checks: six language pairs checked for matching headings/decision IDs, local links and UTF-8; whitespace check passed. Reviewed the accepted behaviors against submitted answers. Application tests were not run because no implementation changed.
 - Remaining: quantity/duration measurement, subtask nesting/inheritance, external-service costs/accounts and license/device details; architecture and implementation still need approval.
+- Commit: [d6bd77d](https://github.com/SwanThunder/Djarvis/commit/d6bd77d8afd96d64be8d59f2678857dfa53a10ca).
