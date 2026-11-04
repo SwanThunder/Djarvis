@@ -473,3 +473,18 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: results recorded in FEASIBILITY with eight design findings; Git checks before commit.
 - Remaining: speech recognition and wake phrase; real 8 GiB machine; Vosk 0.9 listening; GPL phonemizer review; technical finalization and the final architecture and implementation plan.
 - Commit: this entry is published with the feasibility report.
+
+## PLAN-022 — Vois exclusion, speech recognition check, technical details and final plan
+
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-02.
+- Authorization: owner asked to finish the remaining status items: exclude `Vois/` from Git, check speech recognition and the wake phrase, listen to Vosk 0.9, review the espeak-ng license, work out technical details and prepare the final architecture and implementation plan for approval. No application code.
+- Status: complete; implementation plan awaits owner approval.
+- Files: both logs; `.gitignore`; bilingual `docs/architecture/FEASIBILITY`, `docs/STATUS`; new bilingual technical-detail and final-plan documents in `docs/architecture/`. Local only: `cache/feasibility/` (recognition models, Vosk TTS 0.9, scripts, results).
+- Not touched: untracked `Djarvis_проверки_выполнимости.xlsx` (not created by this agent).
+- Delegation: English versions of `TECHNICAL_DESIGN`, `IMPLEMENTATION_PLAN` and `FEASIBILITY` sections 4–5 were translated by a lower-cost model from the Russian originals; the result was reviewed by agent-02.
+- Downloads (into `cache/feasibility/`): Vosk small ru 0.22 and en 0.15, Whisper base and small (int8), Vosk TTS 0.9 multi, spaCy `en_core_web_sm`; packages vosk, faster-whisper, misaki, spacy, sounddevice in separate test environments.
+- Checks: synthetic corpus of 180 clips (ru and en, clean and 10 dB noise). Recognition: Vosk small WER ≈ 5 % (ru, 0.9 voices) and 2–8 % (en); Whisper small 5–6 % / 0–2 %, Whisper base 10 % in Russian. Wake phrase: names-only grammar — 68/72 false; grammar with decoys — 68/72 found, 3/72 false (ru), 18/18 and 1/18 (en). Vosk TTS 0.9: 1.5–1.8 GB, RTF ≈ 0.22, load ≈ 124 s. misaki without espeak-ng → Kokoro: four sentences recognized by Whisper without meaning errors. File set and metadata checked before commit.
+- Result: `Vois/` excluded from Git; findings 9–12 in FEASIBILITY; new `TECHNICAL_DESIGN` (transport, schema and migrations, DJB1 backup format, installer, 8 GiB profile, decisions T1–T6) and `IMPLEMENTATION_PLAN` (architecture, repository layout, phases P0–P7 with acceptance criteria); STATUS updated. No application code written.
+- Remaining: owner approval of the plan and T1–T6; live microphone test (`cache/feasibility/mic_wake_test.py`); Vosk 0.9 listening; code-signing certificate; real 8 GiB machine (P7).
+- Commit: this entry is published together with the PLAN-022 documents.

@@ -2,14 +2,16 @@
 
 [Русская версия](STATUS.ru.md) · [Product](PRODUCT.md) · [Design](DESIGN.md) · [Decisions](architecture/DECISIONS.md) · [Component plan](architecture/COMPONENT_PLAN.md) · [Work log](../Plan/WORK_LOG.md)
 
-Snapshot: 2026-11-04, Europe/Moscow, after PLAN-021. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
+Snapshot: 2026-11-04, Europe/Moscow, after PLAN-022. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
 
 ## 1. Overall
 
 - Stage: design. No application code exists and programming is not authorized.
 - Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), fourteen narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
-- Next gate: final architecture and implementation plan for explicit owner approval.
+- Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
+- Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
+- Next gate: explicit owner approval of the implementation plan; then programming from phase P0.
 
 ## 2. Accepted decisions
 
@@ -37,12 +39,12 @@ All directions below are unapproved technical proposals unless listed in section
 
 | Group | Proposed direction | Open |
 | --- | --- | --- |
-| Foundations CP01–CP04 | Loopback HTTP API plus event stream (named pipe alternative); one Python host owns writes and the database; typed commands with revisions | Transport, wire schema, DDL, PostgreSQL version/distribution, driver, migrations, crash recovery |
+| Foundations CP01–CP04 | Loopback HTTP + WebSocket with token; tray icon owned by the core; PostgreSQL 18 zip, asyncpg, own migration runner; schema v1 ([TECHNICAL_DESIGN](architecture/TECHNICAL_DESIGN.md) §1–2) | Approval of T1–T2; final DDL written in P1 |
 | Domain CP05–CP07 | Deterministic planner; local intent stored separately from resolved instants; immutable attachments | Tie-break, started-placement boundary, segment size/buffers, project/note fields, timer timezone/clock handling, branch move/deletion |
-| Assistant CP08–CP11 | Model proposes, typed tool registry executes; one audio state machine; durable reminders | Model runtime, ASR, wake detection, TTS, **voice licenses**, CPU/8 GiB performance unverified, proactive cooldowns |
+| Assistant CP08–CP11 | Model proposes, typed tool registry executes; one audio state machine; durable reminders; llama.cpp on demand; Vosk small; misaki → Kokoro without GPL | Live microphone test, **voice licenses**, real 8 GiB machine, proactive cooldowns |
 | External CP12–CP14 | Provider adapters with local outbox; scoped Windows grants | Search/weather providers and costs, OAuth details, app identity and argument validation |
-| Trust CP15–CP16 | AES-256-GCM archives with DPAPI-wrapped keys; Ed25519 signed license | Archive format, **price, issuer, payment (deferred)** |
-| Delivery CP17–CP20 | Signed EXE or MSIX; local diagnostics without telemetry | Installer format, Android direction (DD10), test and performance plan |
+| Trust CP15–CP16 | DJB1 format: tar → AES-256-GCM-STREAM, DPAPI-wrapped key; Ed25519 signed license | Approval of T3; **price, issuer, payment (deferred)** |
+| Delivery CP17–CP20 | Per-user Inno Setup without admin rights; models on first run; 8 GB / 16 GB+ profiles; diagnostics without telemetry | Approval of T4–T5, code-signing certificate, Android direction (DD10) |
 
 ## 4. Open owner questions
 
@@ -51,7 +53,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 ## 5. Remaining work
 
-1. Resolve section 4 in small batches.
-2. Remaining feasibility: speech recognition and wake phrase, a real 8 GiB CPU-only machine, Vosk 0.9 listening test, GPL phonemizer review.
-3. Agent-side technical finalization: transport, schema, cryptography, migrations.
-4. Final architecture and implementation plan → owner approval → programming.
+1. Approve the [implementation plan](architecture/IMPLEMENTATION_PLAN.md) and technical decisions T1–T6.
+2. Live wake-phrase test on the owner's microphone (`cache/feasibility/mic_wake_test.py`) and Vosk 0.9 listening (`cache/feasibility/samples/vosk09_*`).
+3. Resolve section 4; acceptance on a real 8 GiB machine happens in phase P7.
+4. After approval — programming from P0.
