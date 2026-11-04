@@ -1,0 +1,12 @@
+# Development and CI tooling for djarvis_core.
+# The lock targets Windows and Python 3.12. Regenerate dev.txt from the
+# repository root with:
+#   pip-compile --generate-hashes --allow-unsafe --strip-extras
+#       --output-file=core/requirements/dev.txt core/requirements/dev.in
+pip-tools
+ruff
+mypy
+pytest
+packaging
+# Build backend for the editable install (used with --no-build-isolation).
+setuptools

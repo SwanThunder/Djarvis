@@ -1,0 +1,66 @@
+# Static analysis settings for the Djarvis interface.
+#
+# The recommended Flutter rule set is extended with strict language modes and
+# additional rules. Analysis runs with --fatal-infos and --fatal-warnings, so
+# every reported issue must be fixed rather than suppressed project-wide.
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    - build/**
+    - windows/**
+
+linter:
+  rules:
+    # Types and declarations
+    - always_declare_return_types
+    - avoid_dynamic_calls
+    - avoid_types_on_closure_parameters
+    - omit_local_variable_types
+    - type_annotate_public_apis
+    - use_super_parameters
+
+    # Immutability and const
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - prefer_final_locals
+
+    # Asynchrony
+    - avoid_void_async
+    - cancel_subscriptions
+    - close_sinks
+    - discarded_futures
+    - unawaited_futures
+
+    # Error handling and safety
+    - avoid_catches_without_on_clauses
+    - avoid_print
+    - avoid_returning_null_for_void
+    - avoid_slow_async_io
+    - only_throw_errors
+    - throw_in_finally
+    - use_build_context_synchronously
+
+    # Style
+    - directives_ordering
+    - prefer_single_quotes
+    - sort_child_properties_last
+    - sort_constructors_first
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - use_key_in_widget_constructors
+
+    # Hygiene
+    - comment_references
+    - depend_on_referenced_packages
+    - unreachable_from_main

@@ -4,33 +4,28 @@
 
 Djarvis is a personal intelligent assistant intended to manage tasks and habits, hold conversations, and find information on the internet.
 
-The repository currently contains an organizational scaffold and design documents. Flutter UI, a Python core/background host and app-managed private PostgreSQL are selected; technical directions T1–T6 and phases P0–P7 with their acceptance criteria are also approved. Process architecture and the core/ + ui/ layout are approved (ADR-022); schema, API and modules are also approved (ADR-024–026). There is no runnable application yet; P0 requires separate explicit authorization.
+Phase P0 — the application skeleton — is under way (authorized by the owner on 2026-11-05, ADR-028). Flutter UI, a Python core/background host and app-managed private PostgreSQL are selected; technical directions T1–T6, phases P0–P7 with their acceptance criteria, process architecture and the core/ + ui/ layout (ADR-022), schema, API and modules (ADR-024–026) are approved. Step 1 of the [P0 plan](docs/architecture/P0_PLAN.md) is done: core and UI skeleton, pinned check tooling and CI. There is no runnable application yet — only the skeleton.
 
 ## Structure
 
-This is the existing organizational scaffold; these folders contain no application code yet. The core/ + ui/ layout approved for future code is in the [implementation plan](docs/architecture/IMPLEMENTATION_PLAN.md); it is created after separate P0 authorization.
-
 ```text
-src/
-  core/           Core behavior and workflows
-  agents/         Agent implementations and coordination
-  tools/          Assistant-callable tools
-  integrations/   External services and model connections
-  memory/         Memory and knowledge access logic
-  interfaces/     Application interfaces; specific channels are undecided
+core/             Python core: djarvis_core package, tests, pinned development dependencies
+ui/               Flutter UI for Windows (djarvis_ui package)
+scripts/          Check and build scripts (check.ps1)
+.github/          CI checks for pull requests before main
+docs/             Development rules, design and approved decisions
+Plan/             Shared development work log in English and Russian
 config/           Configuration without secrets
+assets/           Static assets
 data/
   db/             Local scaffold folder; the future PostgreSQL cluster lives under %LOCALAPPDATA%
   files/          Local scaffold folder; installed application files live outside the repository
 cache/            Rebuildable cache
 logs/             Runtime logs
 tmp/              Temporary files
-Plan/             Shared development work log in English and Russian
-docs/             Development rules and approved decisions
-scripts/          Maintenance scripts
-tests/            Tests
-assets/           Static assets
 ```
+
+The full approved layout is in the [implementation plan](docs/architecture/IMPLEMENTATION_PLAN.md) §2; the remaining parts appear in later P0 steps and later phases.
 
 The data/, cache/, logs/ and tmp/ folders may contain local preparation artifacts; their runtime contents are excluded from publication under project rules. Do not clear them as part of the layout change. The installed application keeps its private database and user files outside the repository in the Windows profile. data/db does not currently contain a live Djarvis database.
 
@@ -39,7 +34,7 @@ The data/, cache/, logs/ and tmp/ folders may contain local preparation artifact
 - Read the [project rules](docs/PROJECT_RULES.md) before each task.
 - Check and update the [shared work log](Plan/WORK_LOG.md) before editing files.
 - Record approved architecture decisions in the [decision register](docs/architecture/DECISIONS.md).
-- Review the [product](docs/PRODUCT.md), [accepted decisions](docs/architecture/DECISIONS.md), [architecture and phases](docs/architecture/IMPLEMENTATION_PLAN.md) and [architecture summary](docs/architecture/ARCHITECTURE_REVIEW.md). Phases, architecture/layout, schema, API and modules are approved; P0 is still under discussion.
+- Review the [product](docs/PRODUCT.md), [accepted decisions](docs/architecture/DECISIONS.md), [architecture and phases](docs/architecture/IMPLEMENTATION_PLAN.md) and [architecture summary](docs/architecture/ARCHITECTURE_REVIEW.md). Phases, architecture/layout, schema, API and modules are approved; P0 is in progress under the [P0 plan](docs/architecture/P0_PLAN.md).
 - Follow the owner's [required Djarvis visual design](docs/DESIGN.md); technology choices must preserve this design.
 - Review the [detailed planner core, data, and interaction proposal](docs/architecture/PLANNER_CORE.md) before implementation planning.
 - Use the [remaining design and decision plan](docs/architecture/REMAINING_PLAN.md) for all eight workstreams, selectable questions, acceptance criteria and context recovery.
@@ -49,6 +44,19 @@ The data/, cache/, logs/ and tmp/ folders may contain local preparation artifact
 - Maintain English and Russian documentation as separate synchronized files.
 - Present and discuss the implementation plan before programming; begin only after owner approval.
 
+## Local checks
+
+Requires Windows, Python 3.12 and Flutter 3.47.7. From the repository root in PowerShell:
+
+```powershell
+py -3.12 -m venv core\.venv
+core\.venv\Scripts\python -m pip install --require-hashes -r core\requirements\dev.txt
+core\.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e core
+powershell -ExecutionPolicy Bypass -File scripts\check.ps1
+```
+
+The script runs core and UI analysis and tests and stops at the first failure; `-Build` also builds the Windows UI (requires Visual Studio with the C++ desktop workload). The same checks run in CI for pull requests before main.
+
 Repository: [SwanThunder/Djarvis](https://github.com/SwanThunder/Djarvis).
 
-The next step is to discuss the [P0 plan](docs/architecture/P0_PLAN.md). The owner asked not to write code yet; P0 needs separate explicit authorization. GitHub stores only pushed files and does not replace a backup of future local user data.
+The next step is step 2 of the [P0 plan](docs/architecture/P0_PLAN.md): embedded Python and PostgreSQL runtimes. GitHub stores only pushed files and does not replace a backup of future local user data.

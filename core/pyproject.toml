@@ -1,0 +1,57 @@
+[build-system]
+# The pinned backend comes from core/requirements/dev.txt; install with
+# --no-build-isolation so the build uses that hashed version.
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "djarvis-core"
+description = "Djarvis local core service."
+requires-python = ">=3.12,<3.13"
+dynamic = ["version"]
+dependencies = []
+
+[tool.setuptools.dynamic]
+version = { attr = "djarvis_core.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["djarvis_core*"]
+
+[tool.setuptools.package-data]
+djarvis_core = ["py.typed"]
+
+# Tool paths are relative to core/; scripts/check.ps1 runs the tools from there.
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["."]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "A", "C4", "DTZ", "T10", "T20", "EM", "ISC", "ICN",
+    "PIE", "PT", "Q", "RET", "SIM", "TID", "TC", "ARG", "PTH", "ERA", "PL", "TRY", "FLY",
+    "PERF", "FURB", "RUF", "S", "BLE", "FBT", "ANN", "ASYNC", "LOG", "G", "INP", "SLF",
+]
+# Conflicts with the formatter.
+ignore = ["ISC001"]
+
+[tool.ruff.lint.per-file-ignores]
+# Plain asserts are the pytest idiom; test modules use importlib mode, not packages.
+"tests/**" = ["S101", "INP001"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+extra_checks = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config", "--import-mode=importlib"]
+xfail_strict = true
+filterwarnings = ["error"]

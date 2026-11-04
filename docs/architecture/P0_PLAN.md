@@ -1,8 +1,8 @@
-# P0 — skeleton plan for discussion
+# P0 — skeleton plan
 
 [Русская версия](P0_PLAN.ru.md) · [phases and criteria](IMPLEMENTATION_PLAN.md) · [modules](MODULES.md) · [API](API.md) · [technical choices](TECHNICAL_DESIGN.md) · [readiness](READINESS.md)
 
-Status: **proposal for discussion**, PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026). The owner asked not to write code yet. This document does not authorize P0.
+Status: **plan in progress**, prepared in PLAN-038, 2026-11-05. Phases, architecture, schema, API and modules are approved (ADR-018, ADR-022, ADR-024–026); the owner authorized P0 within this plan on 2026-11-05 (ADR-028).
 
 ## 1. P0 outcome
 
@@ -48,4 +48,4 @@ Full domain-command idempotency, revisions, planner, schema migrations, voice an
 
 ## 6. Next decision
 
-The owner is now reviewing P0 scope and order. At the owner's explicit request, no code is being written yet. This plan can be refined through discussion; separate permission to start P0 is needed only when the owner decides to move to implementation.
+The owner authorized P0 within this plan on 2026-11-05 (ADR-028). Step 1 is done (PLAN-040); the first CI run and the Windows UI build have not happened yet, and main branch protection and approval of CI runs for outside contributors need a separate owner decision. Next is step 2, "Embedded runtimes". Steps run in order, each verified; P1 begins only after P0 acceptance (§5).

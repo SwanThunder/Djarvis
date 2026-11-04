@@ -2,18 +2,18 @@
 
 [Русская версия](STATUS.ru.md) · [Product](PRODUCT.md) · [Design](DESIGN.md) · [Decisions](architecture/DECISIONS.md) · [Component plan](architecture/COMPONENT_PLAN.md) · [Work log](../Plan/WORK_LOG.md)
 
-Snapshot: 2026-11-05, Europe/Istanbul, after the P0 CI choice in PLAN-039. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
+Snapshot: 2026-11-05, Europe/Istanbul, after P0 step 1 in PLAN-040. This is a navigation summary; the linked canonical documents and the shared work log remain the source of truth. Update or replace this snapshot when status changes materially.
 
 ## 1. Overall
 
-- Stage: design. No application code exists and programming is not authorized.
-- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), 27 narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
+- Stage: P0 — application skeleton, authorized by the owner on 2026-11-05 (ADR-028). Step 1 of the [P0 plan](architecture/P0_PLAN.md) is done: `core/` and `ui/` skeleton, pinned check tooling, `scripts/check.ps1` and pull-request CI. Application code is only a skeleton so far: there is no runnable application.
+- Done: product requirements, mandatory visual design (plus local briefs v2.1 and layout v1.0), 28 narrow ADRs, and detailed proposals for all 20 components (CP01–CP20).
 - Feasibility (PLAN-021): local model, speech synthesis, private PostgreSQL and embedded Python work on CPU; 8 GiB memory is tight — see [feasibility checks](architecture/FEASIBILITY.md).
 - Recognition (PLAN-022): Vosk small for wake phrase and turns (≈ 0.2 GB, WER ≈ 5 % on synthetic speech); wake phrase uses a grammar with decoys plus a "start of utterance only" rule; Vosk TTS 0.9 is too heavy for 8 GiB; English synthesis works without espeak-ng (GPL).
 - Prepared for approval: [technical details](architecture/TECHNICAL_DESIGN.md) and the [final architecture and implementation plan](architecture/IMPLEMENTATION_PLAN.md).
 - Technical decisions T1–T6 approved (ADR-015); its phases and acceptance criteria are approved (ADR-018); architecture and repository layout approved (ADR-022).
 - Structure worked out (PLAN-024): [database schema](architecture/SCHEMA.md) (46 tables, approved in ADR-024), [API catalogue](architecture/API.md), [modules](architecture/MODULES.md); questions Q1–Q5 resolved (ADR-016). Summary — the [programming-readiness report](architecture/READINESS.md).
-- Next step: discuss step 2 of the [P0 plan](architecture/P0_PLAN.md); no code is being written and separate P0 authorization has not been given. Real checks come after programming (owner condition).
+- Next step: step 2 of the [P0 plan](architecture/P0_PLAN.md) — embedded Python and PostgreSQL runtimes. The first CI run and the Windows UI build have not happened yet. Live component checks follow as components are implemented (owner condition).
 
 ## 2. Accepted decisions
 
@@ -36,6 +36,7 @@ Snapshot: 2026-11-05, Europe/Istanbul, after the P0 CI choice in PLAN-039. This 
 | Main screen | Top bar: day selector, search, quick create, notifications (no profile); card contents accepted | PLAN-017, DESIGN |
 | Technical decisions | Loopback HTTP + WebSocket, interface in the tray; PostgreSQL 18 + asyncpg, forward-only migrations with backup; DJB1 backup under DPAPI; Inno Setup unsigned until public release; model unload after 5 min; Vosk TTS 0.7 | ADR-015 |
 | Structure | Subtasks: deletion with a prompt, copies in repetitions, move under any task; block truncated on completion; missed-announcement switch | ADR-016 |
+| Implementation | P0 authorized within the P0 plan, steps in order with each verified, P1 after P0 acceptance; Windows checks in pull requests before main | ADR-027, ADR-028 |
 | Other | Updates notify only, install on user command; raw microphone audio RAM-only, never written to disk; sending mail, deleting or overwriting files always need confirmation | PRODUCT |
 
 ## 3. Components: proposed direction and open items
@@ -58,7 +59,7 @@ All directions below are unapproved technical proposals unless listed in section
 
 ## 5. Remaining work
 
-1. Architecture/layout are accepted (ADR-022). Schema, archive contents, API and modules are approved (ADR-024–026). Discuss the [P0 plan](architecture/P0_PLAN.md); do not write code yet.
+1. P0 is in progress (ADR-028): step 1 is done; first CI run and Windows UI build; confirmation of the `app.djarvis` application identifier before Android; a decision on main branch protection and approval of CI runs for outside contributors; then steps 2–6 of the [P0 plan](architecture/P0_PLAN.md) and P0 acceptance.
 2. Modules are approved (ADR-026); approved schema SQL has not run under the previously chosen validation sequence.
 3. After programming: live checks of assistant, microphone and wake phrase, task tracking and reminders; Vosk 0.9 listening for the 16 GB+ profile.
 4. Resolve section 4; verify the target profile on a real 8 GiB machine in P7.
