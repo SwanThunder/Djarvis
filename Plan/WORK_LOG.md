@@ -521,10 +521,11 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Date: 2026-11-04, Europe/Istanbul.
 - Agent: agent-01.
 - Authorization: owner requested the current done/remaining status and its record in Plan.
-- Status: complete; documentation checked and publication pending.
+- Status: complete; documentation checked and published.
 - Files: both shared logs and bilingual docs/STATUS.
 - Scope: reconcile the overview with published decisions and Git, record completed work and remaining approval gates, and report documentation discrepancies. No application code, schema/API edits, or unrelated local-file changes.
 - Completed: product requirements, visual brief, 20 component design dossiers, 16 approved narrow decisions, feasibility notes for local model/speech/database/runtime, technical design, proposed implementation phases, 45-table schema, API catalogue, module boundaries and readiness mapping. The reported database checks are prior work; no application feature or installer exists yet.
 - Remaining: owner review of implementation plan, schema, API and modules, then explicit authorization for P0. Correct the remaining cross-document mismatches before coding: decision-register count, exact child-completion button label in technical docs, tray owner in implementation-plan diagram, and record the accepted independent concurrent timers for different habits. After programming, test real voice/microphone/wake phrase, planner/habits/reminders/integrations, memory on an actual 8 GiB machine; before public release, resolve voice and service terms, signing, pricing/payment and future Android direction.
 - Git audit: local HEAD and origin/main are identical at 245878c; no modified or staged tracked files before this task. One unrelated untracked spreadsheet is preserved. Local resources and agent instructions remain excluded from Git. The bilingual status summary was stale and has been updated in scope.
 - Verification: compared both status languages, 16 decision IDs and local Markdown links; staged file scope and whitespace checked. Previous feasibility and SQL checks were reviewed as documented, not rerun. No application tests were possible because there is no application code.
+- Commit: [519e278](https://github.com/SwanThunder/Djarvis/commit/519e2788d4d3130042270f1507c1a56ded1a0c95).
