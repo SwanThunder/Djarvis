@@ -107,3 +107,9 @@ The owner explicitly wants recognizable voices for the exact named characters, n
 8. Cutoff for an explicit deadline without a time is resolved by always asking the user for a time; exact task date/timezone semantics and other detailed scheduling/conflict rules; storage/audit representation for habit corrections and historical-statistics recalculation.
 
 Next: resolve these product questions, review full user journeys, and then propose an architecture for explicit owner approval.
+
+## Accepted measurement and nesting choices (PLAN-014)
+
+- Quantity habits have a per-habit choice: sum individual portions (default), or enter the daily total. A daily-total entry is not an additional portion; corrections retain history. Switching modes and unit/threshold details remain to be designed.
+- Duration habits support both a timer with pause and manual duration entry. Multiple sessions are summed for the day. Timer behavior during sleep, full exit, crashes and midnight remains open; duplicate counting must be prevented by the proposed data contract.
+- Subtasks support multiple levels without a fixed product depth limit; the interface can collapse branches. This is not a promise of infinite device capacity. Cycle prevention and scalable tree loading are technical design requirements to review. Inheritance, moving branches and deletion semantics remain open. Existing parent-completion behavior remains unchanged.

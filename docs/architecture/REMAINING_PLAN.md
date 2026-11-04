@@ -197,3 +197,9 @@ When completing a parent with unfinished children, show “Close task” and “
 Exact schema, API names, child nesting/inheritance and handling of already-started placements remain open. These product choices do not authorize implementation.
 
 Next owner choices: quantity/duration aggregation, child nesting and inheritance, external-service accounts/costs, and remaining device/license policies. Technical proposals still require review.
+
+## Accepted measurement and nesting choices (PLAN-014)
+
+- Quantity habits have a per-habit choice: sum individual portions (default), or enter the daily total. A daily-total entry is not an additional portion; corrections retain history. Switching modes and unit/threshold details remain to be designed.
+- Duration habits support both a timer with pause and manual duration entry. Multiple sessions are summed for the day. Timer behavior during sleep, full exit, crashes and midnight remains open; duplicate counting must be prevented by the proposed data contract.
+- Subtasks support multiple levels without a fixed product depth limit; the interface can collapse branches. This is not a promise of infinite device capacity. Cycle prevention and scalable tree loading are technical design requirements to review. Inheritance, moving branches and deletion semantics remain open. Existing parent-completion behavior remains unchanged.

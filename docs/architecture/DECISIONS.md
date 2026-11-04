@@ -2,7 +2,7 @@
 
 [Русская версия](DECISIONS.ru.md)
 
-Eight narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
+Nine narrowly scoped decisions are approved: ADR-001 selects Flutter for UI and necessary Dart UI code; ADR-002 selects PostgreSQL as the local backend database; ADR-003 selects Python for planner-core/background logic with an app-owned runtime; ADR-004 selects an application-managed isolated local PostgreSQL instance; ADR-005 selects local-profile access with imported offline signed licenses and defines trial/expiry behavior; ADR-006 selects Windows-protected backup-key handling without a separate password/recovery key and full-snapshot restore safeguards; ADR-007 records three planner policies for priority order, DST ambiguity, and remaining split placements. ADR-008 records overdue eligibility, explicit abstinence success and parent/child completion choices. ADR-009 records habit measurement modes and multi-level subtasks. Exact versions, drivers, runtime/database distribution, installer dependencies, license format/issuer, payment details, schema, cryptographic/key implementation, and remaining architecture are not approved. Existing folders remain an organizational scaffold.
 
 ## ADR-001 — Flutter UI and necessary Dart UI implementation
 
@@ -93,3 +93,16 @@ When completing a parent with unfinished children, show “Close task” and “
 Exact schema, API names, child nesting/inheritance and handling of already-started placements remain open. These product choices do not authorize implementation.
 
 - Approval basis: Owner’s submitted choices and both parent-completion clarification answers, recorded in PLAN-013.
+
+## ADR-009 — Habit measurement and multi-level subtasks
+
+- Date: 2026-11-04, Europe/Moscow.
+- Status: APPROVED (product behavior only).
+- Context and options: The owner selected per-habit quantity modes instead of one universal mode, timer plus manual duration instead of either alone, and multi-level subtasks instead of a fixed depth cap.
+- Decision and consequences:
+
+- Quantity habits have a per-habit choice: sum individual portions (default), or enter the daily total. A daily-total entry is not an additional portion; corrections retain history. Switching modes and unit/threshold details remain to be designed.
+- Duration habits support both a timer with pause and manual duration entry. Multiple sessions are summed for the day. Timer behavior during sleep, full exit, crashes and midnight remains open; duplicate counting must be prevented by the proposed data contract.
+- Subtasks support multiple levels without a fixed product depth limit; the interface can collapse branches. This is not a promise of infinite device capacity. Cycle prevention and scalable tree loading are technical design requirements to review. Inheritance, moving branches and deletion semantics remain open. Existing parent-completion behavior remains unchanged.
+
+- Approval basis: Three owner answers recorded in PLAN-014. No schema, runtime algorithm or implementation is approved.

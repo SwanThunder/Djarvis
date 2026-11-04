@@ -359,3 +359,13 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Checks: six language pairs checked for matching headings/decision IDs, local links and UTF-8; whitespace check passed. Reviewed the accepted behaviors against submitted answers. Application tests were not run because no implementation changed.
 - Remaining: quantity/duration measurement, subtask nesting/inheritance, external-service costs/accounts and license/device details; architecture and implementation still need approval.
 - Commit: [d6bd77d](https://github.com/SwanThunder/Djarvis/commit/d6bd77d8afd96d64be8d59f2678857dfa53a10ca).
+
+## PLAN-014 — Habit measurement and subtask nesting
+- Date: 2026-11-04, Europe/Moscow.
+- Agent: agent-01.
+- Authorization: owner's three explicit measurement/nesting choices.
+- Status: completed and checked; documentation only.
+- Files: both logs and bilingual PRODUCT, FOUNDATION_DESIGN, DECISIONS and REMAINING_PLAN.
+- Scope: record per-habit quantity modes, duration timer/manual input and multi-level subtasks. Preserve prior completion and correction policies; no implementation.
+- Checks: five bilingual pairs, decision IDs and local links checked; no application tests (documentation only).
+- Remaining: timer interruption behavior, field inheritance and mode switching; implementation requires approval.
