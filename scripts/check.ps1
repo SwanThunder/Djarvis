@@ -14,11 +14,17 @@
 .PARAMETER Build
     Also builds the Windows release of the UI (requires Visual Studio with
     the C++ desktop workload).
+
+.PARAMETER Runtimes
+    Also assembles build/app with the bundled Python and PostgreSQL and runs
+    their smoke test (packaging/build-app.ps1, packaging/smoke-runtimes.ps1).
+    The first run downloads about 0.40 GB into cache/build/runtimes.
 #>
 [CmdletBinding()]
 param(
     [string]$Python,
-    [switch]$Build
+    [switch]$Build,
+    [switch]$Runtimes
 )
 
 Set-StrictMode -Version Latest
@@ -72,6 +78,20 @@ Invoke-Step 'flutter test' $uiDir { & flutter test }
 
 if ($Build) {
     Invoke-Step 'flutter build windows' $uiDir { & flutter build windows --release }
+}
+
+if ($Runtimes) {
+    Invoke-Step 'packaging security regression tests' $repoRoot { & $pythonExe (Join-Path $repoRoot 'packaging/test_build.py') }
+    # Each packaging script runs in its own process of the current shell so
+    # that its exit code is reported exactly.
+    $shellExe = (Get-Process -Id $PID).Path
+    $packagingDir = Join-Path $repoRoot 'packaging'
+    Invoke-Step 'build application folder' $repoRoot {
+        & $shellExe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $packagingDir 'build-app.ps1')
+    }
+    Invoke-Step 'runtime smoke test' $repoRoot {
+        & $shellExe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $packagingDir 'smoke-runtimes.ps1')
+    }
 }
 
 Write-Host 'All checks passed.' -ForegroundColor Green

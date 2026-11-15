@@ -777,3 +777,14 @@ Both development agents use this file and its [Russian counterpart](WORK_LOG.ru.
 - Merge with main: main already contained ADR-028–032 and PLAN-040–044 recorded by agent-01 and agent-02 during the discussion of steps 2–6; the numbers collided with this task. Those records remain unchanged; this task's authorization was renumbered from ADR-028 to ADR-033 and this entry from PLAN-040 to PLAN-045, and its text now reflects that all six steps were accepted. After the merge: 33 ADRs in both languages, unique ADR and PLAN numbers, paired heading counts verified.
 - Remaining: under ADR-032 — open the step 1 pull request, get a green CI run (including the Djarvis.exe build), then the owner's explicit "yes" to merge it; the owner enables the main branch rule with a required check; owner confirmation of the app.djarvis organization (before Android); owner decision on approving CI runs for outside contributors; then P0 step 2 — embedded runtimes under ADR-028.
 - Commit: [73d6305](https://github.com/SwanThunder/Djarvis/commit/73d6305).
+
+## PLAN-048 — P0 step 2: embedded runtimes and build verification
+- Date: 2026-11-15, Europe/Istanbul.
+- Agent: agent-01.
+- Basis: the owner authorized continuation of approved P0 step 2; Python 3.12.10, PostgreSQL 18.6-5 and bundled C++ libraries were selected.
+- Status: in progress; local verification completed, CI and merge not performed.
+- Files: packaging/, scripts/check.ps1, .github/workflows/ci.yml, both logs. The unfinished original work in another worktree is preserved; continuation uses a separate copy.
+- Result: the manifest pins archives and hashes; the build rejects invalid input and retains the previous output. Three x64 release DLLs from a pinned official package are added to PostgreSQL and checked before execution.
+- Checks: two downloads of PostgreSQL and two of the C++ package produced matching hashes for each source; Windows build, Python/Dart/Flutter checks, six packaging tests and embedded-runtime smoke passed locally. The corrected DLL-check order was independently reviewed. Matching downloads from one source are not independent vendor authenticity verification.
+- Limits: clean Windows, actual CI and effective dynamic DLL-load paths were not verified; Microsoft licensing conditions apply to redistribution. Vendor metadata reports a different C++ package size from both downloads despite matching SHA-256; recorded in packaging/README.
+- Remaining: independent acceptance of the complete change, exact publication review, pull request and CI; merge only after explicit owner approval.
